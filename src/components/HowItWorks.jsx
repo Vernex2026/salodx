@@ -36,15 +36,15 @@ export default function HowItWorks() {
       ref={sectionRef}
       id="how"
       aria-labelledby="how-heading"
-      className="relative isolate overflow-hidden bg-[var(--color-cream)]"
+      className="relative isolate overflow-hidden bg-[var(--color-onyx-1)]"
     >
-      {/* Subtle aurora wash */}
+      {/* Electric wash — violet top-right, cyan bottom-left */}
       <div
         aria-hidden="true"
-        className="pointer-events-none absolute inset-0 z-0 opacity-70"
+        className="pointer-events-none absolute inset-0 z-0 opacity-80"
         style={{
           background:
-            "radial-gradient(ellipse 60% 50% at 80% 20%, #FFE8DC 0%, transparent 60%), radial-gradient(ellipse 50% 40% at 10% 80%, #C9E4FF 0%, transparent 60%)",
+            "radial-gradient(ellipse 60% 50% at 82% 20%, rgba(123,92,255,0.22) 0%, transparent 60%), radial-gradient(ellipse 50% 40% at 12% 82%, rgba(0,229,255,0.14) 0%, transparent 60%), radial-gradient(ellipse 40% 35% at 50% 50%, rgba(77,124,255,0.10) 0%, transparent 60%)",
         }}
       />
 
@@ -66,13 +66,13 @@ export default function HowItWorks() {
                 onClick={() => setActive(i)}
                 style={{
                   borderColor: i === active ? "var(--color-hairline)" : "transparent",
-                  background: i === active ? "rgba(255,255,255,0.5)" : "transparent",
+                  background: i === active ? "rgba(255,255,255,0.04)" : "transparent",
                   transition: "background 320ms var(--ease-out), border-color 320ms var(--ease-out), opacity 320ms var(--ease-out)",
                 }}
               >
                 <div
                   aria-hidden="true"
-                  className="step-badge flex h-12 w-12 shrink-0 items-center justify-center rounded-full border border-[var(--color-hairline-2)] bg-white text-[14px] font-medium text-[var(--color-ink)]"
+                  className="step-badge flex h-12 w-12 shrink-0 items-center justify-center rounded-full border border-[var(--color-hairline-2)] bg-white/[0.04] text-[14px] font-medium text-[var(--color-ink)]"
                 >
                   {step.number}
                 </div>
@@ -157,8 +157,8 @@ function StepVisual({ active }) {
         className="relative aspect-square overflow-hidden rounded-[28px] border border-[var(--color-hairline)]"
         style={{
           boxShadow:
-            "0 24px 64px -16px rgba(11,20,38,0.12), 0 8px 24px -8px rgba(11,20,38,0.06), inset 0 0.5px 0 rgba(255,255,255,0.6)",
-          background: "linear-gradient(180deg, #FFFFFF 0%, #FAFAF7 100%)",
+            "0 24px 64px -16px rgba(0,0,0,0.55), 0 8px 24px -8px rgba(0,0,0,0.40), inset 0 0.5px 0 rgba(255,255,255,0.08)",
+          background: "linear-gradient(180deg, var(--color-onyx-3) 0%, var(--color-onyx-2) 100%)",
         }}
       >
         <SceneScan visible={active === 0} />
@@ -168,13 +168,13 @@ function StepVisual({ active }) {
 
       {/* Step pill below visual */}
       <div className="mt-4 flex justify-center">
-        <div className="flex items-center gap-2 rounded-full border border-[var(--color-hairline)] bg-white/70 px-3 py-1.5 text-[12px] text-[var(--color-muted)] backdrop-blur-md">
+        <div className="flex items-center gap-2 rounded-full border border-[var(--color-hairline)] bg-white/[0.04] px-3 py-1.5 text-[12px] text-[var(--color-muted)] backdrop-blur-md">
           <span className="numeric font-medium text-[var(--color-ink)]">
             0{active + 1}
           </span>
           <span className="text-[var(--color-hairline-2)]">/</span>
           <span className="text-[var(--color-faint)]">03</span>
-          <span className="ml-2 font-medium text-[var(--color-coral)]">
+          <span className="ml-2 font-medium text-[var(--electric-blue-2)]">
             {STEPS[active].title}
           </span>
         </div>
@@ -204,7 +204,7 @@ function SceneScan({ visible }) {
           {BANKS.map((b, i) => (
             <div
               key={i}
-              className="flex h-12 items-center justify-center rounded-lg border border-[var(--color-hairline)] bg-white"
+              className="flex h-12 items-center justify-center rounded-lg border border-[var(--color-hairline)] bg-white/[0.04]"
               style={{
                 animation: visible
                   ? `pulse-dot 2.2s ease-in-out infinite ${(i % 6) * 120}ms`
@@ -217,15 +217,16 @@ function SceneScan({ visible }) {
             </div>
           ))}
         </div>
-        {/* Scan line */}
+        {/* Scan line — electric blue with violet glow */}
         {visible && (
           <div
             aria-hidden="true"
             className="scan-line pointer-events-none absolute -inset-y-2 left-0 right-0 h-[2px]"
             style={{
               background:
-                "linear-gradient(90deg, transparent, rgba(255,107,90,0.7), transparent)",
-              boxShadow: "0 0 16px rgba(255,107,90,0.4)",
+                "linear-gradient(90deg, transparent, rgba(77,124,255,0.85), transparent)",
+              boxShadow:
+                "0 0 16px rgba(123,92,255,0.55), 0 0 32px rgba(77,124,255,0.30)",
             }}
           />
         )}
@@ -238,7 +239,7 @@ function SceneTranslate({ visible }) {
   return (
     <div className={sceneCls(visible)}>
       <div className="w-full">
-        <div className="relative rounded-xl border border-[var(--color-hairline)] bg-[var(--color-surface-2)] p-4 text-[10.5px] leading-[1.55] text-[var(--color-faint)]">
+        <div className="relative rounded-xl border border-[var(--color-hairline)] bg-[var(--color-onyx-2)] p-4 text-[10.5px] leading-[1.55] text-[var(--color-faint)]">
           <div className="text-[8.5px] uppercase tracking-[0.14em] text-[var(--color-faint)]">
             §1. Regulamin
           </div>
@@ -246,13 +247,13 @@ function SceneTranslate({ visible }) {
             <span className="line-through">
               Bank zastrzega sobie prawo do zmiany warunków oferty, w szczególności wysokości premii powitalnej oraz wymagań aktywności konta...
             </span>{" "}
-            <span className="bg-[var(--color-brand-tint)] px-1 font-medium text-[var(--color-ink)]">
+            <span className="bg-[var(--electric-violet-tint)] px-1 font-medium text-[var(--color-ink)]">
               wpływ ≥ 1 500 zł / m-c
             </span>{" "}
             <span className="line-through">
               przez okres co najmniej 3 (trzech) kolejnych miesięcy kalendarzowych...
             </span>{" "}
-            <span className="bg-[var(--color-brand-tint)] px-1 font-medium text-[var(--color-ink)]">
+            <span className="bg-[var(--electric-violet-tint)] px-1 font-medium text-[var(--color-ink)]">
               5 transakcji kartą / m-c
             </span>
             <span className="line-through">
@@ -261,7 +262,7 @@ function SceneTranslate({ visible }) {
           </p>
         </div>
 
-        <div className="my-3 flex items-center justify-center text-[var(--color-coral)]">
+        <div className="my-3 flex items-center justify-center text-[var(--electric-blue-2)]">
           <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
             <path
               d="M10 4v12M5 11l5 5 5-5"
@@ -273,23 +274,23 @@ function SceneTranslate({ visible }) {
           </svg>
         </div>
 
-        <div className="rounded-xl border border-[var(--color-hairline)] bg-white p-4">
-          <div className="text-[10px] font-medium uppercase tracking-[0.12em] text-[var(--color-coral)]">
+        <div className="rounded-xl border border-[var(--color-hairline)] bg-[var(--color-onyx-3)] p-4">
+          <div className="text-[10px] font-medium uppercase tracking-[0.12em] text-[var(--electric-blue-2)]">
             Co musisz wiedzieć
           </div>
           <ul className="mt-2 space-y-1.5 text-[12.5px] text-[var(--color-ink)]">
             <li className="flex items-center gap-2">
-              <span className="h-1.5 w-1.5 rounded-full bg-[var(--color-coral)]" />
+              <span className="h-1.5 w-1.5 rounded-full bg-[var(--mint-live)]" />
               <span><span className="numeric font-semibold">500 zł</span> bonusu powitalnego</span>
             </li>
             <li className="flex items-center gap-2">
-              <span className="h-1.5 w-1.5 rounded-full bg-[var(--color-coral)]" />
+              <span className="h-1.5 w-1.5 rounded-full bg-[var(--mint-live)]" />
               <span>
                 Wpływ <span className="numeric font-semibold">≥ 1 500 zł</span> / m-c × 3 m-ce
               </span>
             </li>
             <li className="flex items-center gap-2">
-              <span className="h-1.5 w-1.5 rounded-full bg-[var(--color-coral)]" />
+              <span className="h-1.5 w-1.5 rounded-full bg-[var(--mint-live)]" />
               <span>
                 <span className="numeric font-semibold">5</span> transakcji kartą / m-c
               </span>
@@ -306,17 +307,18 @@ function SceneNotify({ visible }) {
     <div className={sceneCls(visible)}>
       <div className="relative w-full max-w-[260px]">
         <div
-          className="relative overflow-hidden rounded-[36px] border-[10px] border-[var(--color-ink)] bg-[var(--color-cream)]"
+          className="relative overflow-hidden rounded-[36px] bg-[#0A0C14]"
           style={{
             aspectRatio: "9 / 18",
+            border: "10px solid #06070B",
             boxShadow:
-              "0 24px 56px -16px rgba(11,20,38,0.35), 0 8px 16px -8px rgba(11,20,38,0.2)",
+              "0 24px 56px -16px rgba(0,0,0,0.70), 0 8px 16px -8px rgba(0,0,0,0.40), inset 0 0.5px 0 rgba(255,255,255,0.06)",
           }}
         >
           {/* Notch */}
           <div
             aria-hidden="true"
-            className="absolute left-1/2 top-2 z-10 h-4 w-20 -translate-x-1/2 rounded-full bg-[var(--color-ink)]"
+            className="absolute left-1/2 top-2 z-10 h-4 w-20 -translate-x-1/2 rounded-full bg-[#06070B]"
           />
           {/* Status bar */}
           <div className="flex items-center justify-between px-5 pt-3 text-[9px] font-medium text-[var(--color-ink)]">
@@ -326,17 +328,17 @@ function SceneNotify({ visible }) {
 
           <div className="px-3 py-4">
             <div
-              className="rounded-2xl border border-[var(--color-hairline)] bg-white p-3.5"
+              className="rounded-2xl border border-[var(--color-hairline)] bg-white/[0.05] p-3.5"
               style={{
-                boxShadow: "0 4px 12px rgba(11,20,38,0.06)",
+                boxShadow: "0 4px 12px rgba(0,0,0,0.30), inset 0 0.5px 0 rgba(255,255,255,0.08)",
                 animation: visible
                   ? "toast-pop 700ms 200ms cubic-bezier(0.22, 1.2, 0.36, 1) both"
                   : "none",
               }}
             >
               <div className="flex items-center gap-2">
-                <div className="flex h-7 w-7 items-center justify-center rounded-lg bg-[var(--color-brand-tint)]">
-                  <span className="font-display italic text-[12px] text-[var(--color-coral)]">S</span>
+                <div className="flex h-7 w-7 items-center justify-center rounded-lg bg-[var(--electric-violet-tint)]">
+                  <span className="font-display italic text-[12px] text-[var(--electric-violet-2)]">S</span>
                 </div>
                 <div className="leading-tight">
                   <div className="text-[10.5px] font-semibold text-[var(--color-ink)]">Saldox</div>
@@ -351,9 +353,9 @@ function SceneNotify({ visible }) {
               </div>
             </div>
 
-            <div className="mt-2.5 rounded-2xl border border-[var(--color-hairline)] bg-white p-3 opacity-50">
+            <div className="mt-2.5 rounded-2xl border border-[var(--color-hairline)] bg-white/[0.02] p-3 opacity-50">
               <div className="flex items-center gap-2">
-                <div className="h-6 w-6 rounded-lg bg-[var(--color-surface-2)]" />
+                <div className="h-6 w-6 rounded-lg bg-white/[0.04]" />
                 <div className="text-[9px] font-medium text-[var(--color-muted)]">
                   Zeszły tydzień
                 </div>
@@ -367,7 +369,14 @@ function SceneNotify({ visible }) {
 
         {/* Side label */}
         <div className="absolute -right-1 top-12 translate-x-full">
-          <div className="whitespace-nowrap rounded-full bg-[var(--color-emerald)] px-2.5 py-1 text-[10px] font-medium text-white">
+          <div
+            className="whitespace-nowrap rounded-full px-2.5 py-1 text-[10px] font-medium"
+            style={{
+              background: "var(--mint-live)",
+              color: "#06070B",
+              boxShadow: "0 0 12px rgba(0,229,160,0.45)",
+            }}
+          >
             1× / tydz.
           </div>
           <div className="mt-1 whitespace-nowrap text-[10px] text-[var(--color-faint)]">

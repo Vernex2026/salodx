@@ -18,14 +18,14 @@ export default function TrustBlock() {
     <section
       id="trust"
       aria-labelledby="trust-heading"
-      className="relative isolate overflow-hidden bg-[var(--color-cream)]"
+      className="relative isolate overflow-hidden bg-[var(--color-onyx-1)]"
     >
       <div
         aria-hidden="true"
-        className="pointer-events-none absolute inset-0 z-0 opacity-60"
+        className="pointer-events-none absolute inset-0 z-0 opacity-70"
         style={{
           background:
-            "radial-gradient(ellipse 50% 40% at 50% 100%, #FFD4B8 0%, transparent 60%)",
+            "radial-gradient(ellipse 50% 40% at 50% 100%, rgba(123,92,255,0.20) 0%, transparent 60%), radial-gradient(ellipse 40% 30% at 20% 0%, rgba(77,124,255,0.14) 0%, transparent 60%)",
         }}
       />
 
@@ -118,7 +118,7 @@ function Testimonial() {
       {/* Open quote — large display */}
       <div
         aria-hidden="true"
-        className="font-display italic text-[var(--color-coral)]"
+        className="font-display italic text-[var(--electric-violet-2)]"
         style={{ fontSize: "5rem", lineHeight: "0.5", marginBottom: "0.5rem" }}
       >
         “
@@ -142,13 +142,13 @@ function Testimonial() {
       </blockquote>
 
       <figcaption className="mt-8 flex items-center justify-center gap-3">
-        {/* Avatar */}
+        {/* Avatar — electric gradient (gold reserved for TopPromos badge) */}
         <div
           aria-hidden="true"
           className="flex h-12 w-12 items-center justify-center rounded-full font-display text-[18px] font-medium text-white"
           style={{
-            background: "linear-gradient(135deg, #D4A574 0%, #A87E50 100%)",
-            boxShadow: "0 4px 12px rgba(212,165,116,0.32)",
+            background: "linear-gradient(135deg, #4D7CFF 0%, #7B5CFF 100%)",
+            boxShadow: "0 4px 12px rgba(123,92,255,0.32), inset 0 0.5px 0 rgba(255,255,255,0.3)",
           }}
         >
           MT
@@ -218,7 +218,7 @@ function Star({ delay = 0 }) {
     >
       <path
         d="M9 1.5l2.2 5.4 5.8.5-4.4 3.8 1.4 5.7L9 13.8 3.9 16.9l1.4-5.7L0.9 7.4l5.8-.5L9 1.5z"
-        fill="#D4A574"
+        fill="var(--color-ink)"
       />
     </svg>
   );

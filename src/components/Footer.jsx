@@ -1,5 +1,5 @@
 /**
- * Premium minimal footer — Aurora palette, editorial wordmark, single CTA bar.
+ * Premium minimal footer — Onyx palette, editorial wordmark, electric CTA.
  */
 export default function Footer() {
   return (
@@ -7,7 +7,7 @@ export default function Footer() {
       className="relative isolate overflow-hidden"
       style={{
         background:
-          "radial-gradient(ellipse 50% 40% at 20% 20%, rgba(255,107,90,0.12) 0%, transparent 60%), linear-gradient(180deg, #0B1426 0%, #050810 100%)",
+          "radial-gradient(ellipse 50% 40% at 20% 20%, rgba(123,92,255,0.16) 0%, transparent 60%), radial-gradient(ellipse 40% 30% at 80% 90%, rgba(0,229,255,0.10) 0%, transparent 60%), linear-gradient(180deg, #06070B 0%, #030509 100%)",
       }}
     >
       {/* CTA band */}
@@ -24,13 +24,16 @@ export default function Footer() {
           >
             <span className="italic">Twój bonus</span>
             <br />
-            <span className="text-[var(--color-coral)]">już czeka.</span>
+            <span className="display-electric-gradient">
+              <span className="halo" aria-hidden="true">już czeka.</span>
+              już czeka.
+            </span>
           </h2>
           <p className="mt-6 max-w-md text-[16px] leading-[1.55] text-white/55 sm:text-[17px]">
             Sprawdź dzisiejsze oferty z 24 banków. Trwa krócej niż kawa.
           </p>
           <div className="mt-9 flex flex-col items-start gap-4 sm:flex-row sm:items-center">
-            <a href="#promocje" className="cta-coral">
+            <a href="#promocje" className="cta-electric">
               Zobacz dzisiejsze oferty
               <svg
                 className="arrow"
@@ -89,9 +92,9 @@ export default function Footer() {
                 aria-hidden="true"
                 className="relative flex h-8 w-8 items-center justify-center overflow-hidden rounded-[10px]"
                 style={{
-                  background: "linear-gradient(135deg, #FF8470 0%, #FF6B5A 100%)",
+                  background: "linear-gradient(135deg, #4D7CFF 0%, #7B5CFF 100%)",
                   boxShadow:
-                    "0 4px 12px rgba(255,107,90,0.32), inset 0 0.5px 0 rgba(255,255,255,0.5)",
+                    "0 4px 12px rgba(123,92,255,0.32), inset 0 0.5px 0 rgba(255,255,255,0.5)",
                 }}
               >
                 <span className="font-display italic text-[18px] text-white">S</span>
@@ -142,7 +145,7 @@ export default function Footer() {
         <div className="flex flex-col items-start justify-between gap-3 text-[12px] text-white/40 sm:flex-row sm:items-center">
           <div>© 2026 Saldox · Wszelkie prawa zastrzeżone.</div>
           <div className="flex items-center gap-2">
-            <span className="live-dot text-[var(--color-emerald)]" aria-hidden="true" />
+            <span className="live-dot" aria-hidden="true" />
             <span>
               Ostatnia aktualizacja bazy:{" "}
               <span className="numeric font-medium text-white/60">4 min temu</span>

@@ -18,17 +18,30 @@ const FORCE_VISIBLE = `
 `;
 
 const SHOTS = [
-  { name: "01-desktop-hero",        viewport: { w: 1440, h: 900 }, dsf: 2, settle: 2400 },
-  { name: "02-desktop-offers",      viewport: { w: 1440, h: 900 }, dsf: 2, scrollTo: "#promocje", settle: 1400 },
-  { name: "03-desktop-how",         viewport: { w: 1440, h: 900 }, dsf: 2, scrollTo: "#how",      settle: 1600 },
-  { name: "04-desktop-trust",       viewport: { w: 1440, h: 900 }, dsf: 2, scrollTo: "#trust",    settle: 2000 },
-  { name: "05-desktop-menu",        viewport: { w: 1440, h: 900 }, dsf: 2, action: openMenu, settle: 100 },
-  { name: "06-desktop-full",        viewport: { w: 1280, h: 800 }, dsf: 1, forceVisible: true, fullPage: true, settle: 2400, scrollDance: true },
-  { name: "07-mobile-hero",         viewport: { w: 390,  h: 844 }, dsf: 3, mobile: true, settle: 2400 },
-  { name: "08-mobile-offers",       viewport: { w: 390,  h: 844 }, dsf: 3, mobile: true, scrollTo: "#promocje", settle: 1400 },
-  { name: "09-mobile-how",          viewport: { w: 390,  h: 844 }, dsf: 3, mobile: true, scrollTo: "#how",      settle: 1600 },
-  { name: "10-mobile-trust",        viewport: { w: 390,  h: 844 }, dsf: 3, mobile: true, scrollTo: "#trust",    settle: 2000 },
-  { name: "11-mobile-menu",         viewport: { w: 390,  h: 844 }, dsf: 3, mobile: true, action: openMenu, settle: 100 },
+  /* ── Desktop (6) ───────────────────────────────────────────── */
+  { name: "01-desktop-hero",          viewport: { w: 1440, h: 900 }, dsf: 2, settle: 4500, waitR3F: true },
+  { name: "02-desktop-hero-parallax", viewport: { w: 1440, h: 900 }, dsf: 2, settle: 1400, waitR3F: true,
+    action: async (page) => {
+      // Sweep from center to far-right to fire pointermove + settle
+      await page.mouse.move(720, 450);
+      await page.waitForTimeout(60);
+      await page.mouse.move(1320, 350);
+      await page.waitForTimeout(1200);
+    }
+  },
+  { name: "03-desktop-offers",        viewport: { w: 1440, h: 900 }, dsf: 2, scrollTo: "#promocje", settle: 1500 },
+  { name: "04-desktop-how",           viewport: { w: 1440, h: 900 }, dsf: 2, scrollTo: "#how",      settle: 1800 },
+  { name: "05-desktop-trust",         viewport: { w: 1440, h: 900 }, dsf: 2, scrollTo: "#trust",    settle: 2200 },
+  { name: "06-desktop-menu",          viewport: { w: 1440, h: 900 }, dsf: 2, action: openMenu, settle: 800 },
+
+  /* ── Mobile (4) ────────────────────────────────────────────── */
+  { name: "07-mobile-hero",           viewport: { w: 390, h: 844 }, dsf: 3, mobile: true, settle: 2800 },
+  { name: "08-mobile-offers",         viewport: { w: 390, h: 844 }, dsf: 3, mobile: true, scrollTo: "#promocje", settle: 1500 },
+  { name: "09-mobile-how",            viewport: { w: 390, h: 844 }, dsf: 3, mobile: true, scrollTo: "#how",      settle: 1800 },
+  { name: "10-mobile-menu",           viewport: { w: 390, h: 844 }, dsf: 3, mobile: true, action: openMenu, settle: 800 },
+
+  /* ── Bonus: full-page overview ─────────────────────────────── */
+  { name: "11-desktop-full",          viewport: { w: 1280, h: 800 }, dsf: 1, forceVisible: true, fullPage: true, settle: 4500, scrollDance: true, waitR3F: true },
 ];
 
 async function openMenu(page) {
@@ -38,7 +51,7 @@ async function openMenu(page) {
 
 const browser = await chromium.launch({
   executablePath: "/opt/pw-browsers/chromium-1194/chrome-linux/chrome",
-  args: ["--no-sandbox", "--disable-dev-shm-usage"],
+  args: ["--no-sandbox", "--disable-dev-shm-usage", "--use-gl=swiftshader"],
 });
 
 for (const shot of SHOTS) {
@@ -59,9 +72,9 @@ for (const shot of SHOTS) {
 
   if (shot.scrollDance) {
     await page.evaluate(() => window.scrollTo(0, document.body.scrollHeight));
-    await page.waitForTimeout(600);
+    await page.waitForTimeout(700);
     await page.evaluate(() => window.scrollTo(0, 0));
-    await page.waitForTimeout(400);
+    await page.waitForTimeout(500);
   }
 
   if (shot.scrollTo) {
@@ -69,10 +82,20 @@ for (const shot of SHOTS) {
       const el = document.querySelector(sel);
       if (el) el.scrollIntoView({ behavior: "instant", block: "start" });
     }, shot.scrollTo);
-    await page.waitForTimeout(600);
+    await page.waitForTimeout(700);
   }
 
   if (shot.action) await shot.action(page);
+
+  if (shot.waitR3F) {
+    // Force two RAFs to guarantee R3F has rendered the frame buffer
+    await page.evaluate(
+      () =>
+        new Promise((r) =>
+          requestAnimationFrame(() => requestAnimationFrame(() => r()))
+        )
+    );
+  }
 
   await page.waitForTimeout(shot.settle ?? 800);
 

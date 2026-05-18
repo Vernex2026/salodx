@@ -1,11 +1,18 @@
-import { useEffect, useLayoutEffect, useRef, useState } from "react";
+import { lazy, Suspense, useEffect, useLayoutEffect, useRef, useState } from "react";
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { useMagnetic } from "../hooks/useMagnetic";
 import { useTilt3D } from "../hooks/useTilt3D";
+import { useOrbParallax } from "../hooks/useOrbParallax";
 import BankLogo from "./BankLogo";
+import HeroOrbFallback from "./HeroOrbFallback";
+
+const HeroOrb = lazy(() => import("./HeroOrb"));
 
 gsap.registerPlugin(ScrollTrigger);
+
+/* Kill switch — flip to false to ship the static fallback only. */
+const ORB_ENABLED = true;
 
 const prefersReducedMotion = () =>
   typeof window !== "undefined" &&
@@ -13,13 +20,17 @@ const prefersReducedMotion = () =>
 
 export default function Hero() {
   const sectionRef = useRef(null);
-  const photoWrapRef = useRef(null);
   const cardTiltRef = useRef(null);
   const cardWrapRef = useRef(null);
   const primaryCtaRef = useRef(null);
   const headlineRef = useRef(null);
+  const orbWrapRef = useRef(null);
 
   const [gsapActive] = useState(() => !prefersReducedMotion());
+
+  // Shared parallax source — orb reads parallaxRef in useFrame,
+  // card reads --orb-px CSS var via transform.
+  const parallaxRef = useOrbParallax(sectionRef, { maxPx: 18, lerp: 0.12 });
 
   useMagnetic(primaryCtaRef, { strength: 0.22, radius: 110, max: 6 });
   useTilt3D(cardTiltRef, { triggerRef: cardWrapRef, maxDeg: 4, lerp: 0.08 });
@@ -38,6 +49,11 @@ export default function Hero() {
           0.18
         )
         .from(
+          ".hero-rise[data-rise='headline-2']",
+          { y: 28, opacity: 0, filter: "blur(8px)", duration: 0.8, ease: "power2.out" },
+          0.65
+        )
+        .from(
           ".hero-rise[data-rise='subhead']",
           { y: 18, opacity: 0, duration: 0.7 },
           "-=0.30"
@@ -53,17 +69,16 @@ export default function Hero() {
           "-=0.40"
         )
         .from(
-          ".hero-rise[data-rise='photo']",
-          { y: 24, opacity: 0, scale: 1.03, filter: "blur(8px)", duration: 1.1, ease: "power2.out" },
+          ".hero-rise[data-rise='orb']",
+          { y: 24, opacity: 0, scale: 1.04, filter: "blur(10px)", duration: 1.2, ease: "power2.out" },
           0.4
         )
         .from(
           ".hero-rise[data-rise='card']",
           { y: 32, opacity: 0, scale: 0.92, filter: "blur(10px)", duration: 0.95, ease: "back.out(1.4)" },
-          "-=0.70"
+          "-=0.80"
         );
 
-      // Slight headline compress on scroll
       gsap.to(headlineRef.current, {
         scale: 0.96,
         y: -12,
@@ -77,8 +92,7 @@ export default function Hero() {
         },
       });
 
-      // Photo parallax drift
-      gsap.to(photoWrapRef.current, {
+      gsap.to(orbWrapRef.current, {
         y: -52,
         ease: "none",
         scrollTrigger: {
@@ -105,7 +119,7 @@ export default function Hero() {
       id="top"
       aria-labelledby="hero-heading"
       data-gsap-active={gsapActive ? "true" : "false"}
-      className="bg-aurora-mesh-drift bg-grain relative isolate overflow-hidden"
+      className="bg-onyx-mesh-drift bg-grain relative isolate overflow-hidden"
     >
       <div className="relative z-10 mx-auto grid w-full max-w-[1280px] gap-10 px-6 pb-20 pt-28 sm:px-8 md:pb-28 md:pt-32 lg:grid-cols-12 lg:gap-12 lg:px-12 lg:pb-40 lg:pt-36">
         {/* ── LEFT COLUMN — Typography + CTA ─────────────────── */}
@@ -114,12 +128,11 @@ export default function Hero() {
           <a
             href="#promocje"
             data-rise="pill"
-            className="hero-rise group mx-auto inline-flex items-center gap-2.5 self-center rounded-full border border-[var(--color-hairline)] bg-white/60 py-1.5 pl-2 pr-4 text-[13px] font-medium text-[var(--color-ink)] backdrop-blur-md transition-colors hover:bg-white/80 lg:mx-0 lg:self-start"
-            style={{ boxShadow: "0 1px 2px rgba(11,20,38,0.04)" }}
+            className="hero-rise group mx-auto inline-flex items-center gap-2.5 self-center rounded-full border border-[var(--color-hairline)] bg-white/[0.04] py-1.5 pl-2 pr-4 text-[13px] font-medium text-[var(--color-ink)] backdrop-blur-md transition-colors hover:bg-white/[0.08] lg:mx-0 lg:self-start"
           >
             <span className="relative flex h-5 w-5 items-center justify-center rounded-full bg-[var(--color-success-tint)]">
-              <span className="absolute h-2 w-2 rounded-full bg-[var(--color-emerald)] animate-pulse-dot" />
-              <span className="relative h-1.5 w-1.5 rounded-full bg-[var(--color-emerald)]" />
+              <span className="absolute h-2 w-2 rounded-full bg-[var(--mint-live)] animate-pulse-dot" />
+              <span className="relative h-1.5 w-1.5 rounded-full bg-[var(--mint-live)]" />
             </span>
             <span className="text-[var(--color-muted)]">
               <span className="font-semibold text-[var(--color-ink)]">47 ofert</span> dziś · skanujemy 24 banki
@@ -135,7 +148,7 @@ export default function Hero() {
             </svg>
           </a>
 
-          {/* Hero headline — Instrument Serif, italic + regular hybrid */}
+          {/* Hero headline — italic display, second line is electric gradient */}
           <h1
             id="hero-heading"
             ref={headlineRef}
@@ -153,11 +166,16 @@ export default function Hero() {
               baseDelay={120}
               className="italic text-[var(--color-ink)]"
             />
-            <HeroLine
-              text="już czeka."
-              baseDelay={540}
-              className="text-[var(--color-coral)]"
-            />
+            <span
+              data-rise="headline-2"
+              className="hero-rise block"
+              style={{ "--rise-delay": "650ms" }}
+            >
+              <span className="display-electric-gradient">
+                <span className="halo" aria-hidden="true">już czeka.</span>
+                już czeka.
+              </span>
+            </span>
           </h1>
 
           {/* Subhead */}
@@ -175,7 +193,7 @@ export default function Hero() {
             className="hero-rise mt-10 flex flex-col items-center gap-4 sm:flex-row sm:gap-5 lg:justify-start"
             style={{ "--rise-delay": "1100ms" }}
           >
-            <a ref={primaryCtaRef} href="#promocje" className="cta-coral">
+            <a ref={primaryCtaRef} href="#promocje" className="cta-electric">
               Zobacz dzisiejsze oferty
               <svg
                 aria-hidden="true"
@@ -216,7 +234,7 @@ export default function Hero() {
             style={{ "--rise-delay": "1300ms" }}
           >
             <span className="flex items-center gap-2 text-[var(--color-muted)]">
-              <span className="live-dot text-[var(--color-emerald)]" aria-hidden="true" />
+              <span className="live-dot" aria-hidden="true" />
               <span>
                 <span className="font-medium text-[var(--color-ink)]">47</span> ofert
                 <span className="mx-1.5 text-[var(--color-hairline-2)]">·</span>
@@ -228,96 +246,53 @@ export default function Hero() {
           </div>
         </div>
 
-        {/* ── RIGHT COLUMN — Lifestyle photo + glass card ──── */}
+        {/* ── RIGHT COLUMN — 3D orb + floating glass card ────── */}
         <div className="relative lg:col-span-5">
           <div
-            ref={photoWrapRef}
-            data-rise="photo"
-            className="hero-rise relative mx-auto aspect-[4/5] w-full max-w-md lg:max-w-none"
+            ref={orbWrapRef}
+            data-rise="orb"
+            className="hero-rise relative mx-auto aspect-square w-full max-w-md lg:max-w-none"
             style={{ perspective: "1400px" }}
           >
-            {/* The "photo" — stylized SVG composition */}
-            <div
-              className="absolute inset-0 overflow-hidden rounded-[28px] lg:rounded-[36px]"
-              style={{
-                boxShadow:
-                  "0 32px 80px -16px rgba(11,20,38,0.18), 0 8px 24px -8px rgba(11,20,38,0.08)",
-              }}
-            >
-              <img
-                src="/photos/hero-lifestyle.svg"
-                alt=""
-                role="presentation"
-                className="h-full w-full object-cover"
-                style={{ filter: "saturate(1.04) brightness(1.02)" }}
-              />
-              {/* Warm tint overlay */}
-              <div
-                aria-hidden="true"
-                className="pointer-events-none absolute inset-0"
-                style={{
-                  background:
-                    "linear-gradient(180deg, transparent 0%, transparent 50%, rgba(255,193,154,0.10) 100%)",
-                }}
-              />
-              {/* Edge vignette */}
-              <div
-                aria-hidden="true"
-                className="pointer-events-none absolute inset-0 rounded-[inherit]"
-                style={{
-                  boxShadow: "inset 0 0 60px rgba(11,20,38,0.06), inset 0 0 0 1px rgba(255,255,255,0.4)",
-                }}
-              />
-            </div>
+            {/* Kill-switch and Suspense gating: when ORB_ENABLED is false the
+                lazy import is never reached at runtime; mobile + reduced motion
+                still go through the orb's internal gates. */}
+            {ORB_ENABLED ? (
+              <Suspense fallback={<HeroOrbFallback />}>
+                <HeroOrb enabled={ORB_ENABLED} parallaxRef={parallaxRef} />
+              </Suspense>
+            ) : (
+              <HeroOrbFallback />
+            )}
+          </div>
 
-            {/* Floating bonus toast — appears top-right after delay */}
+          {/* Floating glass card — overlaps orb bottom-right.
+              Card translates opposite to mouse via --orb-px (set by useOrbParallax). */}
+          <div
+            ref={cardWrapRef}
+            data-rise="card"
+            className="hero-rise absolute z-20"
+            style={{
+              width: "min(320px, 86%)",
+              right: "-2%",
+              bottom: "4%",
+              perspective: "1200px",
+              transform: "translate(var(--orb-px, 0px), var(--orb-py, 0px))",
+              transition: "transform 0.4s cubic-bezier(0.22, 1, 0.36, 1)",
+            }}
+          >
             <div
-              className="toast-pop absolute -top-4 right-4 z-30 flex items-center gap-2.5 rounded-2xl border border-[var(--color-hairline)] bg-white/95 px-3.5 py-2.5 text-[12.5px] text-[var(--color-text)] backdrop-blur-md sm:right-6 lg:-right-4"
-              style={{ boxShadow: "var(--shadow-lifted)" }}
-              role="status"
-              aria-live="polite"
+              ref={cardTiltRef}
+              className="float-card"
+              style={{ transformStyle: "preserve-3d", willChange: "transform" }}
             >
-              <span
-                className="flex h-7 w-7 items-center justify-center rounded-full bg-[var(--color-brand-tint)] text-[var(--color-coral)]"
-                aria-hidden="true"
-              >
-                <svg width="13" height="13" viewBox="0 0 14 14" fill="none">
-                  <path d="M7 1v12M1 7h12" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" />
-                </svg>
-              </span>
-              <div className="leading-tight">
-                <div className="font-medium text-[var(--color-ink)]">
-                  Nowa oferta · <span className="numeric font-semibold text-[var(--color-coral)]">+450 zł</span>
-                </div>
-                <div className="text-[11px] text-[var(--color-faint)]">ING · przed chwilą</div>
-              </div>
-            </div>
-
-            {/* Glass card — THE hero element */}
-            <div
-              ref={cardWrapRef}
-              data-rise="card"
-              className="hero-rise absolute z-20"
-              style={{
-                width: "min(340px, 88%)",
-                left: "-6%",
-                bottom: "8%",
-                perspective: "1200px",
-              }}
-            >
-              <div
-                ref={cardTiltRef}
-                className="float-card"
-                style={{ transformStyle: "preserve-3d", willChange: "transform" }}
-              >
-                <GlassOfferCard />
-              </div>
+              <GlassOfferCard />
             </div>
           </div>
         </div>
       </div>
 
-      {/* Scroll indicator — bottom center */}
+      {/* Scroll indicator */}
       <div
         aria-hidden="true"
         className="pointer-events-none absolute inset-x-0 bottom-6 z-10 hidden justify-center md:flex"
@@ -330,10 +305,10 @@ export default function Hero() {
         </div>
       </div>
 
-      {/* Bottom fade-out to next section (handoff to TopOffers dark) */}
+      {/* Bottom fade-out — onyx hand-off */}
       <div
         aria-hidden="true"
-        className="pointer-events-none absolute inset-x-0 bottom-0 z-[2] h-32 bg-gradient-to-b from-transparent to-[var(--color-cream)]"
+        className="pointer-events-none absolute inset-x-0 bottom-0 z-[2] h-32 bg-gradient-to-b from-transparent to-[var(--color-onyx-1)]"
       />
     </section>
   );
@@ -376,11 +351,11 @@ function HeroLine({ text, baseDelay, className = "" }) {
   );
 }
 
-/* ── Glass card — premium signature element ── */
+/* ── Glass card — dark glass + orb-facing halo + electric accents ── */
 function GlassOfferCard() {
   return (
     <article
-      className="glass-card relative overflow-hidden rounded-[24px] p-7"
+      className="glass-card orb-halo relative overflow-hidden rounded-[24px] p-7"
       aria-label="mBank · bonus powitalny 500 zł"
     >
       <header className="relative flex items-center gap-3">
@@ -391,8 +366,8 @@ function GlassOfferCard() {
           </h3>
           <span className="text-[12px] text-[var(--color-muted)]">Konto Intensive</span>
         </div>
-        <span className="inline-flex items-center gap-1.5 rounded-full bg-[var(--color-success-tint)] px-2 py-1 text-[10.5px] font-medium text-[var(--color-emerald)]">
-          <span className="live-dot text-[var(--color-emerald)]" aria-hidden="true" />
+        <span className="inline-flex items-center gap-1.5 rounded-full bg-[var(--color-success-tint)] px-2 py-1 text-[10.5px] font-medium text-[var(--mint-live)]">
+          <span className="live-dot" aria-hidden="true" />
           12 min
         </span>
       </header>
@@ -415,20 +390,20 @@ function GlassOfferCard() {
             zł
           </span>
         </p>
-        <span className="mt-1 inline-block rounded-full bg-[var(--color-brand-tint)] px-2.5 py-0.5 text-[11px] font-medium text-[var(--color-coral)]">
+        <span className="mt-1 inline-block rounded-full bg-[var(--electric-violet-tint)] px-2.5 py-0.5 text-[11px] font-medium text-[var(--electric-violet-2)]">
           + zwrot 1%
         </span>
       </div>
 
       <ul className="relative mt-5 space-y-1.5 text-[12.5px] text-[var(--color-text)]">
         <li className="flex items-start gap-2">
-          <svg aria-hidden="true" width="14" height="14" viewBox="0 0 14 14" className="mt-0.5 shrink-0 text-[var(--color-coral)]">
+          <svg aria-hidden="true" width="14" height="14" viewBox="0 0 14 14" className="mt-0.5 shrink-0 text-[var(--mint-live)]">
             <path d="M3 7.5l2.5 2.5 6-6" stroke="currentColor" strokeWidth="1.8" fill="none" strokeLinecap="round" strokeLinejoin="round" />
           </svg>
           Wpływ ≥ <span className="numeric font-semibold">1 500 zł</span> / m-c
         </li>
         <li className="flex items-start gap-2">
-          <svg aria-hidden="true" width="14" height="14" viewBox="0 0 14 14" className="mt-0.5 shrink-0 text-[var(--color-coral)]">
+          <svg aria-hidden="true" width="14" height="14" viewBox="0 0 14 14" className="mt-0.5 shrink-0 text-[var(--mint-live)]">
             <path d="M3 7.5l2.5 2.5 6-6" stroke="currentColor" strokeWidth="1.8" fill="none" strokeLinecap="round" strokeLinejoin="round" />
           </svg>
           <span className="numeric font-semibold">5</span>&nbsp;transakcji kartą
@@ -441,7 +416,10 @@ function GlassOfferCard() {
             Do końca
           </div>
           <div className="mt-0.5 flex items-baseline gap-1">
-            <span className="font-display italic numeric text-[20px] text-[var(--color-ink)]" style={{ letterSpacing: "-0.02em" }}>
+            <span
+              className="font-display italic numeric text-[20px] text-[var(--color-ink)]"
+              style={{ letterSpacing: "-0.02em" }}
+            >
               14
             </span>
             <span className="text-[11.5px] text-[var(--color-muted)]">dni</span>
@@ -449,11 +427,25 @@ function GlassOfferCard() {
         </div>
         <button
           type="button"
-          className="group inline-flex items-center gap-1.5 rounded-full bg-[var(--color-ink)] px-4 py-2 text-[12px] font-semibold text-white transition-transform hover:scale-105"
+          className="group inline-flex items-center gap-1.5 rounded-full px-4 py-2 text-[12px] font-semibold transition-transform hover:scale-105"
+          style={{ background: "#F4F6FB", color: "#06070B" }}
         >
           Sprawdź
-          <svg aria-hidden="true" width="11" height="11" viewBox="0 0 12 12" className="transition-transform group-hover:translate-x-0.5">
-            <path d="M2.5 6h7M6 2.5L9.5 6 6 9.5" stroke="currentColor" strokeWidth="1.5" fill="none" strokeLinecap="round" strokeLinejoin="round" />
+          <svg
+            aria-hidden="true"
+            width="11"
+            height="11"
+            viewBox="0 0 12 12"
+            className="transition-transform group-hover:translate-x-0.5"
+          >
+            <path
+              d="M2.5 6h7M6 2.5L9.5 6 6 9.5"
+              stroke="currentColor"
+              strokeWidth="1.5"
+              fill="none"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+            />
           </svg>
         </button>
       </footer>

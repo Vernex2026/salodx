@@ -48,15 +48,25 @@ export default function TopPromos() {
     <section
       id="promocje"
       aria-labelledby="top-offers-heading"
-      className="bg-dark-mesh bg-grain relative isolate overflow-hidden"
+      className="bg-onyx-mesh bg-grain relative isolate overflow-hidden"
     >
-      {/* Decorative warm bloom — subtle coral haze top-left */}
+      {/* Decorative electric bloom — violet haze top-left */}
       <div
         aria-hidden="true"
-        className="pointer-events-none absolute -left-32 -top-32 z-0 h-[480px] w-[480px] rounded-full opacity-30"
+        className="pointer-events-none absolute -left-32 -top-32 z-0 h-[480px] w-[480px] rounded-full opacity-40"
         style={{
           background:
-            "radial-gradient(closest-side, rgba(255,107,90,0.4) 0%, transparent 70%)",
+            "radial-gradient(closest-side, rgba(123,92,255,0.38) 0%, transparent 70%)",
+          filter: "blur(40px)",
+        }}
+      />
+      {/* Companion electric-blue bloom bottom-right */}
+      <div
+        aria-hidden="true"
+        className="pointer-events-none absolute -right-32 bottom-0 z-0 h-[420px] w-[420px] rounded-full opacity-35"
+        style={{
+          background:
+            "radial-gradient(closest-side, rgba(77,124,255,0.30) 0%, transparent 70%)",
           filter: "blur(40px)",
         }}
       />
@@ -196,10 +206,14 @@ function OfferCard({ offer, delay = 0 }) {
           </div>
         )}
 
-        {/* Urgent badge */}
+        {/* Urgent badge — electric cyan (not gold-reserved, not coral-banned) */}
         {urgent && !badge && (
-          <div className="relative mb-6 inline-flex items-center gap-1.5 rounded-full border border-[rgba(255,107,90,0.32)] bg-[rgba(255,107,90,0.10)] px-2.5 py-1 text-[10.5px] font-medium uppercase tracking-[0.14em] text-[var(--color-coral-2)]">
-            <span className="live-dot text-[var(--color-coral-2)]" aria-hidden="true" />
+          <div className="relative mb-6 inline-flex items-center gap-1.5 rounded-full border border-[rgba(0,229,255,0.32)] bg-[rgba(0,229,255,0.10)] px-2.5 py-1 text-[10.5px] font-medium uppercase tracking-[0.14em] text-[var(--plasma-cyan)]">
+            <span
+              aria-hidden="true"
+              className="inline-block h-1.5 w-1.5 rounded-full bg-[var(--plasma-cyan)]"
+              style={{ boxShadow: "0 0 8px rgba(0,229,255,0.7)" }}
+            />
             Kończy się
           </div>
         )}
@@ -252,7 +266,7 @@ function OfferCard({ offer, delay = 0 }) {
                 width="14"
                 height="14"
                 viewBox="0 0 14 14"
-                className="mt-0.5 shrink-0 text-[var(--color-coral)]"
+                className="mt-0.5 shrink-0 text-[var(--mint-live)]"
               >
                 <path
                   d="M3 7.5l2.5 2.5 6-6"
