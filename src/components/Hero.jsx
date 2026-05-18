@@ -119,11 +119,11 @@ export default function Hero() {
       id="top"
       aria-labelledby="hero-heading"
       data-gsap-active={gsapActive ? "true" : "false"}
-      className="bg-onyx-mesh-drift bg-grain relative isolate overflow-hidden"
+      className="section-bridge relative isolate overflow-hidden"
     >
       <div className="relative z-10 mx-auto grid w-full max-w-[1280px] gap-10 px-6 pb-20 pt-28 sm:px-8 md:pb-28 md:pt-32 lg:grid-cols-12 lg:gap-12 lg:px-12 lg:pb-40 lg:pt-36">
         {/* ── LEFT COLUMN — Typography + CTA ─────────────────── */}
-        <div className="lg:col-span-7 lg:pr-8 flex flex-col justify-center">
+        <div className="lg:col-span-7 lg:pr-4 flex flex-col justify-center">
           {/* Pill — insider signal */}
           <a
             href="#promocje"
@@ -148,15 +148,16 @@ export default function Hero() {
             </svg>
           </a>
 
-          {/* Hero headline — italic display, second line is electric gradient */}
+          {/* Hero headline — Fraunces upright display, second line is electric gradient */}
           <h1
             id="hero-heading"
             ref={headlineRef}
             className="font-display mt-8 text-center lg:text-left"
             style={{
-              fontSize: "clamp(3rem, 8.6vw, 7rem)",
-              lineHeight: "0.94",
-              letterSpacing: "-0.03em",
+              fontSize: "clamp(3rem, 8.6vw, 6.5rem)",
+              lineHeight: "0.96",
+              letterSpacing: "-0.045em",
+              fontWeight: 500,
               transformOrigin: "left center",
               willChange: "transform",
             }}
@@ -164,7 +165,7 @@ export default function Hero() {
             <HeroLine
               text="Twój bonus"
               baseDelay={120}
-              className="italic text-[var(--color-ink)]"
+              className="text-[var(--color-ink)]"
             />
             <span
               data-rise="headline-2"
@@ -251,7 +252,7 @@ export default function Hero() {
           <div
             ref={orbWrapRef}
             data-rise="orb"
-            className="hero-rise relative mx-auto aspect-square w-full max-w-md lg:max-w-none"
+            className="hero-rise relative mx-auto aspect-square w-full max-w-md lg:max-w-[560px]"
             style={{ perspective: "1400px" }}
           >
             {/* Kill-switch and Suspense gating: when ORB_ENABLED is false the
@@ -274,8 +275,8 @@ export default function Hero() {
             className="hero-rise absolute z-20"
             style={{
               width: "min(320px, 86%)",
-              right: "-2%",
-              bottom: "4%",
+              right: "-4%",
+              bottom: "8%",
               perspective: "1200px",
               transform: "translate(var(--orb-px, 0px), var(--orb-py, 0px))",
               transition: "transform 0.4s cubic-bezier(0.22, 1, 0.36, 1)",
@@ -355,7 +356,7 @@ function HeroLine({ text, baseDelay, className = "" }) {
 function GlassOfferCard() {
   return (
     <article
-      className="glass-card orb-halo relative overflow-hidden rounded-[24px] p-7"
+      className="card-onyx orb-halo relative overflow-hidden p-7"
       aria-label="mBank · bonus powitalny 500 zł"
     >
       <header className="relative flex items-center gap-3">
@@ -378,14 +379,14 @@ function GlassOfferCard() {
         </div>
         <p className="mt-1.5 flex items-baseline gap-1">
           <span
-            className="font-display italic numeric text-[var(--color-ink)]"
-            style={{ fontSize: "4.5rem", lineHeight: "1", letterSpacing: "-0.04em" }}
+            className="font-display numeric text-[var(--color-ink)]"
+            style={{ fontSize: "4.5rem", lineHeight: "1", letterSpacing: "-0.045em", fontWeight: 400 }}
           >
             500
           </span>
           <span
-            className="font-display italic text-[var(--color-muted)]"
-            style={{ fontSize: "1.5rem" }}
+            className="font-display text-[var(--color-muted)]"
+            style={{ fontSize: "1.5rem", fontWeight: 400 }}
           >
             zł
           </span>
@@ -417,8 +418,8 @@ function GlassOfferCard() {
           </div>
           <div className="mt-0.5 flex items-baseline gap-1">
             <span
-              className="font-display italic numeric text-[20px] text-[var(--color-ink)]"
-              style={{ letterSpacing: "-0.02em" }}
+              className="font-display numeric text-[20px] text-[var(--color-ink)]"
+              style={{ letterSpacing: "-0.035em", fontWeight: 400 }}
             >
               14
             </span>

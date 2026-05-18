@@ -19,7 +19,7 @@ const FORCE_VISIBLE = `
 
 const SHOTS = [
   /* ── Desktop (6) ───────────────────────────────────────────── */
-  { name: "01-desktop-hero",          viewport: { w: 1440, h: 900 }, dsf: 2, settle: 4500, waitR3F: true },
+  { name: "01-desktop-hero",          viewport: { w: 1440, h: 900 }, dsf: 2, settle: 5500, waitR3F: true },
   { name: "02-desktop-hero-parallax", viewport: { w: 1440, h: 900 }, dsf: 2, settle: 1400, waitR3F: true,
     action: async (page) => {
       // Sweep from center to far-right to fire pointermove + settle
@@ -41,7 +41,7 @@ const SHOTS = [
   { name: "10-mobile-menu",           viewport: { w: 390, h: 844 }, dsf: 3, mobile: true, action: openMenu, settle: 800 },
 
   /* ── Bonus: full-page overview ─────────────────────────────── */
-  { name: "11-desktop-full",          viewport: { w: 1280, h: 800 }, dsf: 1, forceVisible: true, fullPage: true, settle: 4500, scrollDance: true, waitR3F: true },
+  { name: "11-desktop-full",          viewport: { w: 1280, h: 800 }, dsf: 1, forceVisible: true, fullPage: true, settle: 5500, scrollDance: true, waitR3F: true },
 ];
 
 async function openMenu(page) {

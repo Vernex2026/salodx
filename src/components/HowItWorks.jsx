@@ -36,15 +36,15 @@ export default function HowItWorks() {
       ref={sectionRef}
       id="how"
       aria-labelledby="how-heading"
-      className="relative isolate overflow-hidden bg-[var(--color-onyx-1)]"
+      className="section-bridge relative isolate overflow-hidden"
     >
-      {/* Electric wash — violet top-right, cyan bottom-left */}
+      {/* Localised violet bloom — sits over the body atmosphere for accent */}
       <div
         aria-hidden="true"
-        className="pointer-events-none absolute inset-0 z-0 opacity-80"
+        className="pointer-events-none absolute inset-0 z-0 opacity-30"
         style={{
           background:
-            "radial-gradient(ellipse 60% 50% at 82% 20%, rgba(123,92,255,0.22) 0%, transparent 60%), radial-gradient(ellipse 50% 40% at 12% 82%, rgba(0,229,255,0.14) 0%, transparent 60%), radial-gradient(ellipse 40% 35% at 50% 50%, rgba(77,124,255,0.10) 0%, transparent 60%)",
+            "radial-gradient(ellipse 50% 40% at 80% 22%, rgba(123,92,255,0.36) 0%, transparent 60%)",
         }}
       />
 
@@ -106,8 +106,8 @@ export default function HowItWorks() {
           ].map((s) => (
             <div key={s.l} className="flex flex-col items-center">
               <span
-                className="font-display italic text-[var(--color-ink)]"
-                style={{ fontSize: "clamp(1.5rem, 3vw, 2rem)", letterSpacing: "-0.02em" }}
+                className="font-display text-[var(--color-ink)]"
+                style={{ fontSize: "clamp(1.5rem, 3vw, 2rem)", letterSpacing: "-0.035em", fontWeight: 400 }}
               >
                 {s.v}
               </span>
@@ -131,10 +131,11 @@ function Header() {
         style={{
           fontSize: "clamp(2.25rem, 5vw, 4rem)",
           lineHeight: "1.02",
-          letterSpacing: "-0.025em",
+          letterSpacing: "-0.04em",
+          fontWeight: 500,
         }}
       >
-        <span className="italic">3 kroki.</span>{" "}
+        <span>3 kroki.</span>{" "}
         <span>Bez kont, bez prowizji.</span>
       </h2>
       <p className="mt-6 max-w-xl text-[16px] leading-[1.55] text-[var(--color-muted)] sm:text-[17px]">
@@ -211,7 +212,7 @@ function SceneScan({ visible }) {
                   : "none",
               }}
             >
-              <span className="font-display italic text-[14px] text-[var(--color-muted)]">
+              <span className="font-display text-[14px] font-medium text-[var(--color-muted)]" style={{letterSpacing:"-0.02em"}}>
                 {b}
               </span>
             </div>
@@ -338,7 +339,7 @@ function SceneNotify({ visible }) {
             >
               <div className="flex items-center gap-2">
                 <div className="flex h-7 w-7 items-center justify-center rounded-lg bg-[var(--electric-violet-tint)]">
-                  <span className="font-display italic text-[12px] text-[var(--electric-violet-2)]">S</span>
+                  <span className="font-display text-[12px] font-medium text-[var(--electric-violet-2)]" style={{letterSpacing:"-0.02em"}}>S</span>
                 </div>
                 <div className="leading-tight">
                   <div className="text-[10.5px] font-semibold text-[var(--color-ink)]">Saldox</div>

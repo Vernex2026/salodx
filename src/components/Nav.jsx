@@ -64,7 +64,7 @@ export default function Nav() {
                   "0 4px 12px rgba(123,92,255,0.32), inset 0 0.5px 0 rgba(255,255,255,0.5)",
               }}
             >
-              <span className="font-display italic text-[18px] font-normal leading-none text-white">
+              <span className="font-display text-[18px] font-medium leading-none text-white">
                 S
               </span>
             </span>
@@ -149,7 +149,7 @@ export default function Nav() {
                         "0 4px 12px rgba(123,92,255,0.32), inset 0 0.5px 0 rgba(255,255,255,0.5)",
                     }}
                   >
-                    <span className="font-display italic text-[18px] font-normal leading-none text-white">
+                    <span className="font-display text-[18px] font-medium leading-none text-white">
                       S
                     </span>
                   </span>
@@ -183,15 +183,16 @@ export default function Nav() {
                       <a
                         href={link.href}
                         onClick={() => setOpen(false)}
-                        className="group block py-3 font-display tracking-[-0.02em] text-white transition-colors duration-200 hover:text-[var(--plasma-cyan)]"
+                        className="group block py-3 font-display tracking-[-0.04em] text-white transition-colors duration-200 hover:text-[var(--plasma-cyan)]"
                         style={{
                           fontSize: "clamp(3rem, 8vw, 5.5rem)",
                           lineHeight: "1",
-                          fontStyle: "italic",
+                          fontStyle: "normal",
+                          fontWeight: 400,
                         }}
                       >
                         <span className="inline-flex items-center gap-6">
-                          <span className="numeric text-[14px] not-italic font-mono text-white/40 tracking-[0.12em]">
+                          <span className="numeric text-[14px] font-mono text-white/40 tracking-[0.12em]">
                             0{i + 1}
                           </span>
                           <span className="relative inline-block">
@@ -218,7 +219,7 @@ export default function Nav() {
                     <div className="eyebrow text-white/40">Kontakt</div>
                     <a
                       href="mailto:biuro@saldox.pl"
-                      className="mt-2 inline-block font-display text-[26px] italic tracking-[-0.02em] text-white transition-colors hover:text-[var(--plasma-cyan)] sm:text-[32px]"
+                      className="mt-2 inline-block font-display text-[26px] font-medium tracking-[-0.02em] text-white transition-colors hover:text-[var(--plasma-cyan)] sm:text-[32px]"
                     >
                       biuro@saldox.pl
                     </a>

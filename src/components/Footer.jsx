@@ -11,7 +11,7 @@ export default function Footer() {
       }}
     >
       {/* CTA band */}
-      <div className="relative mx-auto max-w-[1280px] px-6 pb-12 pt-24 sm:px-8 md:pb-16 md:pt-32 lg:px-12">
+      <div id="next" className="section-bridge relative mx-auto max-w-[1280px] px-6 pb-12 pt-24 sm:px-8 md:pb-16 md:pt-32 lg:px-12">
         <div className="max-w-3xl">
           <div className="eyebrow text-white/35">Następny krok</div>
           <h2
@@ -19,10 +19,11 @@ export default function Footer() {
             style={{
               fontSize: "clamp(2.5rem, 6vw, 5rem)",
               lineHeight: "0.98",
-              letterSpacing: "-0.03em",
+              letterSpacing: "-0.045em",
+              fontWeight: 500,
             }}
           >
-            <span className="italic">Twój bonus</span>
+            <span>Twój bonus</span>
             <br />
             <span className="display-electric-gradient">
               <span className="halo" aria-hidden="true">już czeka.</span>
@@ -97,7 +98,7 @@ export default function Footer() {
                     "0 4px 12px rgba(123,92,255,0.32), inset 0 0.5px 0 rgba(255,255,255,0.5)",
                 }}
               >
-                <span className="font-display italic text-[18px] text-white">S</span>
+                <span className="font-display text-[18px] font-medium text-white" style={{letterSpacing:"-0.02em"}}>S</span>
               </span>
               <span className="font-display text-[22px] tracking-[-0.02em] text-white">
                 Saldox

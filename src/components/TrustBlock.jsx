@@ -18,7 +18,7 @@ export default function TrustBlock() {
     <section
       id="trust"
       aria-labelledby="trust-heading"
-      className="relative isolate overflow-hidden bg-[var(--color-onyx-1)]"
+      className="section-bridge relative isolate overflow-hidden"
     >
       <div
         aria-hidden="true"
@@ -66,11 +66,12 @@ function Eyebrow() {
         style={{
           fontSize: "clamp(2.25rem, 5vw, 4rem)",
           lineHeight: "1.02",
-          letterSpacing: "-0.025em",
+          letterSpacing: "-0.04em",
+          fontWeight: 500,
         }}
       >
         <span>Nie wierzysz?</span>{" "}
-        <span className="italic text-[var(--color-muted)]">Spójrz na liczby.</span>
+        <span className="text-[var(--color-muted)]">Spójrz na liczby.</span>
       </h2>
     </div>
   );
@@ -86,17 +87,18 @@ function StatItem({ stat, delay = 0 }) {
       style={{ "--reveal-delay": `${delay}ms` }}
     >
       <p
-        className="font-display italic numeric text-[var(--color-ink)]"
+        className="font-display numeric text-[var(--color-ink)]"
         style={{
           fontSize: "clamp(3rem, 6vw, 5rem)",
           lineHeight: "0.95",
-          letterSpacing: "-0.035em",
+          letterSpacing: "-0.05em",
+          fontWeight: 400,
         }}
       >
         {fmt(animated, stat.format)}
         {stat.suffix && (
           <span
-            className="font-display italic text-[var(--color-muted)]"
+            className="font-display text-[var(--color-muted)]"
             style={{ fontSize: "clamp(1.25rem, 2vw, 1.75rem)", marginLeft: "0.15em" }}
           >
             {stat.suffix}
@@ -118,7 +120,7 @@ function Testimonial() {
       {/* Open quote — large display */}
       <div
         aria-hidden="true"
-        className="font-display italic text-[var(--electric-violet-2)]"
+        className="font-display text-[var(--electric-violet-2)]"
         style={{ fontSize: "5rem", lineHeight: "0.5", marginBottom: "0.5rem" }}
       >
         “
@@ -179,7 +181,7 @@ function RatingRow() {
             <Star key={i} delay={400 + i * 80} />
           ))}
         </div>
-        <span className="font-display italic text-[18px] text-[var(--color-ink)]">
+        <span className="font-display text-[18px] text-[var(--color-ink)]">
           4,9
         </span>
         <span className="text-[var(--color-faint)]">/ 5</span>

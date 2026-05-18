@@ -74,9 +74,9 @@ function useBankAtlas() {
       roundRect(ctx, x + pad + 4, y + pad + 4, tile - pad * 2 - 8, (tile - pad * 2) * 0.5, r * 0.85);
       ctx.fill();
 
-      // Monogram letter (Instrument Serif italic style — fallback to serif italic)
+      // Monogram letter — Geist Bold (sans, fintech) at tile-sized px
       ctx.fillStyle = "#FFFFFF";
-      ctx.font = `italic 600 ${tile * 0.42}px "Instrument Serif", "Times New Roman", serif`;
+      ctx.font = `700 ${tile * 0.46}px "Geist", -apple-system, "Segoe UI", sans-serif`;
       ctx.textAlign = "center";
       ctx.textBaseline = "middle";
       ctx.fillText(bank.letter, x + tile / 2, y + tile / 2 + tile * 0.03);
@@ -159,12 +159,13 @@ function BankRing({ atlas, radius, count, speed, tilt = 0, yOffset = 0, sizeScal
             key={i}
             ref={(el) => (planeRefs.current[i] = el)}
             position={[x, wobble, z]}
-            scale={[0.42 * sizeScale, 0.42 * sizeScale, 1]}
+            scale={[0.48 * sizeScale, 0.48 * sizeScale, 1]}
           >
             <planeGeometry args={[1, 1]} />
             <meshBasicMaterial
               transparent
               toneMapped={false}
+              depthWrite={false}
               side={THREE.DoubleSide}
             >
               <primitive object={tileTexture(atlas, col, row, cols, rows)} attach="map" />
@@ -216,41 +217,69 @@ function OrbScene({ parallaxRef }) {
 
   return (
     <group ref={orbGroupRef}>
-      {/* Inner orbiting bank rings (rendered behind the orb's refractive shell) */}
-      <BankRing atlas={atlas} radius={0.62} count={8} speed={0.18}  tilt={0.10}  yOffset={0.06}  sizeScale={1.1} stride={1} />
-      <BankRing atlas={atlas} radius={0.75} count={8} speed={-0.14} tilt={-0.20} yOffset={-0.04} sizeScale={1.0} stride={3} />
-      <BankRing atlas={atlas} radius={0.85} count={8} speed={0.22}  tilt={0.32}  yOffset={0.02}  sizeScale={0.9} stride={2} />
-
-      {/* The glass sphere — backside enabled for genuine refraction depth */}
-      <mesh>
-        <sphereGeometry args={[1.0, 96, 96]} />
-        <MeshTransmissionMaterial
-          thickness={0.6}
-          roughness={0.0}
-          transmission={1}
-          ior={1.35}
-          chromaticAberration={0.10}
-          anisotropicBlur={0.2}
-          distortion={0.25}
-          distortionScale={0.4}
-          temporalDistortion={0.08}
-          color="#1A2942"
-          backside
-          samples={6}
-          resolution={768}
-          attenuationDistance={4.0}
-          attenuationColor="#2D55FF"
-        />
+      {/* Centre glow — point light + tiny additive sphere acts as the
+          "data core" the bank rings orbit around. */}
+      <pointLight position={[0, 0, 0]} intensity={2.4} color="#4D7CFF" distance={1.6} decay={2} />
+      <mesh scale={0.05}>
+        <sphereGeometry args={[1.0, 16, 16]} />
+        <meshBasicMaterial color="#00E5FF" toneMapped={false} />
       </mesh>
 
-      {/* Inner rim glow — adds the plasma underbelly to the orb */}
-      <mesh scale={1.04}>
-        <sphereGeometry args={[1.0, 32, 32]} />
+      {/* Inner atmosphere — a soft violet glow inside the shell so the
+          orb reads as a volume, not a thin ring. Additive blend, backside. */}
+      <mesh scale={0.92}>
+        <sphereGeometry args={[1.0, 48, 48]} />
         <meshBasicMaterial
           transparent
           opacity={0.10}
           color="#7B5CFF"
           side={THREE.BackSide}
+          depthWrite={false}
+          toneMapped={false}
+        />
+      </mesh>
+
+      {/* Inner orbiting bank rings — emissive (toneMapped:false) so they
+          survive bloom and read clearly through the thin glass shell. */}
+      <BankRing atlas={atlas} radius={0.55} count={8} speed={0.18}  tilt={0.10}  yOffset={0.06}  sizeScale={1.0} stride={1} />
+      <BankRing atlas={atlas} radius={0.65} count={8} speed={-0.14} tilt={-0.20} yOffset={-0.04} sizeScale={0.95} stride={3} />
+      <BankRing atlas={atlas} radius={0.75} count={8} speed={0.22}  tilt={0.32}  yOffset={0.02}  sizeScale={0.9} stride={2} />
+
+      {/* The glass SHELL — thin, low distortion, CLEAR (no tint).
+          This is the v3.1 fix: previous version had thickness 0.6 +
+          distortion 0.25 which smeared everything inside into noise. */}
+      <mesh>
+        <sphereGeometry args={[1.0, 128, 128]} />
+        <MeshTransmissionMaterial
+          thickness={0.10}
+          roughness={0.0}
+          transmission={1}
+          ior={1.45}
+          chromaticAberration={0.04}
+          anisotropicBlur={0.10}
+          distortion={0.04}
+          distortionScale={0.05}
+          temporalDistortion={0.0}
+          color="#FFFFFF"
+          backside
+          samples={8}
+          resolution={1024}
+          attenuationDistance={5.0}
+          attenuationColor="#FFFFFF"
+        />
+      </mesh>
+
+      {/* Outer Fresnel rim — backside violet glow at scale 1.04 marks
+          the shell boundary even though the glass itself is clear. */}
+      <mesh scale={1.04}>
+        <sphereGeometry args={[1.0, 48, 48]} />
+        <meshBasicMaterial
+          transparent
+          opacity={0.18}
+          color="#7B5CFF"
+          side={THREE.BackSide}
+          depthWrite={false}
+          toneMapped={false}
         />
       </mesh>
     </group>
@@ -275,28 +304,28 @@ export default function HeroOrb({ enabled = true, parallaxRef }) {
   return (
     <div className="absolute inset-0">
       <Canvas
-        dpr={[1, 1.5]}
+        dpr={[1, 1.75]}
         gl={{ antialias: false, alpha: true, powerPreference: "high-performance" }}
-        camera={{ position: [0, 0, 3.0], fov: 38 }}
+        camera={{ position: [0, 0, 3.4], fov: 36 }}
         style={{ background: "transparent" }}
       >
         {/* 3-point coloured rig — no HDRI, all brand-palette light */}
-        <ambientLight intensity={0.18} color="#0A0C14" />
-        <directionalLight position={[3, 4, 5]} intensity={1.2} color="#4D7CFF" />
-        <directionalLight position={[-2, 1, -3]} intensity={0.8} color="#7B5CFF" />
-        <pointLight position={[0, -2, 2]} intensity={0.6} color="#00E5FF" />
+        <ambientLight intensity={0.20} color="#0A0C14" />
+        <directionalLight position={[3, 4, 5]} intensity={1.4} color="#4D7CFF" />
+        <directionalLight position={[-2, 1, -3]} intensity={1.0} color="#7B5CFF" />
+        <pointLight position={[0, -2, 2]} intensity={0.8} color="#00E5FF" />
 
         <OrbScene parallaxRef={parallaxRef} />
 
         <EffectComposer multisampling={0}>
           <Bloom
-            intensity={0.6}
-            luminanceThreshold={0.2}
+            intensity={0.85}
+            luminanceThreshold={0.15}
             luminanceSmoothing={0.5}
-            radius={0.7}
+            radius={0.8}
           />
           <ChromaticAberration
-            offset={[0.0015, 0.0012]}
+            offset={[0.0010, 0.0008]}
             radialModulation
             modulationOffset={0.3}
           />

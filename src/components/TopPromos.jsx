@@ -48,7 +48,7 @@ export default function TopPromos() {
     <section
       id="promocje"
       aria-labelledby="top-offers-heading"
-      className="bg-onyx-mesh bg-grain relative isolate overflow-hidden"
+      className="section-bridge relative isolate overflow-hidden"
     >
       {/* Decorative electric bloom — violet haze top-left */}
       <div
@@ -81,10 +81,11 @@ export default function TopPromos() {
             style={{
               fontSize: "clamp(2.25rem, 5vw, 4rem)",
               lineHeight: "1.02",
-              letterSpacing: "-0.025em",
+              letterSpacing: "-0.04em",
+              fontWeight: 500,
             }}
           >
-            <span className="italic">3 oferty.</span>{" "}
+            <span>3 oferty.</span>{" "}
             <span>3 deadliny.</span>
             <br className="hidden sm:inline" />{" "}
             <span className="text-white/70">Wszystko czego potrzebujesz.</span>
@@ -160,16 +161,8 @@ function OfferCard({ offer, delay = 0 }) {
       style={{ "--reveal-delay": `${delay}ms` }}
     >
       <article
-        className={`relative overflow-hidden rounded-[20px] border p-7 transition-all duration-500 hover:-translate-y-1 ${
-          featured
-            ? "border-[rgba(212,165,116,0.32)] bg-gradient-to-br from-white/[0.06] to-white/[0.02]"
-            : "border-white/8 bg-gradient-to-br from-white/[0.05] to-white/[0.01] hover:border-white/16"
-        }`}
-        style={{
-          boxShadow: featured
-            ? "inset 0 0 0 1px rgba(212,165,116,0.16), 0 24px 56px -16px rgba(212,165,116,0.18)"
-            : "inset 0 0 0 1px rgba(255,255,255,0.03), 0 16px 40px -16px rgba(0,0,0,0.4)",
-        }}
+        className="card-onyx relative overflow-hidden p-7"
+        data-featured={featured ? "true" : "false"}
       >
         {/* Top accent line — bank color */}
         <div
@@ -234,18 +227,19 @@ function OfferCard({ offer, delay = 0 }) {
           <div className="eyebrow text-white/40">Bonus powitalny</div>
           <p className="mt-2 flex items-baseline gap-2">
             <span
-              className="font-display italic numeric text-white"
+              className="font-display numeric text-white"
               style={{
                 fontSize: featured ? "6rem" : "5rem",
                 lineHeight: "0.95",
-                letterSpacing: "-0.04em",
+                letterSpacing: "-0.05em",
+                fontWeight: 400,
               }}
             >
               {bonus}
             </span>
             <span
-              className="font-display italic text-white/55"
-              style={{ fontSize: "1.4rem" }}
+              className="font-display text-white/55"
+              style={{ fontSize: "1.4rem", fontWeight: 400 }}
             >
               zł
             </span>
@@ -288,8 +282,8 @@ function OfferCard({ offer, delay = 0 }) {
             <div className="eyebrow text-white/35">Do końca</div>
             <div className="mt-0.5 flex items-baseline gap-1.5">
               <span
-                className="font-display italic numeric text-white"
-                style={{ fontSize: "1.65rem", letterSpacing: "-0.02em" }}
+                className="font-display numeric text-white"
+                style={{ fontSize: "1.65rem", letterSpacing: "-0.035em", fontWeight: 400 }}
               >
                 {days}
               </span>

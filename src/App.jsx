@@ -5,6 +5,7 @@ import HowItWorks from "./components/HowItWorks";
 import TrustBlock from "./components/TrustBlock";
 import Footer from "./components/Footer";
 import MobileStickyCTA from "./components/MobileStickyCTA";
+import SectionRail from "./components/SectionRail";
 
 export default function App() {
   return (
@@ -16,9 +17,12 @@ export default function App() {
         Przejdź do treści
       </a>
 
+      {/* Persistent atmospheric layer — slow chromatic drift behind every section */}
+      <div className="app-atmosphere" aria-hidden="true" />
+
       <Nav />
 
-      <main>
+      <main className="relative z-[2]">
         <Hero />
         <TopPromos />
         <HowItWorks />
@@ -27,6 +31,7 @@ export default function App() {
 
       <Footer />
 
+      <SectionRail />
       <MobileStickyCTA />
     </>
   );
