@@ -131,9 +131,18 @@
   --ease-soft:   cubic-bezier(0.16, 1, 0.3, 1);
   --ease-curtain:cubic-bezier(0.83, 0, 0.17, 1);
   --ease-in:     cubic-bezier(0.7, 0, 0.84, 0);
+
+  /* ── Apple Cupertino tier (awesome-design-md research) ──── */
+  --ease-apple-press:   cubic-bezier(0.34, 1.56, 0.64, 1);   /* overshoot back.out — press feedback */
+  --ease-ios-spring:    cubic-bezier(0.32, 0.72, 0, 1);       /* iOS Tahoe spring — primary entrances */
+  --ease-elastic-out:   cubic-bezier(0.43, 0.13, 0.23, 0.96); /* Stripe number elastic (count-up) */
+  --ease-material:      cubic-bezier(0.4, 0, 0.2, 1);         /* Linear surface lift */
+  --ease-framer-reveal: cubic-bezier(0.17, 0.85, 0.83, 0.67); /* Framer gradient spotlight reveal */
+
   --dur-fast:    160ms;
   --dur-base:    240ms;
   --dur-slow:    420ms;
+  --dur-cinematic: 880ms;   /* Apple landing entrance */
 }
 
 /* ── Globals ─────────────────────────────────────────────── */
@@ -162,6 +171,104 @@ body {
 .font-display { font-family: var(--font-display); }
 .font-mono    { font-family: var(--font-mono); }
 .numeric      { font-variant-numeric: tabular-nums; }
+
+/* Tabular numerals globally — financial data must align (Stripe pattern) */
+body { font-variant-numeric: tabular-nums; }
+
+/* ──────────────────────────────────────────────────────────
+   Cursor Blob — Apple Vision Pro signature ambient light follower
+   ────────────────────────────────────────────────────────── */
+.cursor-blob {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 720px;
+  height: 720px;
+  border-radius: 9999px;
+  pointer-events: none;
+  z-index: 1;
+  background: radial-gradient(
+    closest-side,
+    rgba(123, 92, 255, 0.22) 0%,
+    rgba(77, 124, 255, 0.18) 24%,
+    rgba(0, 229, 255, 0.10) 52%,
+    transparent 78%
+  );
+  filter: blur(48px);
+  mix-blend-mode: plus-lighter;
+  will-change: transform, opacity;
+  transition: opacity 700ms cubic-bezier(0.32, 0.72, 0, 1);
+}
+@media (max-width: 768px) {
+  .cursor-blob { display: none; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .cursor-blob { display: none; }
+}
+
+/* ──────────────────────────────────────────────────────────
+   Glass refractive shine sweep — animated angular gradient on hover
+   Apply to any glass card by adding class .glass-shine
+   ────────────────────────────────────────────────────────── */
+.glass-shine {
+  position: relative;
+  overflow: hidden;
+}
+.glass-shine::after {
+  content: "";
+  position: absolute;
+  inset: -1px;
+  border-radius: inherit;
+  pointer-events: none;
+  background: linear-gradient(
+    115deg,
+    transparent 30%,
+    rgba(255, 255, 255, 0.10) 45%,
+    rgba(123, 92, 255, 0.16) 50%,
+    rgba(255, 255, 255, 0.10) 55%,
+    transparent 70%
+  );
+  background-size: 220% 220%;
+  background-position: 200% 0;
+  opacity: 0;
+  transition: opacity 320ms cubic-bezier(0.32, 0.72, 0, 1);
+  mix-blend-mode: plus-lighter;
+}
+.glass-shine:hover::after {
+  opacity: 1;
+  animation: glass-shine-sweep 1.4s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+}
+@keyframes glass-shine-sweep {
+  0%   { background-position: 200% 0; }
+  100% { background-position: -200% 0; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .glass-shine:hover::after { animation: none; opacity: 0.4; }
+}
+
+/* ──────────────────────────────────────────────────────────
+   Apple press feedback — utility class for buttons/cards
+   ────────────────────────────────────────────────────────── */
+.apple-press {
+  transition: transform 140ms var(--ease-apple-press),
+              box-shadow 280ms var(--ease-ios-spring);
+}
+.apple-press:active {
+  transform: scale(0.96);
+}
+
+/* Apple lift — hover elevation z Stripe blue-tinted shadow */
+.apple-lift {
+  transition: transform 280ms var(--ease-ios-spring),
+              box-shadow 280ms var(--ease-ios-spring);
+}
+.apple-lift:hover {
+  transform: translateY(-4px);
+  box-shadow:
+    0 0 0 1px rgba(255, 255, 255, 0.06),
+    rgba(50, 50, 93, 0.25) 0px 30px 45px -30px,
+    rgba(123, 92, 255, 0.20) 0px 16px 48px -8px;
+}
 
 :where(a, button, [role="button"], input, textarea, select):focus-visible {
   outline: 2px solid var(--electric-blue);

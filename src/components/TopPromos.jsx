@@ -160,7 +160,7 @@ function OfferCard({ offer, delay = 0 }) {
       style={{ "--reveal-delay": `${delay}ms` }}
     >
       <article
-        className={`relative overflow-hidden rounded-[20px] border p-7 transition-all duration-500 hover:-translate-y-1 ${
+        className={`glass-shine apple-lift relative overflow-hidden rounded-[20px] border p-7 ${
           featured
             ? "border-[rgba(212,165,116,0.32)] bg-gradient-to-br from-white/[0.06] to-white/[0.02]"
             : "border-white/8 bg-gradient-to-br from-white/[0.05] to-white/[0.01] hover:border-white/16"
@@ -298,7 +298,7 @@ function OfferCard({ offer, delay = 0 }) {
           </div>
           <button
             type="button"
-            className="group/btn inline-flex items-center gap-1.5 rounded-full bg-white px-4 py-2.5 text-[13px] font-semibold text-[var(--color-ink)] transition-transform hover:scale-105"
+            className="apple-press group/btn inline-flex items-center gap-1.5 rounded-full bg-white px-4 py-2.5 text-[13px] font-semibold text-[var(--color-ink)] transition-transform hover:scale-105"
           >
             Sprawdź
             <svg
