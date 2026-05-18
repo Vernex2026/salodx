@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { createPortal } from "react-dom";
 
 const LINKS = [
@@ -11,8 +11,18 @@ const LINKS = [
 
 export default function Nav() {
   const [open, setOpen] = useState(false);
+  const [scrolled, setScrolled] = useState(false);
+  const hamburgerRef = useRef(null);
 
-  // Esc + body scroll lock when open
+  // Scrolled state — glass nav after 64px
+  useEffect(() => {
+    const onScroll = () => setScrolled(window.scrollY > 64);
+    onScroll();
+    window.addEventListener("scroll", onScroll, { passive: true });
+    return () => window.removeEventListener("scroll", onScroll);
+  }, []);
+
+  // Scroll lock + Esc when menu open
   useEffect(() => {
     if (!open) return;
     const onKey = (e) => e.key === "Escape" && setOpen(false);
@@ -22,203 +32,231 @@ export default function Nav() {
     return () => {
       document.removeEventListener("keydown", onKey);
       document.body.style.overflow = prev;
+      // Return focus to hamburger
+      hamburgerRef.current?.focus();
     };
   }, [open]);
 
   return (
-    <header
-      className="sticky top-0 z-50 w-full border-b border-[var(--color-hairline)]/50 bg-white/45 backdrop-blur-md backdrop-saturate-150"
-      role="banner"
-    >
-      <nav
-        aria-label="Główna nawigacja"
-        className="mx-auto flex h-16 max-w-7xl items-center justify-between px-6 lg:px-10"
+    <>
+      <header
+        className={`fixed top-0 left-0 right-0 z-50 transition-[background,backdrop-filter,border-color] duration-300 ${
+          scrolled || open ? "nav-scrolled" : ""
+        }`}
+        role="banner"
       >
-        {/* Wordmark */}
-        <a
-          href="#top"
-          className="group flex items-center gap-2.5"
-          aria-label="Saldox — strona główna"
+        <nav
+          aria-label="Główna nawigacja"
+          className="mx-auto flex h-[72px] max-w-[1280px] items-center justify-between px-6 sm:px-8 lg:px-12"
         >
-          <span
-            aria-hidden="true"
-            className="relative flex h-7 w-7 items-center justify-center rounded-[10px] bg-[var(--color-brand)] shadow-[0_4px_12px_rgba(31,91,255,0.35)]"
-          >
-            <span className="absolute inset-0 rounded-[10px] bg-gradient-to-br from-white/35 to-transparent" />
-            <span className="font-display text-[15px] font-semibold leading-none text-white tracking-[-0.04em]">S</span>
-          </span>
-          <span className="font-display text-[19px] font-semibold tracking-[-0.035em] text-[var(--color-ink)]">
-            Saldox
-          </span>
-        </a>
-
-        {/* Desktop center links */}
-        <ul className="hidden items-center gap-1 md:flex" role="list">
-          {LINKS.map((l) => (
-            <li key={l.href}>
-              <a
-                href={l.href}
-                className="rounded-md px-3 py-2 text-[14px] font-medium text-[var(--color-text)] transition-colors duration-150 ease-out hover:text-[var(--color-brand)]"
-              >
-                {l.label}
-              </a>
-            </li>
-          ))}
-        </ul>
-
-        {/* Right cluster */}
-        <div className="flex items-center gap-2">
+          {/* Wordmark */}
           <a
-            href="#login"
-            className="hidden rounded-md px-3 py-2 text-[14px] font-medium text-[var(--color-muted)] transition-colors hover:text-[var(--color-ink)] sm:inline-block"
+            href="#top"
+            className="group flex items-center gap-2.5"
+            aria-label="Saldox — strona główna"
           >
-            Zaloguj
-          </a>
-          <a
-            href="#promocje"
-            className="group hidden items-center gap-1.5 rounded-full bg-[var(--color-ink)] px-4 py-2 text-[13.5px] font-medium text-white transition-all duration-200 ease-out hover:bg-[#1a2236] hover:shadow-[0_8px_20px_rgba(10,14,26,0.18)] sm:inline-flex"
-          >
-            Zobacz oferty
-            <svg
+            <span
               aria-hidden="true"
-              width="14" height="14" viewBox="0 0 14 14" fill="none"
-              className="transition-transform duration-200 ease-out group-hover:translate-x-0.5"
-            >
-              <path d="M2.5 7h9M8 3.5L11.5 7 8 10.5" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
-            </svg>
-          </a>
-
-          {/* Mobile hamburger */}
-          <button
-            type="button"
-            onClick={() => setOpen(true)}
-            aria-label="Otwórz menu"
-            aria-expanded={open}
-            aria-controls="mobile-sheet"
-            className="inline-flex h-10 w-10 items-center justify-center rounded-xl text-[var(--color-ink)] transition-colors hover:bg-[var(--color-surface-2)] md:hidden"
-          >
-            <svg width="20" height="20" viewBox="0 0 20 20" fill="none" aria-hidden="true">
-              <path d="M3 6h14M3 10h14M3 14h14" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round"/>
-            </svg>
-          </button>
-        </div>
-      </nav>
-
-      {/* Mobile sheet — renderowany przez portal do body (poza sticky header stacking context) */}
-      {open && createPortal(
-        <div
-          id="mobile-sheet"
-          className="fixed inset-0 z-[100] md:hidden"
-          role="dialog"
-          aria-modal="true"
-          aria-label="Menu mobilne"
-        >
-          {/* Overlay — mocniejszy backdrop blur + ciemniejszy podkład */}
-          <div
-            className="sheet-overlay absolute inset-0"
-            onClick={() => setOpen(false)}
-            aria-hidden="true"
-          />
-          {/* Sheet — liquid glass tafla (macOS Tahoe / Vision Pro style) */}
-          <div
-            className="sheet-panel absolute left-3 right-3 top-3 flex max-h-[92vh] flex-col overflow-hidden rounded-[32px]"
-            style={{
-              background: "rgba(255, 255, 255, 0.42)",
-              backdropFilter: "blur(40px) saturate(180%)",
-              WebkitBackdropFilter: "blur(40px) saturate(180%)",
-              boxShadow: [
-                // outer drop — unoszenie tafli
-                "0 32px 64px -16px rgba(10,14,26,0.28)",
-                "0 12px 24px -8px rgba(10,14,26,0.14)",
-                "0 2px 4px rgba(10,14,26,0.04)",
-                // inset edge ring — krawędź refrakcyjna
-                "inset 0 0 0 1px rgba(255,255,255,0.55)",
-                // inset top highlight — światło z góry
-                "inset 0 1.5px 0 rgba(255,255,255,0.85)",
-                // inset bottom subtle shadow — depth pod taflą
-                "inset 0 -1px 0 rgba(10,14,26,0.06)",
-              ].join(", "),
-            }}
-          >
-            {/* Refraction sheen — subtle top→bottom gradient overlay */}
-            <div
-              aria-hidden="true"
-              className="pointer-events-none absolute inset-0 rounded-[32px]"
+              className="relative flex h-8 w-8 items-center justify-center overflow-hidden rounded-[10px]"
               style={{
-                background:
-                  "linear-gradient(180deg, rgba(255,255,255,0.45) 0%, rgba(255,255,255,0.10) 35%, rgba(255,255,255,0) 60%)",
+                background: "linear-gradient(135deg, #4D7CFF 0%, #7B5CFF 100%)",
+                boxShadow:
+                  "0 4px 12px rgba(123,92,255,0.32), inset 0 0.5px 0 rgba(255,255,255,0.5)",
               }}
-            />
-            <div className="relative flex h-full flex-col">
-            {/* Header — bez separatora (czysta tafla) */}
-            <div className="flex items-center justify-between px-5 py-4">
-              <div className="flex items-center gap-2.5">
-                <span
-                  aria-hidden="true"
-                  className="relative flex h-7 w-7 items-center justify-center rounded-[10px] bg-[var(--color-brand)] shadow-[0_4px_12px_rgba(31,91,255,0.35)]"
-                >
-                  <span className="absolute inset-0 rounded-[10px] bg-gradient-to-br from-white/35 to-transparent" />
-                  <span className="font-display text-[15px] font-semibold leading-none text-white tracking-[-0.04em]">S</span>
-                </span>
-                <span className="font-display text-[17px] font-semibold tracking-[-0.035em] text-[var(--color-ink)]">Saldox</span>
-              </div>
-              <button
-                type="button"
-                onClick={() => setOpen(false)}
-                aria-label="Zamknij menu"
-                className="inline-flex h-9 w-9 items-center justify-center rounded-xl text-[var(--color-muted)] transition-colors hover:bg-[var(--color-surface-2)] hover:text-[var(--color-ink)]"
-              >
-                <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true">
-                  <path d="M4 4l8 8M12 4l-8 8" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round"/>
-                </svg>
-              </button>
-            </div>
+            >
+              <span className="font-display italic text-[18px] font-normal leading-none text-white">
+                S
+              </span>
+            </span>
+            <span className="font-display text-[22px] font-normal tracking-[-0.02em] text-[var(--color-ink)]">
+              Saldox
+            </span>
+          </a>
 
-            <ul role="list" className="flex-1 space-y-1 px-3 py-6">
-              {LINKS.map((l, i) => (
-                <li
-                  key={l.href}
-                  className="sheet-link-item"
-                  style={{ animationDelay: `${180 + i * 70}ms` }}
-                >
-                  <a
-                    href={l.href}
-                    onClick={() => setOpen(false)}
-                    className="flex items-center justify-between rounded-2xl px-4 py-3.5 text-[17px] font-medium text-[var(--color-ink)] transition-all duration-200 hover:bg-white/40 hover:text-[var(--color-brand)] hover:shadow-[inset_0_0_0_1px_rgba(255,255,255,0.6),inset_0_1px_0_rgba(255,255,255,0.8)]"
-                  >
-                    {l.label}
-                    <svg aria-hidden="true" width="14" height="14" viewBox="0 0 14 14" className="text-[var(--color-faint)]">
-                      <path d="M5 3l4 4-4 4" stroke="currentColor" strokeWidth="1.6" fill="none" strokeLinecap="round" strokeLinejoin="round"/>
-                    </svg>
-                  </a>
-                </li>
-              ))}
-            </ul>
-
-            <div className="mt-auto space-y-3 p-5">
-              <a
-                href="#login"
-                onClick={() => setOpen(false)}
-                className="block rounded-full border border-[var(--color-hairline-2)] bg-white px-5 py-3 text-center text-[14px] font-medium text-[var(--color-ink)]"
-              >
-                Zaloguj
-              </a>
-              <a
-                href="#promocje"
-                onClick={() => setOpen(false)}
-                className="flex items-center justify-center gap-1.5 rounded-full bg-[var(--color-brand)] px-5 py-3 text-[14px] font-semibold text-white shadow-[var(--shadow-glow)]"
-              >
-                Zobacz oferty
-                <svg aria-hidden="true" width="14" height="14" viewBox="0 0 14 14">
-                  <path d="M2.5 7h9M8 3.5L11.5 7 8 10.5" stroke="currentColor" strokeWidth="1.6" fill="none" strokeLinecap="round" strokeLinejoin="round"/>
-                </svg>
-              </a>
-            </div>
-            </div>
+          {/* Center: Live indicator (desktop) */}
+          <div className="hidden items-center gap-2 rounded-full border border-[var(--color-hairline)] bg-white/[0.04] px-3 py-1.5 text-[12.5px] font-medium text-[var(--color-muted)] backdrop-blur-md md:flex">
+            <span className="live-dot" aria-hidden="true" />
+            <span>
+              <span className="text-[var(--color-ink)] numeric font-semibold">47</span> ofert
+              <span className="mx-1.5 text-[var(--color-hairline-2)]">·</span>
+              <span className="text-[var(--color-ink)] numeric font-semibold">24</span> banki
+            </span>
           </div>
-        </div>,
-        document.body
-      )}
-    </header>
+
+          {/* Right cluster */}
+          <div className="flex items-center gap-3">
+            <a
+              href="#promocje"
+              className="hidden rounded-full border border-[var(--color-hairline)] bg-white/[0.04] px-4 py-2 text-[13px] font-medium text-[var(--color-ink)] backdrop-blur-md transition-colors hover:bg-white/[0.10] sm:inline-block"
+            >
+              Zobacz oferty
+            </a>
+
+            <button
+              ref={hamburgerRef}
+              type="button"
+              onClick={() => setOpen((v) => !v)}
+              aria-label={open ? "Zamknij menu" : "Otwórz menu"}
+              aria-expanded={open}
+              aria-controls="menu-overlay"
+              className="hamburger relative inline-flex h-11 w-11 items-center justify-center rounded-full border border-[var(--color-hairline)] bg-white/[0.04] text-[var(--color-ink)] backdrop-blur-md transition-colors hover:bg-white/[0.10]"
+              data-open={open}
+            >
+              <span aria-hidden="true" className="relative block h-3.5 w-5">
+                <span
+                  className="hamburger-line hamburger-line-1 absolute left-0 right-0 top-0 h-[1.6px] rounded-full bg-current"
+                  style={{ transformOrigin: "center" }}
+                />
+                <span
+                  className="hamburger-line hamburger-line-2 absolute left-0 right-0 top-1/2 h-[1.6px] -translate-y-1/2 rounded-full bg-current"
+                />
+                <span
+                  className="hamburger-line hamburger-line-3 absolute bottom-0 left-0 right-0 h-[1.6px] rounded-full bg-current"
+                  style={{ transformOrigin: "center" }}
+                />
+              </span>
+            </button>
+          </div>
+        </nav>
+      </header>
+
+      {/* Fullscreen menu overlay — ZEN style */}
+      {typeof document !== "undefined" &&
+        createPortal(
+          <div
+            id="menu-overlay"
+            className="menu-overlay"
+            data-open={open}
+            role="dialog"
+            aria-modal={open}
+            aria-label="Menu główne"
+            aria-hidden={!open}
+          >
+            <div className="relative flex h-full w-full flex-col">
+              {/* Top bar inside overlay — wordmark + close mirrors nav */}
+              <div className="flex items-center justify-between px-6 pt-[18px] sm:px-8 lg:px-12">
+                <a
+                  href="#top"
+                  onClick={() => setOpen(false)}
+                  className="flex items-center gap-2.5"
+                >
+                  <span
+                    aria-hidden="true"
+                    className="relative flex h-8 w-8 items-center justify-center overflow-hidden rounded-[10px]"
+                    style={{
+                      background: "linear-gradient(135deg, #4D7CFF 0%, #7B5CFF 100%)",
+                      boxShadow:
+                        "0 4px 12px rgba(123,92,255,0.32), inset 0 0.5px 0 rgba(255,255,255,0.5)",
+                    }}
+                  >
+                    <span className="font-display italic text-[18px] font-normal leading-none text-white">
+                      S
+                    </span>
+                  </span>
+                  <span className="font-display text-[22px] font-normal tracking-[-0.02em] text-white">
+                    Saldox
+                  </span>
+                </a>
+
+                {/* Close button — morphs back to hamburger */}
+                <button
+                  type="button"
+                  onClick={() => setOpen(false)}
+                  aria-label="Zamknij menu"
+                  className="inline-flex h-11 w-11 items-center justify-center rounded-full border border-white/15 bg-white/[0.06] text-white backdrop-blur-md transition-colors hover:bg-white/[0.12]"
+                >
+                  <svg width="14" height="14" viewBox="0 0 14 14" fill="none" aria-hidden="true">
+                    <path d="M3 3l8 8M11 3l-8 8" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" />
+                  </svg>
+                </button>
+              </div>
+
+              {/* Menu items — large editorial typography */}
+              <div className="flex flex-1 flex-col justify-center px-6 sm:px-8 lg:px-12">
+                <ul role="list" className="space-y-1">
+                  {LINKS.map((link, i) => (
+                    <li
+                      key={link.href}
+                      className="menu-item"
+                      style={{ transitionDelay: open ? `${280 + i * 80}ms` : "0ms" }}
+                    >
+                      <a
+                        href={link.href}
+                        onClick={() => setOpen(false)}
+                        className="group block py-3 font-display tracking-[-0.02em] text-white transition-colors duration-200 hover:text-[var(--plasma-cyan)]"
+                        style={{
+                          fontSize: "clamp(3rem, 8vw, 5.5rem)",
+                          lineHeight: "1",
+                          fontStyle: "italic",
+                        }}
+                      >
+                        <span className="inline-flex items-center gap-6">
+                          <span className="numeric text-[14px] not-italic font-mono text-white/40 tracking-[0.12em]">
+                            0{i + 1}
+                          </span>
+                          <span className="relative inline-block">
+                            {link.label}
+                            <span
+                              aria-hidden="true"
+                              className="absolute -bottom-1 left-0 h-[2px] w-0 bg-current transition-all duration-300 ease-out group-hover:w-full"
+                            />
+                          </span>
+                        </span>
+                      </a>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+
+              {/* Bottom block — contact + meta */}
+              <div
+                className="menu-item border-t border-white/10 px-6 pb-10 pt-8 sm:px-8 lg:px-12"
+                style={{ transitionDelay: open ? "720ms" : "0ms" }}
+              >
+                <div className="flex flex-wrap items-end justify-between gap-6">
+                  <div>
+                    <div className="eyebrow text-white/40">Kontakt</div>
+                    <a
+                      href="mailto:biuro@saldox.pl"
+                      className="mt-2 inline-block font-display text-[26px] italic tracking-[-0.02em] text-white transition-colors hover:text-[var(--plasma-cyan)] sm:text-[32px]"
+                    >
+                      biuro@saldox.pl
+                    </a>
+                  </div>
+                  <div className="flex flex-col items-start gap-3">
+                    <a
+                      href="#newsletter"
+                      onClick={() => setOpen(false)}
+                      className="group inline-flex items-center gap-2 text-[14px] font-medium text-white/80 transition-colors hover:text-white"
+                    >
+                      Zapisz się na newsletter
+                      <svg
+                        aria-hidden="true"
+                        width="14"
+                        height="14"
+                        viewBox="0 0 14 14"
+                        className="transition-transform group-hover:translate-x-1"
+                      >
+                        <path
+                          d="M2.5 7h9M8 3.5L11.5 7 8 10.5"
+                          stroke="currentColor"
+                          strokeWidth="1.6"
+                          fill="none"
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                        />
+                      </svg>
+                    </a>
+                    <div className="text-[12px] text-white/40">
+                      Saldox · 2026 · Premium hub promocji bankowych
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>,
+          document.body
+        )}
+    </>
   );
 }
