@@ -48,28 +48,9 @@ export default function TopPromos() {
     <section
       id="promocje"
       aria-labelledby="top-offers-heading"
-      className="section-bridge relative isolate overflow-hidden"
+      className="relative isolate overflow-hidden"
+      style={{ background: "var(--color-black)" }}
     >
-      {/* Decorative electric bloom — violet haze top-left */}
-      <div
-        aria-hidden="true"
-        className="pointer-events-none absolute -left-32 -top-32 z-0 h-[480px] w-[480px] rounded-full opacity-40"
-        style={{
-          background:
-            "radial-gradient(closest-side, rgba(123,92,255,0.38) 0%, transparent 70%)",
-          filter: "blur(40px)",
-        }}
-      />
-      {/* Companion electric-blue bloom bottom-right */}
-      <div
-        aria-hidden="true"
-        className="pointer-events-none absolute -right-32 bottom-0 z-0 h-[420px] w-[420px] rounded-full opacity-35"
-        style={{
-          background:
-            "radial-gradient(closest-side, rgba(77,124,255,0.30) 0%, transparent 70%)",
-          filter: "blur(40px)",
-        }}
-      />
 
       <div className="relative z-10 mx-auto max-w-[1280px] px-6 py-24 sm:px-8 md:py-32 lg:px-12 lg:py-40">
         {/* Header */}
@@ -79,16 +60,15 @@ export default function TopPromos() {
             id="top-offers-heading"
             className="font-display mt-4 text-white"
             style={{
-              fontSize: "clamp(2.25rem, 5vw, 4rem)",
-              lineHeight: "1.02",
-              letterSpacing: "-0.04em",
-              fontWeight: 500,
+              fontSize: "clamp(2.5rem, 5.5vw, 4.5rem)",
+              lineHeight: "0.98",
+              letterSpacing: "-0.055em",
+              fontWeight: 700,
             }}
           >
-            <span>3 oferty.</span>{" "}
-            <span>3 deadliny.</span>
+            <span>3 oferty. 3 deadliny.</span>
             <br className="hidden sm:inline" />{" "}
-            <span className="text-white/70">Wszystko czego potrzebujesz.</span>
+            <span className="text-white/55">Wszystko czego potrzebujesz.</span>
           </h2>
           <p
             className="mt-6 max-w-xl text-[16px] leading-[1.55] text-white/55 sm:text-[17px]"
@@ -112,7 +92,7 @@ export default function TopPromos() {
         <div className="mt-14 flex justify-center">
           <a
             href="#all-offers"
-            className="group inline-flex items-center gap-2 rounded-full border border-white/14 bg-white/[0.04] px-5 py-3 text-[14px] font-medium text-white/80 backdrop-blur-sm transition-all hover:border-white/24 hover:bg-white/[0.08] hover:text-white"
+            className="group inline-flex items-center gap-2 rounded-full border border-white/16 bg-transparent px-5 py-3 text-[14px] font-medium text-white transition-all hover:border-white/40 hover:bg-white/[0.04]"
           >
             Zobacz wszystkie 47 ofert
             <svg
@@ -161,34 +141,19 @@ function OfferCard({ offer, delay = 0 }) {
       style={{ "--reveal-delay": `${delay}ms` }}
     >
       <article
-        className="card-onyx relative overflow-hidden p-7"
+        className="card-stark relative overflow-hidden p-7"
         data-featured={featured ? "true" : "false"}
       >
-        {/* Top accent line — bank color */}
+        {/* Top accent line — solid bank color, no gradient */}
         <div
           aria-hidden="true"
           className="absolute left-7 right-7 top-0 h-[2px]"
-          style={{
-            background: `linear-gradient(90deg, transparent, ${accent}, transparent)`,
-            opacity: 0.55,
-          }}
+          style={{ background: accent }}
         />
 
-        {/* Featured glow — radial behind number */}
-        {featured && (
-          <div
-            aria-hidden="true"
-            className="pointer-events-none absolute -left-12 top-20 z-0 h-48 w-48 rounded-full opacity-40"
-            style={{
-              background: `radial-gradient(closest-side, ${accent}55 0%, transparent 70%)`,
-              filter: "blur(40px)",
-            }}
-          />
-        )}
-
-        {/* Featured badge */}
+        {/* Featured badge — gold (single allowed gold moment in v4) */}
         {badge && (
-          <div className="relative mb-6 inline-flex items-center gap-1.5 rounded-full border border-[rgba(212,165,116,0.32)] bg-[rgba(212,165,116,0.08)] px-2.5 py-1 text-[10.5px] font-medium uppercase tracking-[0.14em] text-[var(--color-gold)]">
+          <div className="relative mb-6 inline-flex items-center gap-1.5 rounded-full border border-[rgba(212,165,116,0.42)] bg-[rgba(212,165,116,0.06)] px-2.5 py-1 text-[10.5px] font-semibold uppercase tracking-[0.14em] text-[var(--color-gold)]">
             <svg width="11" height="11" viewBox="0 0 12 12" fill="none" aria-hidden="true">
               <path
                 d="M6 1l1.2 3.6L11 5l-3 2.5.8 3.5L6 9l-2.8 2 .8-3.5L1 5l3.8-.4L6 1z"
@@ -199,14 +164,10 @@ function OfferCard({ offer, delay = 0 }) {
           </div>
         )}
 
-        {/* Urgent badge — electric cyan (not gold-reserved, not coral-banned) */}
+        {/* Urgent badge — white outline pill (Revolut style, no glow) */}
         {urgent && !badge && (
-          <div className="relative mb-6 inline-flex items-center gap-1.5 rounded-full border border-[rgba(0,229,255,0.32)] bg-[rgba(0,229,255,0.10)] px-2.5 py-1 text-[10.5px] font-medium uppercase tracking-[0.14em] text-[var(--plasma-cyan)]">
-            <span
-              aria-hidden="true"
-              className="inline-block h-1.5 w-1.5 rounded-full bg-[var(--plasma-cyan)]"
-              style={{ boxShadow: "0 0 8px rgba(0,229,255,0.7)" }}
-            />
+          <div className="relative mb-6 inline-flex items-center gap-1.5 rounded-full border border-white/24 px-2.5 py-1 text-[10.5px] font-semibold uppercase tracking-[0.14em] text-white">
+            <span className="live-dot" aria-hidden="true" />
             Kończy się
           </div>
         )}

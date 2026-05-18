@@ -1,40 +1,33 @@
 /**
- * Premium minimal footer — Onyx palette, editorial wordmark, electric CTA.
+ * Premium minimal footer — solid black, bold sans, no bloom, no gradient.
  */
 export default function Footer() {
   return (
     <footer
       className="relative isolate overflow-hidden"
-      style={{
-        background:
-          "radial-gradient(ellipse 50% 40% at 20% 20%, rgba(123,92,255,0.16) 0%, transparent 60%), radial-gradient(ellipse 40% 30% at 80% 90%, rgba(0,229,255,0.10) 0%, transparent 60%), linear-gradient(180deg, #06070B 0%, #030509 100%)",
-      }}
+      style={{ background: "var(--color-black)" }}
     >
       {/* CTA band */}
-      <div id="next" className="section-bridge relative mx-auto max-w-[1280px] px-6 pb-12 pt-24 sm:px-8 md:pb-16 md:pt-32 lg:px-12">
+      <div id="next" className="relative mx-auto max-w-[1280px] px-6 pb-12 pt-24 sm:px-8 md:pb-16 md:pt-32 lg:px-12">
         <div className="max-w-3xl">
-          <div className="eyebrow text-white/35">Następny krok</div>
+          <div className="eyebrow text-white/40">Następny krok</div>
           <h2
             className="font-display mt-4 text-white"
             style={{
-              fontSize: "clamp(2.5rem, 6vw, 5rem)",
-              lineHeight: "0.98",
-              letterSpacing: "-0.045em",
-              fontWeight: 500,
+              fontSize: "clamp(2.75rem, 6.5vw, 5.5rem)",
+              lineHeight: "0.96",
+              letterSpacing: "-0.06em",
+              fontWeight: 700,
             }}
           >
-            <span>Twój bonus</span>
-            <br />
-            <span className="display-electric-gradient">
-              <span className="halo" aria-hidden="true">już czeka.</span>
-              już czeka.
-            </span>
+            <span className="block">Twój bonus</span>
+            <span className="block text-white/55">już czeka.</span>
           </h2>
           <p className="mt-6 max-w-md text-[16px] leading-[1.55] text-white/55 sm:text-[17px]">
             Sprawdź dzisiejsze oferty z 24 banków. Trwa krócej niż kawa.
           </p>
           <div className="mt-9 flex flex-col items-start gap-4 sm:flex-row sm:items-center">
-            <a href="#promocje" className="cta-electric">
+            <a href="#promocje" className="cta-primary cta-primary--light">
               Zobacz dzisiejsze oferty
               <svg
                 className="arrow"
@@ -92,15 +85,11 @@ export default function Footer() {
               <span
                 aria-hidden="true"
                 className="relative flex h-8 w-8 items-center justify-center overflow-hidden rounded-[10px]"
-                style={{
-                  background: "linear-gradient(135deg, #4D7CFF 0%, #7B5CFF 100%)",
-                  boxShadow:
-                    "0 4px 12px rgba(123,92,255,0.32), inset 0 0.5px 0 rgba(255,255,255,0.5)",
-                }}
+                style={{ background: "var(--color-white)" }}
               >
-                <span className="font-display text-[18px] font-medium text-white" style={{letterSpacing:"-0.02em"}}>S</span>
+                <span className="font-display text-[18px] font-bold text-[var(--color-black)]" style={{letterSpacing:"-0.04em"}}>S</span>
               </span>
-              <span className="font-display text-[22px] tracking-[-0.02em] text-white">
+              <span className="font-display text-[22px] font-bold tracking-[-0.04em] text-white">
                 Saldox
               </span>
             </a>

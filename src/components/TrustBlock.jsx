@@ -18,16 +18,9 @@ export default function TrustBlock() {
     <section
       id="trust"
       aria-labelledby="trust-heading"
-      className="section-bridge relative isolate overflow-hidden"
+      className="relative isolate overflow-hidden"
+      style={{ background: "var(--color-black)" }}
     >
-      <div
-        aria-hidden="true"
-        className="pointer-events-none absolute inset-0 z-0 opacity-70"
-        style={{
-          background:
-            "radial-gradient(ellipse 50% 40% at 50% 100%, rgba(123,92,255,0.20) 0%, transparent 60%), radial-gradient(ellipse 40% 30% at 20% 0%, rgba(77,124,255,0.14) 0%, transparent 60%)",
-        }}
-      />
 
       <div className="relative z-10 mx-auto max-w-[1280px] px-6 py-24 sm:px-8 md:py-32 lg:px-12 lg:py-40">
         <Eyebrow />
@@ -120,7 +113,7 @@ function Testimonial() {
       {/* Open quote — large display */}
       <div
         aria-hidden="true"
-        className="font-display text-[var(--electric-violet-2)]"
+        className="font-display text-white/70"
         style={{ fontSize: "5rem", lineHeight: "0.5", marginBottom: "0.5rem" }}
       >
         “
@@ -144,13 +137,13 @@ function Testimonial() {
       </blockquote>
 
       <figcaption className="mt-8 flex items-center justify-center gap-3">
-        {/* Avatar — electric gradient (gold reserved for TopPromos badge) */}
+        {/* Avatar — solid white circle, black initials (Revolut neutrality) */}
         <div
           aria-hidden="true"
-          className="flex h-12 w-12 items-center justify-center rounded-full font-display text-[18px] font-medium text-white"
+          className="flex h-12 w-12 items-center justify-center rounded-full font-display text-[18px] font-bold text-[var(--color-black)]"
           style={{
-            background: "linear-gradient(135deg, #4D7CFF 0%, #7B5CFF 100%)",
-            boxShadow: "0 4px 12px rgba(123,92,255,0.32), inset 0 0.5px 0 rgba(255,255,255,0.3)",
+            background: "var(--color-white)",
+            letterSpacing: "-0.03em",
           }}
         >
           MT
@@ -181,7 +174,7 @@ function RatingRow() {
             <Star key={i} delay={400 + i * 80} />
           ))}
         </div>
-        <span className="font-display text-[18px] text-[var(--color-ink)]">
+        <span className="font-display numeric text-[18px] font-bold text-[var(--color-ink)]" style={{letterSpacing:"-0.04em"}}>
           4,9
         </span>
         <span className="text-[var(--color-faint)]">/ 5</span>
