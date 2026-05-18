@@ -5,6 +5,7 @@ import HowItWorks from "./components/HowItWorks";
 import TrustBlock from "./components/TrustBlock";
 import Footer from "./components/Footer";
 import MobileStickyCTA from "./components/MobileStickyCTA";
+import CursorBlob from "./components/CursorBlob";
 
 export default function App() {
   return (
@@ -15,6 +16,9 @@ export default function App() {
       >
         Przejdź do treści
       </a>
+
+      {/* Apple Vision Pro signature ambient light follower */}
+      <CursorBlob />
 
       <Nav />
 

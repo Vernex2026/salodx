@@ -193,7 +193,7 @@ export default function Hero() {
             className="hero-rise mt-10 flex flex-col items-center gap-4 sm:flex-row sm:gap-5 lg:justify-start"
             style={{ "--rise-delay": "1100ms" }}
           >
-            <a ref={primaryCtaRef} href="#promocje" className="cta-electric">
+            <a ref={primaryCtaRef} href="#promocje" className="cta-electric apple-press">
               Zobacz dzisiejsze oferty
               <svg
                 aria-hidden="true"
@@ -355,7 +355,7 @@ function HeroLine({ text, baseDelay, className = "" }) {
 function GlassOfferCard() {
   return (
     <article
-      className="glass-card orb-halo relative overflow-hidden rounded-[24px] p-7"
+      className="glass-card orb-halo glass-shine relative overflow-hidden rounded-[24px] p-7"
       aria-label="mBank · bonus powitalny 500 zł"
     >
       <header className="relative flex items-center gap-3">
