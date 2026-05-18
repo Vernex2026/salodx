@@ -1,97 +1,175 @@
-import DocumentationPanel from "./DocumentationPanel";
-
-// Footer — pełen 4-col + live signal "ostatni update bazy"
-const COLUMNS = [
-  {
-    title: "Produkt",
-    links: ["Promocje", "Banki", "Pożyczki", "Kalkulator bonusów", "FAQ"],
-  },
-  {
-    title: "Banki",
-    links: ["mBank", "Santander", "ING", "Pekao", "Millennium", "Wszystkie banki"],
-  },
-  {
-    title: "Firma",
-    links: ["O nas", "Blog", "Kontakt", "Praca", "Reklama"],
-  },
-  {
-    title: "Legal",
-    links: ["Regulamin", "Polityka prywatności", "Cookies", "Disclaimer"],
-  },
-];
-
+/**
+ * Premium minimal footer — Aurora palette, editorial wordmark, single CTA bar.
+ */
 export default function Footer() {
   return (
-    <footer className="relative border-t border-[var(--color-hairline)] bg-white pt-20 pb-10">
-      <div className="mx-auto max-w-7xl px-6 lg:px-10">
-        {/* Top: brand + live signal */}
-        <div className="flex flex-col items-start justify-between gap-6 border-b border-[var(--color-hairline)] pb-10 sm:flex-row sm:items-center">
-          <a href="#top" className="group flex items-center gap-2.5" aria-label="Saldox — strona główna">
-            <span
-              aria-hidden="true"
-              className="relative flex h-8 w-8 items-center justify-center rounded-[10px] bg-[var(--color-brand)] shadow-[0_4px_12px_rgba(31,91,255,0.30)]"
+    <footer
+      className="relative isolate overflow-hidden"
+      style={{
+        background:
+          "radial-gradient(ellipse 50% 40% at 20% 20%, rgba(255,107,90,0.12) 0%, transparent 60%), linear-gradient(180deg, #0B1426 0%, #050810 100%)",
+      }}
+    >
+      {/* CTA band */}
+      <div className="relative mx-auto max-w-[1280px] px-6 pb-12 pt-24 sm:px-8 md:pb-16 md:pt-32 lg:px-12">
+        <div className="max-w-3xl">
+          <div className="eyebrow text-white/35">Następny krok</div>
+          <h2
+            className="font-display mt-4 text-white"
+            style={{
+              fontSize: "clamp(2.5rem, 6vw, 5rem)",
+              lineHeight: "0.98",
+              letterSpacing: "-0.03em",
+            }}
+          >
+            <span className="italic">Twój bonus</span>
+            <br />
+            <span className="text-[var(--color-coral)]">już czeka.</span>
+          </h2>
+          <p className="mt-6 max-w-md text-[16px] leading-[1.55] text-white/55 sm:text-[17px]">
+            Sprawdź dzisiejsze oferty z 24 banków. Trwa krócej niż kawa.
+          </p>
+          <div className="mt-9 flex flex-col items-start gap-4 sm:flex-row sm:items-center">
+            <a href="#promocje" className="cta-coral">
+              Zobacz dzisiejsze oferty
+              <svg
+                className="arrow"
+                aria-hidden="true"
+                width="16"
+                height="16"
+                viewBox="0 0 16 16"
+                fill="none"
+              >
+                <path
+                  d="M3 8h10M9 4l4 4-4 4"
+                  stroke="currentColor"
+                  strokeWidth="1.7"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                />
+              </svg>
+            </a>
+            <a
+              href="#newsletter"
+              className="inline-flex items-center gap-2 px-2 py-3 text-[14px] font-medium text-white/70 transition-colors hover:text-white"
             >
-              <span className="absolute inset-0 rounded-[10px] bg-gradient-to-br from-white/35 to-transparent" />
-              <span className="font-display text-[16px] font-semibold leading-none text-white tracking-[-0.04em]">S</span>
-            </span>
-            <span className="font-display text-[20px] font-semibold tracking-[-0.035em] text-[var(--color-ink)]">
-              Saldox
-            </span>
-          </a>
-
-          <div className="flex flex-wrap items-center gap-x-6 gap-y-2 text-[13px]">
-            <span className="flex items-center gap-2 text-[var(--color-muted)]">
-              <span className="relative flex h-2 w-2" aria-hidden="true">
-                <span className="absolute inline-flex h-full w-full animate-pulse-dot rounded-full bg-[var(--color-success)]" />
-                <span className="relative inline-flex h-2 w-2 rounded-full bg-[var(--color-success)]" />
-              </span>
-              Ostatni update bazy: <span className="numeric font-medium text-[var(--color-text)]">4 min temu</span>
-            </span>
-            <span aria-hidden="true" className="h-1 w-1 rounded-full bg-[var(--color-hairline-2)]" />
-            <span className="numeric text-[var(--color-muted)]">
-              Monitorowanych banków: <span className="font-medium text-[var(--color-text)]">24</span>
-            </span>
+              Zapisz się na newsletter
+              <svg
+                aria-hidden="true"
+                width="14"
+                height="14"
+                viewBox="0 0 14 14"
+                className="transition-transform group-hover:translate-x-0.5"
+              >
+                <path
+                  d="M2.5 7h9M8 3.5L11.5 7 8 10.5"
+                  stroke="currentColor"
+                  strokeWidth="1.6"
+                  fill="none"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                />
+              </svg>
+            </a>
           </div>
         </div>
+      </div>
 
-        {/* Middle: 4-col grid */}
-        <div className="grid grid-cols-2 gap-10 py-12 sm:grid-cols-4 sm:gap-8 lg:gap-10">
-          {COLUMNS.map((col) => (
-            <div key={col.title}>
-              <h4 className="font-display text-[13px] font-semibold uppercase tracking-[0.14em] text-[var(--color-ink)]">
-                {col.title}
-              </h4>
-              <ul role="list" className="mt-5 space-y-3 text-[14px]">
-                {col.links.map((link) => (
-                  <li key={link}>
-                    <a
-                      href={`#${link.toLowerCase().replace(/\s+/g, "-")}`}
-                      className="text-[var(--color-muted)] transition-colors duration-150 hover:text-[var(--color-brand)]"
-                    >
-                      {link}
-                    </a>
-                  </li>
-                ))}
-              </ul>
-            </div>
-          ))}
-        </div>
-
-        {/* Documentation — rozwijalna sekcja techniczna */}
-        <DocumentationPanel />
-
-        {/* Bottom: copyright + social */}
-        <div className="mt-12 flex flex-col items-start justify-between gap-4 border-t border-[var(--color-hairline)] pt-8 text-[12.5px] text-[var(--color-faint)] sm:flex-row sm:items-center">
+      {/* Meta strip */}
+      <div className="relative mx-auto max-w-[1280px] border-t border-white/8 px-6 py-10 sm:px-8 lg:px-12">
+        <div className="flex flex-col items-start justify-between gap-8 lg:flex-row lg:items-center">
+          {/* Wordmark + tagline */}
           <div>
-            © 2026 Saldox · Niezależny hub promocji bankowych w Polsce. Nie jesteśmy bankiem ani pośrednikiem.
+            <a
+              href="#top"
+              className="group inline-flex items-center gap-2.5"
+              aria-label="Saldox — strona główna"
+            >
+              <span
+                aria-hidden="true"
+                className="relative flex h-8 w-8 items-center justify-center overflow-hidden rounded-[10px]"
+                style={{
+                  background: "linear-gradient(135deg, #FF8470 0%, #FF6B5A 100%)",
+                  boxShadow:
+                    "0 4px 12px rgba(255,107,90,0.32), inset 0 0.5px 0 rgba(255,255,255,0.5)",
+                }}
+              >
+                <span className="font-display italic text-[18px] text-white">S</span>
+              </span>
+              <span className="font-display text-[22px] tracking-[-0.02em] text-white">
+                Saldox
+              </span>
+            </a>
+            <p className="mt-3 max-w-sm text-[13px] leading-[1.55] text-white/45">
+              Niezależny hub premium ofert bankowych. Nie pośrednik. Nie sprzedawca.
+              Po prostu Twój filtr.
+            </p>
           </div>
-          <div className="flex items-center gap-5">
-            <a href="#twitter" className="font-medium text-[var(--color-muted)] hover:text-[var(--color-ink)]">X / Twitter</a>
-            <a href="#linkedin" className="font-medium text-[var(--color-muted)] hover:text-[var(--color-ink)]">LinkedIn</a>
-            <a href="#rss" className="font-medium text-[var(--color-muted)] hover:text-[var(--color-ink)]">RSS</a>
+
+          {/* Links */}
+          <nav aria-label="Linki" className="grid grid-cols-2 gap-x-10 gap-y-6 sm:grid-cols-3 lg:gap-x-14">
+            <FooterCol
+              title="Produkt"
+              links={[
+                ["Promocje", "#promocje"],
+                ["Banki", "#banki"],
+                ["Pożyczki", "#pozyczki"],
+                ["FAQ", "#faq"],
+              ]}
+            />
+            <FooterCol
+              title="Firma"
+              links={[
+                ["O nas", "#o-nas"],
+                ["Blog", "#blog"],
+                ["Kontakt", "mailto:biuro@saldox.pl"],
+              ]}
+            />
+            <FooterCol
+              title="Legal"
+              links={[
+                ["Regulamin", "#regulamin"],
+                ["Prywatność", "#prywatnosc"],
+                ["Cookies", "#cookies"],
+              ]}
+            />
+          </nav>
+        </div>
+      </div>
+
+      {/* Bottom bar */}
+      <div className="relative mx-auto max-w-[1280px] border-t border-white/8 px-6 py-6 sm:px-8 lg:px-12">
+        <div className="flex flex-col items-start justify-between gap-3 text-[12px] text-white/40 sm:flex-row sm:items-center">
+          <div>© 2026 Saldox · Wszelkie prawa zastrzeżone.</div>
+          <div className="flex items-center gap-2">
+            <span className="live-dot text-[var(--color-emerald)]" aria-hidden="true" />
+            <span>
+              Ostatnia aktualizacja bazy:{" "}
+              <span className="numeric font-medium text-white/60">4 min temu</span>
+            </span>
           </div>
         </div>
       </div>
     </footer>
+  );
+}
+
+function FooterCol({ title, links }) {
+  return (
+    <div>
+      <h4 className="eyebrow text-white/40">{title}</h4>
+      <ul role="list" className="mt-4 space-y-2.5 text-[13.5px]">
+        {links.map(([label, href]) => (
+          <li key={label}>
+            <a
+              href={href}
+              className="text-white/65 transition-colors hover:text-white"
+            >
+              {label}
+            </a>
+          </li>
+        ))}
+      </ul>
+    </div>
   );
 }
