@@ -87,7 +87,7 @@ export default function Nav() {
           <div className="flex items-center gap-3">
             <a
               href="#promocje"
-              className="hidden rounded-full border border-[var(--color-hairline)] bg-white/[0.04] px-4 py-2 text-[13px] font-medium text-[var(--color-ink)] transition-colors hover:bg-white/[0.10] sm:inline-block"
+              className="hidden h-10 items-center rounded-full border border-[var(--color-hairline)] bg-white/[0.04] px-4 text-[13px] font-medium text-[var(--color-ink)] transition-colors hover:border-white/20 hover:bg-white/[0.08] sm:inline-flex"
             >
               Zobacz oferty
             </a>
@@ -99,7 +99,7 @@ export default function Nav() {
               aria-label={open ? "Zamknij menu" : "Otwórz menu"}
               aria-expanded={open}
               aria-controls="menu-overlay"
-              className="hamburger relative inline-flex h-11 w-11 items-center justify-center rounded-full border border-[var(--color-hairline)] bg-white/[0.04] text-[var(--color-ink)] transition-colors hover:bg-white/[0.10]"
+              className="hamburger relative inline-flex h-10 w-10 items-center justify-center rounded-full border border-[var(--color-hairline)] bg-white/[0.04] text-[var(--color-ink)] transition-colors hover:border-white/20 hover:bg-white/[0.08]"
               data-open={open}
             >
               <span aria-hidden="true" className="relative block h-3.5 w-5">

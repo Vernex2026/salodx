@@ -1,10 +1,12 @@
 import { useReveal } from "../hooks/useReveal";
 import BankLogo from "./BankLogo";
 import SaldoxGlassCard from "./ui/SaldoxGlassCard";
+import FlowingLightBackground from "./decorative/FlowingLightBackground";
 
 const OFFERS = [
   {
     bank: "mBank",
+    bankKey: "mbank",
     product: "Konto Intensive",
     bonus: 500,
     extra: "+ zwrot 1% za zakupy",
@@ -19,6 +21,7 @@ const OFFERS = [
   },
   {
     bank: "Santander",
+    bankKey: "santander",
     product: "Konto Jakie Chcę",
     bonus: 300,
     extra: "+ 200 zł cashback Allegro",
@@ -32,6 +35,7 @@ const OFFERS = [
   },
   {
     bank: "ING",
+    bankKey: "ing",
     product: "Konto Direct",
     bonus: 450,
     extra: "+ 4% na koncie oszczędnościowym",
@@ -52,6 +56,7 @@ export default function TopPromos() {
       className="section-atmosphere-promos relative isolate overflow-hidden"
       style={{ background: "var(--color-black)" }}
     >
+      <FlowingLightBackground opacity={0.85} blendMode="screen" />
 
       <div className="relative z-10 mx-auto max-w-[1280px] px-6 py-24 sm:px-8 md:py-32 lg:px-12 lg:py-40">
         {/* Header */}
@@ -133,7 +138,7 @@ function SectionHeader({ children }) {
 
 function OfferCard({ offer, delay = 0 }) {
   const [ref, visible] = useReveal({ threshold: 0.15 });
-  const { bank, product, bonus, extra, days, requirements, accent, badge, featured, urgent } = offer;
+  const { bank, bankKey, product, bonus, extra, days, requirements, badge, featured, urgent } = offer;
 
   return (
     <li
@@ -143,9 +148,8 @@ function OfferCard({ offer, delay = 0 }) {
     >
       <SaldoxGlassCard
         variant="offer"
-        bankAccentColor={accent}
+        bank={bankKey}
         topBadge={!!badge}
-        padding="28px"
       >
         <div className="relative flex flex-col">
           {/* Featured badge — gold */}
