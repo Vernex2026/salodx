@@ -141,7 +141,7 @@ function OfferCard({ offer, delay = 0 }) {
       style={{ "--reveal-delay": `${delay}ms` }}
     >
       <article
-        className="card-stark relative overflow-hidden p-7"
+        className="card-glass relative overflow-hidden p-7"
         data-featured={featured ? "true" : "false"}
       >
         {/* Top accent line — solid bank color, no gradient */}

@@ -40,14 +40,14 @@ export default function Nav() {
   return (
     <>
       <header
-        className={`fixed top-0 left-0 right-0 z-50 transition-[background,backdrop-filter,border-color] duration-300 ${
-          scrolled || open ? "nav-scrolled" : ""
-        }`}
+        className="fixed left-1/2 top-3 z-50 -translate-x-1/2 transition-[transform,opacity] duration-300"
+        style={{ width: "calc(100% - 24px)", maxWidth: "1180px" }}
         role="banner"
       >
         <nav
           aria-label="Główna nawigacja"
-          className="mx-auto flex h-[72px] max-w-[1280px] items-center justify-between px-6 sm:px-8 lg:px-12"
+          data-scrolled={scrolled || open ? "true" : "false"}
+          className="nav-glass flex h-[60px] items-center justify-between rounded-full pl-4 pr-2 sm:pl-5 sm:pr-3"
         >
           {/* Wordmark */}
           <a

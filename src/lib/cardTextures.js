@@ -11,8 +11,12 @@ import * as THREE from "three";
    memo-cached so React StrictMode double-mount doesn't redraw.
    ────────────────────────────────────────────────────────── */
 
-const W = 1024; // texture width (front + back share dims)
-const H = 645; // 1024 / 1.586 ≈ 645 — ISO/IEC 7810 ID-1 ratio
+const W = 1536; // texture width (front + back share dims)
+const H = 968;  // 1536 / 1.586 ≈ 968 — ISO/IEC 7810 ID-1 ratio
+const OW = 1024; // authored layout width
+const OH = 645;  // authored layout height — drawing coords use these
+const SCALE_X = W / OW;
+const SCALE_Y = H / OH;
 
 const BANKS = {
   mBank: {
@@ -102,23 +106,26 @@ function drawFront(bankKey) {
   canvas.width = W;
   canvas.height = H;
   const ctx = canvas.getContext("2d");
+  // Authored at 1024×645. Scale once so all subsequent coords use the
+  // authored space — we get a crisper texture without rewriting layout.
+  ctx.scale(SCALE_X, SCALE_Y);
 
   // Background — bank brand diagonal gradient
-  const bg = ctx.createLinearGradient(0, 0, W, H);
+  const bg = ctx.createLinearGradient(0, 0, OW, OH);
   bg.addColorStop(0, cfg.colorA);
   bg.addColorStop(1, cfg.colorB);
   ctx.fillStyle = bg;
-  ctx.fillRect(0, 0, W, H);
+  ctx.fillRect(0, 0, OW, OH);
 
   // Subtle radial sheen — premium soft highlight, off-center
   const sheen = ctx.createRadialGradient(
-    W * 0.28, H * 0.30, 20,
-    W * 0.28, H * 0.30, W * 0.62
+    OW * 0.28, OH * 0.30, 20,
+    OW * 0.28, OH * 0.30, OW * 0.62
   );
   sheen.addColorStop(0, "rgba(255,255,255,0.20)");
   sheen.addColorStop(1, "rgba(255,255,255,0)");
   ctx.fillStyle = sheen;
-  ctx.fillRect(0, 0, W, H);
+  ctx.fillRect(0, 0, OW, OH);
 
   // Inner top-left wordmark + bank monogram block
   ctx.fillStyle = "#FFFFFF";
@@ -160,7 +167,7 @@ function drawFront(bankKey) {
 
   // Card-scheme placeholder (interlocking circles, generic)
   ctx.save();
-  ctx.translate(W - 180, H - 110);
+  ctx.translate(OW - 180, OH - 110);
   ctx.fillStyle = "rgba(255,255,255,0.95)";
   ctx.beginPath();
   ctx.arc(0, 0, 36, 0, Math.PI * 2);
@@ -175,12 +182,12 @@ function drawFront(bankKey) {
   ctx.fillStyle = "rgba(255,255,255,0.32)";
   ctx.font = "600 14px Geist, Inter, sans-serif";
   ctx.textAlign = "right";
-  ctx.fillText("via saldox.pl", W - 64, H - 32);
+  ctx.fillText("via saldox.pl", OW - 64, OH - 32);
   ctx.textAlign = "start";
 
   const tex = new THREE.CanvasTexture(canvas);
   tex.colorSpace = THREE.SRGBColorSpace;
-  tex.anisotropy = 8;
+  tex.anisotropy = 16;
   tex.needsUpdate = true;
   return tex;
 }
@@ -190,32 +197,33 @@ function drawBack() {
   canvas.width = W;
   canvas.height = H;
   const ctx = canvas.getContext("2d");
+  ctx.scale(SCALE_X, SCALE_Y);
 
   // Dark base
   ctx.fillStyle = "#0A0C14";
-  ctx.fillRect(0, 0, W, H);
+  ctx.fillRect(0, 0, OW, OH);
 
   // Subtle vignette
-  const vig = ctx.createRadialGradient(W / 2, H / 2, 50, W / 2, H / 2, W * 0.6);
+  const vig = ctx.createRadialGradient(OW / 2, OH / 2, 50, OW / 2, OH / 2, OW * 0.6);
   vig.addColorStop(0, "rgba(255,255,255,0.05)");
   vig.addColorStop(1, "rgba(0,0,0,0.45)");
   ctx.fillStyle = vig;
-  ctx.fillRect(0, 0, W, H);
+  ctx.fillRect(0, 0, OW, OH);
 
   // Magnetic stripe — solid band near top
   ctx.fillStyle = "#06070B";
-  ctx.fillRect(0, 80, W, 96);
+  ctx.fillRect(0, 80, OW, 96);
 
   // Signature strip
   ctx.fillStyle = "#F2F2F2";
-  ctx.fillRect(64, 240, W * 0.55, 60);
+  ctx.fillRect(64, 240, OW * 0.55, 60);
   ctx.fillStyle = "rgba(0,0,0,0.45)";
   ctx.font = "600 20px ui-monospace, 'JetBrains Mono', monospace";
   ctx.fillText("ANNA KOWALSKA  ····  CVV 482", 80, 268);
 
   // Saldox monogram + wordmark — centered low
   ctx.save();
-  ctx.translate(W / 2, H * 0.66);
+  ctx.translate(OW / 2, OH * 0.66);
 
   // Monogram square (white "S" on white block)
   ctx.fillStyle = "#FFFFFF";
@@ -242,17 +250,43 @@ function drawBack() {
   ctx.fillStyle = "rgba(255,255,255,0.35)";
   ctx.font = "500 16px ui-monospace, 'JetBrains Mono', monospace";
   ctx.textAlign = "left";
-  ctx.fillText("saldox.pl", 64, H - 40);
+  ctx.fillText("saldox.pl", 64, OH - 40);
   ctx.textAlign = "right";
-  ctx.fillText("This card is a visual mockup", W - 64, H - 40);
+  ctx.fillText("This card is a visual mockup", OW - 64, OH - 40);
   ctx.textAlign = "start";
 
   const tex = new THREE.CanvasTexture(canvas);
   tex.colorSpace = THREE.SRGBColorSpace;
-  tex.anisotropy = 8;
+  tex.anisotropy = 16;
   tex.needsUpdate = true;
   return tex;
 }
+
+/* ──────────────────────────────────────────────────────────
+   Integration point for imported GLB models (future).
+
+   When you drop a high-quality GLB into /public/models/, swap
+   the procedural cards in BankCard3D.jsx like this:
+
+     import { useGLTF } from "@react-three/drei";
+     useGLTF.preload("/models/your-card.glb");
+     const { scene } = useGLTF("/models/your-card.glb");
+     return <primitive object={scene.clone(true)} />;
+
+   Then override the front-face texture per bank by traversing
+   the scene and finding the main mesh:
+
+     scene.traverse((o) => {
+       if (o.isMesh && o.material.name === "Front") {
+         o.material.map = getBankCardTextures(bank).front;
+         o.material.needsUpdate = true;
+       }
+     });
+
+   See /root/.claude/plans/hybrid-layout-pixel-imperative-hanrahan.md
+   "Sourcing 3D models" section for source recommendations
+   (pmndrs market, Sketchfab, Spline, Meshy, etc.).
+   ────────────────────────────────────────────────────────── */
 
 let cachedBack = null;
 

@@ -1,6 +1,8 @@
 import { Canvas } from "@react-three/fiber";
 import {
   ContactShadows,
+  Environment,
+  Lightformer,
   PerspectiveCamera,
 } from "@react-three/drei";
 import BankCard3D from "./BankCard3D";
@@ -53,6 +55,44 @@ export default function HeroCardScene() {
         />
         <pointLight position={[0, -2.2, 3]} intensity={0.95} color="#FFFFFF" />
         <pointLight position={[2, 1, -1.5]} intensity={0.6} color="#FFB07A" />
+
+        {/* Procedural environment — Lightformers act as virtual area
+            lights that bake into the cubemap for material reflections.
+            No external HDRI fetch, so works in any sandbox / strict CSP. */}
+        <Environment resolution={256} frames={1}>
+          <Lightformer
+            form="rect"
+            intensity={2.4}
+            color="#FFFFFF"
+            position={[2.5, 2.2, 2.0]}
+            scale={[3, 1.4, 1]}
+            target={[0, 0, 0]}
+          />
+          <Lightformer
+            form="rect"
+            intensity={1.4}
+            color="#B8C5FF"
+            position={[-3, 1.5, 1.8]}
+            scale={[2.4, 1.2, 1]}
+            target={[0, 0, 0]}
+          />
+          <Lightformer
+            form="rect"
+            intensity={0.8}
+            color="#FFB07A"
+            position={[0, -1.6, 1.8]}
+            scale={[3, 1, 1]}
+            target={[0, 0, 0]}
+          />
+          <Lightformer
+            form="ring"
+            intensity={0.6}
+            color="#FFFFFF"
+            position={[0, 2.6, -1.0]}
+            scale={2}
+            target={[0, 0, 0]}
+          />
+        </Environment>
 
         {/* Three bank cards — gentle fan spread. Rotation is slow +
             every card has a different rotationOffset so they always

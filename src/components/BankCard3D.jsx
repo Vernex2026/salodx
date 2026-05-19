@@ -73,15 +73,20 @@ export default function BankCard3D({
           <meshStandardMaterial color={EDGE_COLOR} metalness={0.18} roughness={0.55} />
         </RoundedBox>
 
-        {/* Front face — bank brand */}
+        {/* Front face — bank brand, with subtle iridescence for an
+            Apple-like holographic refleks on rotation */}
         <mesh position={[0, 0, HALF_DEPTH + PLANE_OFFSET]} castShadow>
           <planeGeometry args={[1.586, 1.0]} />
           <meshPhysicalMaterial
             map={front}
-            metalness={0.06}
-            roughness={0.32}
-            clearcoat={0.85}
-            clearcoatRoughness={0.10}
+            metalness={0.10}
+            roughness={0.28}
+            clearcoat={1.0}
+            clearcoatRoughness={0.08}
+            iridescence={0.18}
+            iridescenceIOR={1.4}
+            iridescenceThicknessRange={[120, 480]}
+            envMapIntensity={0.85}
           />
         </mesh>
 
@@ -95,10 +100,11 @@ export default function BankCard3D({
           <planeGeometry args={[1.586, 1.0]} />
           <meshPhysicalMaterial
             map={back}
-            metalness={0.06}
-            roughness={0.42}
-            clearcoat={0.55}
-            clearcoatRoughness={0.18}
+            metalness={0.08}
+            roughness={0.40}
+            clearcoat={0.70}
+            clearcoatRoughness={0.15}
+            envMapIntensity={0.70}
           />
         </mesh>
       </group>
