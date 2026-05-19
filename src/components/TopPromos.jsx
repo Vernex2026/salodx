@@ -253,7 +253,7 @@ function OfferCard({ offer, delay = 0 }) {
           </div>
           <button
             type="button"
-            className="group/btn inline-flex items-center gap-1.5 rounded-full bg-white px-4 py-2.5 text-[13px] font-semibold text-[var(--color-ink)] transition-transform hover:scale-105"
+            className="apple-press group/btn inline-flex items-center gap-1.5 rounded-full bg-white px-4 py-2.5 text-[13px] font-semibold text-[var(--color-ink)] transition-transform hover:scale-105"
           >
             Sprawdź
             <svg

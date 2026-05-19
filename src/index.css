@@ -114,9 +114,18 @@
   --ease-soft:   cubic-bezier(0.16, 1, 0.3, 1);
   --ease-curtain:cubic-bezier(0.83, 0, 0.17, 1);
   --ease-in:     cubic-bezier(0.7, 0, 0.84, 0);
+
+  /* ── Apple Cupertino tier (awesome-design-md research) ──── */
+  --ease-apple-press:   cubic-bezier(0.34, 1.56, 0.64, 1);   /* overshoot back.out — press feedback */
+  --ease-ios-spring:    cubic-bezier(0.32, 0.72, 0, 1);       /* iOS Tahoe spring — primary entrances */
+  --ease-elastic-out:   cubic-bezier(0.43, 0.13, 0.23, 0.96); /* Stripe number elastic (count-up) */
+  --ease-material:      cubic-bezier(0.4, 0, 0.2, 1);         /* Linear surface lift */
+  --ease-framer-reveal: cubic-bezier(0.17, 0.85, 0.83, 0.67); /* Framer gradient spotlight reveal */
+
   --dur-fast:    160ms;
   --dur-base:    240ms;
   --dur-slow:    420ms;
+  --dur-cinematic: 880ms;   /* Apple landing entrance */
 }
 
 /* ── Globals ─────────────────────────────────────────────── */
@@ -154,6 +163,17 @@ body {
 }
 .font-mono { font-family: var(--font-mono); }
 .numeric   { font-variant-numeric: tabular-nums; }
+
+/* Tabular numerals globally — financial data must align (Stripe pattern) */
+body { font-variant-numeric: tabular-nums; }
+
+/* Apple press feedback — solid scale, no blur. Used on small CTAs. */
+.apple-press {
+  transition: transform 140ms var(--ease-apple-press);
+}
+.apple-press:active {
+  transform: scale(0.96);
+}
 
 :where(a, button, [role="button"], input, textarea, select):focus-visible {
   outline: 2px solid var(--color-white);
