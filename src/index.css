@@ -605,24 +605,40 @@ body { font-variant-numeric: tabular-nums; }
 .offer-card[data-bank="santander"] { --bank-color: #00C896; }
 .offer-card[data-bank="ing"]       { --bank-color: #FF6600; }
 
-/* Iridescent background placeholder — sits BEHIND each .offer-card
-   (sibling element with -z-10). The blue/violet/cyan blobs get
-   refracted through the card's backdrop-filter into a soft hologram.
-   When real PNG assets land in /public/decorative/, SaldoxGlassCard
-   swaps this for an <img>. */
+/* Iridescent background — sits BEHIND each .offer-card, bleeding
+   16px past the card on every side (-inset-4 on the wrapper).
+   When /public/decorative/iridescent-shape-{1,2,3}.png assets land,
+   <SaldoxGlassCard> renders an <img> over this placeholder; until
+   then this is what shows.
+
+   Per owner v11 spec: shape itself is SHARP (no filter blur — the
+   card's backdrop-filter does its own blur). 100% visible.
+   Drifts via @keyframes driftShape. */
 .iridescent-bg-placeholder {
   background:
-    radial-gradient(circle at 30% 40%, #4D7CFF 0%, transparent 50%),
-    radial-gradient(circle at 70% 60%, #7B5CFF 0%, transparent 50%),
-    radial-gradient(circle at 50% 80%, #00E5FF 0%, transparent 50%);
-  filter: blur(40px) saturate(150%);
-  opacity: 0.5;
+    radial-gradient(circle at 30% 40%, #4D7CFF 0%, transparent 55%),
+    radial-gradient(circle at 70% 60%, #7B5CFF 0%, transparent 55%),
+    radial-gradient(circle at 50% 80%, #00E5FF 0%, transparent 55%);
+  filter: saturate(140%) brightness(110%);
+  opacity: 0.85;
+  animation: driftShape 24s ease-in-out infinite;
   will-change: transform;
 }
 @media (max-width: 768px) {
   .iridescent-bg-placeholder {
-    opacity: 0.35;
+    opacity: 0.55;
   }
+}
+@media (prefers-reduced-motion: reduce) {
+  .iridescent-bg-placeholder {
+    animation: none;
+  }
+}
+
+@keyframes driftShape {
+  0%,  100% { transform: translate(0, 0)       rotate(0deg)  scale(1); }
+  33%       { transform: translate(-15px, 12px) rotate(6deg)  scale(1.03); }
+  66%       { transform: translate(12px, -8px)  rotate(-4deg) scale(0.97); }
 }
 
 /* Section bg — cold-spectrum halos, far subtler than v8/v9. No more

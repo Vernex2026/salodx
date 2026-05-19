@@ -6,6 +6,7 @@ const OFFERS = [
   {
     bank: "mBank",
     bankKey: "mbank",
+    iridescentShape: 1,
     product: "Konto Intensive",
     bonus: 500,
     extra: "+ zwrot 1% za zakupy",
@@ -21,6 +22,7 @@ const OFFERS = [
   {
     bank: "Santander",
     bankKey: "santander",
+    iridescentShape: 2,
     product: "Konto Jakie Chcę",
     bonus: 300,
     extra: "+ 200 zł cashback Allegro",
@@ -35,6 +37,7 @@ const OFFERS = [
   {
     bank: "ING",
     bankKey: "ing",
+    iridescentShape: 3,
     product: "Konto Direct",
     bonus: 450,
     extra: "+ 4% na koncie oszczędnościowym",
@@ -136,7 +139,7 @@ function SectionHeader({ children }) {
 
 function OfferCard({ offer, delay = 0 }) {
   const [ref, visible] = useReveal({ threshold: 0.15 });
-  const { bank, bankKey, product, bonus, extra, days, requirements, badge, featured, urgent } = offer;
+  const { bank, bankKey, iridescentShape, product, bonus, extra, days, requirements, badge, featured, urgent } = offer;
 
   return (
     <li
@@ -148,6 +151,7 @@ function OfferCard({ offer, delay = 0 }) {
         variant="offer"
         bank={bankKey}
         topBadge={!!badge}
+        iridescentShape={iridescentShape}
       >
         <div className="relative flex flex-col">
           {/* Featured badge — gold */}
