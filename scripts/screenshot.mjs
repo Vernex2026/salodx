@@ -19,21 +19,21 @@ const FORCE_VISIBLE = `
 
 const SHOTS = [
   /* ── Desktop (6) ───────────────────────────────────────────── */
-  { name: "01-desktop-hero",   viewport: { w: 1440, h: 900 }, dsf: 2, settle: 2200 },
+  { name: "01-desktop-hero",   viewport: { w: 1440, h: 900 }, dsf: 2, settle: 3200, waitR3F: true },
   { name: "02-desktop-offers", viewport: { w: 1440, h: 900 }, dsf: 2, scrollTo: "#promocje", settle: 1500 },
   { name: "03-desktop-how",    viewport: { w: 1440, h: 900 }, dsf: 2, scrollTo: "#how",      settle: 1800 },
   { name: "04-desktop-trust",  viewport: { w: 1440, h: 900 }, dsf: 2, scrollTo: "#trust",    settle: 1800 },
   { name: "05-desktop-footer", viewport: { w: 1440, h: 900 }, dsf: 2, scrollTo: "#next",     settle: 1200 },
   { name: "06-desktop-menu",   viewport: { w: 1440, h: 900 }, dsf: 2, action: openMenu, settle: 800 },
 
-  /* ── Mobile (4) ────────────────────────────────────────────── */
-  { name: "07-mobile-hero",   viewport: { w: 390, h: 844 }, dsf: 3, mobile: true, settle: 2000 },
+  /* ── Mobile (4) — auto falls back to static card, no R3F ───── */
+  { name: "07-mobile-hero",   viewport: { w: 390, h: 844 }, dsf: 3, mobile: true, settle: 1800 },
   { name: "08-mobile-offers", viewport: { w: 390, h: 844 }, dsf: 3, mobile: true, scrollTo: "#promocje", settle: 1500 },
   { name: "09-mobile-how",    viewport: { w: 390, h: 844 }, dsf: 3, mobile: true, scrollTo: "#how",      settle: 1800 },
   { name: "10-mobile-menu",   viewport: { w: 390, h: 844 }, dsf: 3, mobile: true, action: openMenu, settle: 800 },
 
   /* ── Bonus: full-page overview ─────────────────────────────── */
-  { name: "11-desktop-full",  viewport: { w: 1280, h: 800 }, dsf: 1, forceVisible: true, fullPage: true, settle: 2400, scrollDance: true },
+  { name: "11-desktop-full",  viewport: { w: 1280, h: 800 }, dsf: 1, forceVisible: true, fullPage: true, settle: 3200, scrollDance: true, waitR3F: true },
 ];
 
 async function openMenu(page) {
@@ -80,7 +80,11 @@ for (const shot of SHOTS) {
   if (shot.action) await shot.action(page);
 
   if (shot.waitR3F) {
-    // Force two RAFs to guarantee R3F has rendered the frame buffer
+    // Let R3F mount + textures generate, then freeze the scene so the
+    // screenshot captures a stable, designed frame instead of a random
+    // moment in the float/spin cycle.
+    await page.waitForTimeout(1500);
+    await page.evaluate(() => { window.__pauseR3F = true; });
     await page.evaluate(
       () =>
         new Promise((r) =>

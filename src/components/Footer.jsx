@@ -14,9 +14,9 @@ export default function Footer() {
           <h2
             className="font-display mt-4 text-white"
             style={{
-              fontSize: "clamp(2.75rem, 6.5vw, 5.5rem)",
-              lineHeight: "0.96",
-              letterSpacing: "-0.06em",
+              fontSize: "clamp(3.5rem, 11vw, 10rem)",
+              lineHeight: "0.88",
+              letterSpacing: "-0.065em",
               fontWeight: 700,
             }}
           >

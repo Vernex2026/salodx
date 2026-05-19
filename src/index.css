@@ -175,6 +175,148 @@ body { font-variant-numeric: tabular-nums; }
   transform: scale(0.96);
 }
 
+/* ──────────────────────────────────────────────────────────
+   Text shimmer — white-to-fainter-white sweep. Sharp, no blur.
+   Used on hero "już czeka." for subtle premium "alive" feel.
+   No chroma — only alpha modulation, respects no-gradient policy.
+   ────────────────────────────────────────────────────────── */
+.text-shimmer {
+  background: linear-gradient(
+    100deg,
+    rgba(255, 255, 255, 1) 0%,
+    rgba(255, 255, 255, 0.55) 45%,
+    rgba(255, 255, 255, 1) 100%
+  );
+  background-size: 220% 100%;
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  animation: text-shimmer 4s ease-in-out infinite;
+}
+@keyframes text-shimmer {
+  0%, 100% { background-position: 220% 50%; }
+  50%      { background-position: 0% 50%; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .text-shimmer {
+    animation: none;
+    color: var(--color-ink);
+    -webkit-background-clip: border-box;
+    background-clip: border-box;
+    background: none;
+  }
+}
+
+/* ──────────────────────────────────────────────────────────
+   Hero spotlight — cursor-tracked sharp radial wash.
+   No blur. Subtle alpha only. Disabled on touch + RM.
+   ────────────────────────────────────────────────────────── */
+.hero-spotlight {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 1;
+  background: radial-gradient(
+    circle 320px at var(--mx, 50%) var(--my, 50%),
+    rgba(255, 255, 255, 0.08) 0%,
+    rgba(255, 255, 255, 0.02) 40%,
+    transparent 70%
+  );
+  opacity: 0;
+  transition: opacity 600ms var(--ease-out);
+}
+.hero-spotlight[data-active="true"] {
+  opacity: 1;
+}
+@media (max-width: 1024px), (prefers-reduced-motion: reduce), (hover: none) {
+  .hero-spotlight { display: none; }
+}
+
+/* ──────────────────────────────────────────────────────────
+   Background beams — sharp animated diagonal lines.
+   1px wide, gradient mask, no blur. Aceternity pattern without
+   the soft glows.
+   ────────────────────────────────────────────────────────── */
+.beams-layer {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 0;
+  overflow: hidden;
+}
+.beam {
+  position: absolute;
+  top: -20%;
+  height: 140%;
+  width: 1px;
+  background: linear-gradient(
+    180deg,
+    transparent 0%,
+    rgba(255, 255, 255, 0.20) 50%,
+    transparent 100%
+  );
+  transform-origin: center top;
+  animation: beam-flow 8s linear infinite;
+  opacity: 0;
+}
+.beam--1 { left: 18%; animation-delay: 0s;   transform: rotate(-12deg); }
+.beam--2 { left: 42%; animation-delay: 2.7s; transform: rotate(-10deg); }
+.beam--3 { left: 68%; animation-delay: 5.3s; transform: rotate(-14deg); }
+.beam--4 { left: 88%; animation-delay: 1.4s; transform: rotate(-11deg); }
+
+@keyframes beam-flow {
+  0%   { opacity: 0; transform-origin: center top; }
+  15%  { opacity: 1; }
+  85%  { opacity: 1; }
+  100% { opacity: 0; }
+}
+.beam--1 { animation-name: beam-flow-1; }
+.beam--2 { animation-name: beam-flow-2; }
+.beam--3 { animation-name: beam-flow-3; }
+.beam--4 { animation-name: beam-flow-4; }
+@keyframes beam-flow-1 {
+  0%   { opacity: 0; transform: rotate(-12deg) translateY(-30%); }
+  15%  { opacity: 1; }
+  85%  { opacity: 1; }
+  100% { opacity: 0; transform: rotate(-12deg) translateY(30%); }
+}
+@keyframes beam-flow-2 {
+  0%   { opacity: 0; transform: rotate(-10deg) translateY(-30%); }
+  15%  { opacity: 1; }
+  85%  { opacity: 1; }
+  100% { opacity: 0; transform: rotate(-10deg) translateY(30%); }
+}
+@keyframes beam-flow-3 {
+  0%   { opacity: 0; transform: rotate(-14deg) translateY(-30%); }
+  15%  { opacity: 1; }
+  85%  { opacity: 1; }
+  100% { opacity: 0; transform: rotate(-14deg) translateY(30%); }
+}
+@keyframes beam-flow-4 {
+  0%   { opacity: 0; transform: rotate(-11deg) translateY(-30%); }
+  15%  { opacity: 1; }
+  85%  { opacity: 1; }
+  100% { opacity: 0; transform: rotate(-11deg) translateY(30%); }
+}
+@media (prefers-reduced-motion: reduce) {
+  .beam { animation: none; opacity: 0; }
+}
+
+/* ──────────────────────────────────────────────────────────
+   Hero 3D scene wrapper — R3F Canvas sits in the right column;
+   the wrapper just provides the aspect box and a fallback ground
+   for any pre-load flash.
+   ────────────────────────────────────────────────────────── */
+.hero-scene {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 1 / 1.06;
+  background: transparent;
+}
+.hero-scene canvas {
+  outline: none !important;
+}
+
 :where(a, button, [role="button"], input, textarea, select):focus-visible {
   outline: 2px solid var(--color-white);
   outline-offset: 3px;
@@ -404,6 +546,115 @@ body { font-variant-numeric: tabular-nums; }
 .cta-ghost:hover .arrow { transform: translateX(3px); }
 
 /* ──────────────────────────────────────────────────────────
+   Glass design system — v7 unlocks backdrop-filter per user
+   request. Four surfaces only: floating nav pill, offer cards,
+   HowItWorks phone wrapper, mobile sticky CTA. Anywhere else
+   keeps solid surfaces.
+   ────────────────────────────────────────────────────────── */
+
+/* NOTE: .card-glass (CSS backdrop-filter implementation) was removed in
+   v9 — the offer cards now use SaldoxGlassCard (liquid-glass-react
+   with SVG feDisplacementMap + chromaticAberration). The other three
+   glass surfaces (.nav-glass, .phone-glass-frame, .mobile-cta) still
+   use CSS backdrop-filter until they get migrated. */
+
+/* liquid-glass-react renders two invisible position:relative helper
+   divs that — left in normal flow — push the wrapper to ~3x the
+   intended card height. Force them to absolute so they overlap the
+   main glass surface instead of stacking under it. */
+.saldox-liquid-wrap > div.opacity-0 {
+  position: absolute !important;
+  inset: 0;
+  margin: 0;
+}
+
+/* Atmospheric depth behind the liquid-glass offer cards. SaldoxGlassCard
+   uses SVG feDisplacementMap — it refracts what's behind it. So the
+   section needs subtle cold-spectrum color blobs (blue + violet) for the
+   glass to break up into rainbows on its edges. Owner-specified palette. */
+.section-atmosphere-promos {
+  position: relative;
+  isolation: isolate;
+}
+.section-atmosphere-promos::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(ellipse 50% 40% at 30% 30%, rgba(77, 124, 255, 0.08) 0%, transparent 60%),
+    radial-gradient(ellipse 50% 40% at 70% 70%, rgba(123, 92, 255, 0.06) 0%, transparent 60%);
+  z-index: 0;
+  pointer-events: none;
+}
+
+/* Floating glass nav pill — Zen-browser-style top nav */
+.nav-glass {
+  background: rgba(10, 12, 20, 0.55);
+  -webkit-backdrop-filter: blur(32px) saturate(180%);
+  backdrop-filter: blur(32px) saturate(180%);
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.18),
+    0 1px 2px rgba(0, 0, 0, 0.40),
+    0 12px 32px -8px rgba(0, 0, 0, 0.50);
+  transition: background 240ms var(--ease-out);
+  will-change: backdrop-filter;
+}
+.nav-glass[data-scrolled="true"] {
+  background: rgba(10, 12, 20, 0.70);
+}
+
+/* Light glass — phone wrapper in HowItWorks (cream section) */
+.phone-glass-frame {
+  position: relative;
+  border-radius: 32px;
+  background: linear-gradient(
+    180deg,
+    rgba(255, 255, 255, 0.55) 0%,
+    rgba(255, 255, 255, 0.18) 100%
+  );
+  -webkit-backdrop-filter: blur(22px) saturate(140%);
+  backdrop-filter: blur(22px) saturate(140%);
+  border: 1px solid rgba(6, 7, 11, 0.10);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.55),
+    0 1px 2px rgba(6, 7, 11, 0.05),
+    0 32px 64px -20px rgba(6, 7, 11, 0.18);
+}
+.phone-glass-frame::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  padding: 1px;
+  background: linear-gradient(
+    135deg,
+    rgba(255, 255, 255, 0.90) 0%,
+    rgba(6, 7, 11, 0.10) 50%,
+    rgba(255, 255, 255, 0.50) 100%
+  );
+  -webkit-mask:
+    linear-gradient(#fff 0 0) content-box,
+    linear-gradient(#fff 0 0);
+  -webkit-mask-composite: xor;
+          mask-composite: exclude;
+  pointer-events: none;
+  z-index: 1;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  /* Drop blur radius for vestibular-sensitive users — keeps the
+     tint so the layout still reads, just less expensive + less
+     visually noisy. */
+  .nav-glass,
+  .phone-glass-frame,
+  .mobile-cta {
+    -webkit-backdrop-filter: blur(12px) saturate(120%);
+            backdrop-filter: blur(12px) saturate(120%);
+  }
+}
+
+/* ──────────────────────────────────────────────────────────
    Nav — solid surfaces, no backdrop-blur
    ────────────────────────────────────────────────────────── */
 .nav-scrolled {
@@ -436,6 +687,32 @@ body { font-variant-numeric: tabular-nums; }
 .menu-overlay[data-open="true"] .menu-item {
   opacity: 1;
   transform: translateY(0);
+}
+
+/* Menu overlay — hide the safety scrollbar so it doesn't show when
+   items happen to fit. Items use overflow-y-auto as a fallback. */
+.menu-overlay div[class*="overflow-y-auto"] {
+  scrollbar-width: none;
+}
+.menu-overlay div[class*="overflow-y-auto"]::-webkit-scrollbar {
+  display: none;
+}
+
+/* Viewport-height-aware sizing for menu items. Owners reported FAQ
+   wycieka poniżej viewport na windowed desktop (~950px). At max-h:800
+   we cap the font + tighten paddings so all 5 items + bottom block
+   remain visible. */
+@media (max-height: 800px) {
+  .menu-overlay .menu-item a[class*="font-display"] {
+    font-size: clamp(1.75rem, min(5.5vw, 6.5vh), 3.5rem) !important;
+    padding-block: 0.5rem !important;
+  }
+}
+@media (max-height: 640px) {
+  .menu-overlay .menu-item a[class*="font-display"] {
+    font-size: clamp(1.5rem, 5vh, 2.75rem) !important;
+    padding-block: 0.375rem !important;
+  }
 }
 
 /* Hamburger morph */
@@ -510,7 +787,7 @@ body { font-variant-numeric: tabular-nums; }
 }
 
 /* ──────────────────────────────────────────────────────────
-   Mobile sticky CTA — solid, no blur
+   Mobile sticky CTA — glass pill (matches floating nav language)
    ────────────────────────────────────────────────────────── */
 .mobile-cta {
   position: fixed;
@@ -520,17 +797,21 @@ body { font-variant-numeric: tabular-nums; }
   z-index: 60;
   padding: 12px;
   border-radius: 9999px;
-  background: rgba(6, 7, 11, 0.94);
-  border: 1px solid var(--color-hairline);
+  background: rgba(6, 7, 11, 0.55);
+  -webkit-backdrop-filter: blur(28px) saturate(160%);
+  backdrop-filter: blur(28px) saturate(160%);
+  border: 1px solid rgba(255, 255, 255, 0.14);
   box-shadow:
-    0 2px 4px rgba(0, 0, 0, 0.4),
-    0 24px 56px -16px rgba(0, 0, 0, 0.6);
+    inset 0 1px 0 rgba(255, 255, 255, 0.18),
+    0 2px 4px rgba(0, 0, 0, 0.40),
+    0 24px 56px -16px rgba(0, 0, 0, 0.55);
   transform: translateY(120%);
   opacity: 0;
   transition:
     transform 420ms var(--ease-spring),
     opacity 320ms var(--ease-out);
   pointer-events: none;
+  will-change: backdrop-filter;
 }
 .mobile-cta[data-visible="true"] {
   transform: translateY(0);

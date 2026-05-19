@@ -1,5 +1,13 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useLayoutEffect, useRef, useState } from "react";
+import { gsap } from "gsap";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { useReveal } from "../hooks/useReveal";
+
+gsap.registerPlugin(ScrollTrigger);
+
+const prefersReducedMotion = () =>
+  typeof window !== "undefined" &&
+  window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
 const STEPS = [
   {
@@ -23,12 +31,33 @@ export default function HowItWorks() {
   const [active, setActive] = useState(0);
   const sectionRef = useRef(null);
 
-  // Auto-advance light touch
-  useEffect(() => {
-    const id = window.setInterval(() => {
-      setActive((v) => (v + 1) % STEPS.length);
-    }, 4200);
-    return () => window.clearInterval(id);
+  // Scroll-driven active step. On desktop with motion enabled, active
+  // state is tied to scroll progress through the section (0-33%=step 0,
+  // 33-66%=1, 66-100%=2). On reduced-motion / mobile, fallback interval.
+  useLayoutEffect(() => {
+    if (typeof window === "undefined") return;
+    if (prefersReducedMotion() || window.matchMedia("(max-width: 768px)").matches) {
+      const id = window.setInterval(() => {
+        setActive((v) => (v + 1) % STEPS.length);
+      }, 4200);
+      return () => window.clearInterval(id);
+    }
+    const section = sectionRef.current;
+    if (!section) return;
+    const ctx = gsap.context(() => {
+      ScrollTrigger.create({
+        trigger: section,
+        start: "top 70%",
+        end: "bottom 30%",
+        scrub: 0.5,
+        onUpdate: (self) => {
+          const p = self.progress;
+          const next = p < 0.33 ? 0 : p < 0.66 ? 1 : 2;
+          setActive((cur) => (cur === next ? cur : next));
+        },
+      });
+    }, section);
+    return () => ctx.revert();
   }, []);
 
   return (
@@ -121,9 +150,9 @@ function Header() {
         id="how-heading"
         className="font-display mt-4 text-[var(--color-ink)]"
         style={{
-          fontSize: "clamp(2.5rem, 5.5vw, 4.5rem)",
-          lineHeight: "0.98",
-          letterSpacing: "-0.055em",
+          fontSize: "clamp(3rem, 8vw, 6rem)",
+          lineHeight: "0.94",
+          letterSpacing: "-0.06em",
           fontWeight: 700,
         }}
       >
@@ -146,13 +175,7 @@ function StepVisual({ active }) {
       ref={ref}
       className={`reveal ${visible ? "is-visible" : ""} relative mx-auto w-full max-w-[480px]`}
     >
-      <div
-        className="relative aspect-square overflow-hidden rounded-[24px] border border-[var(--color-hairline)]"
-        style={{
-          boxShadow: "0 1px 2px rgba(6,7,11,0.06), 0 24px 56px -16px rgba(6,7,11,0.12)",
-          background: "var(--color-surface-light)",
-        }}
-      >
+      <div className="phone-glass-frame relative aspect-[4/5] overflow-hidden">
         <SceneScan visible={active === 0} />
         <SceneTranslate visible={active === 1} />
         <SceneNotify visible={active === 2} />
@@ -176,10 +199,10 @@ function StepVisual({ active }) {
 }
 
 const sceneCls = (visible) =>
-  `absolute inset-0 flex items-center justify-center p-8 transition-all duration-700 ${
+  `absolute inset-0 flex items-center justify-center p-8 transition-all duration-[520ms] ${
     visible
       ? "opacity-100 scale-100 blur-0"
-      : "pointer-events-none scale-[0.98] opacity-0 blur-md"
+      : "pointer-events-none scale-[0.97] opacity-0 blur-sm"
   }`;
 
 function SceneScan({ visible }) {
@@ -295,14 +318,17 @@ function SceneTranslate({ visible }) {
 function SceneNotify({ visible }) {
   return (
     <div className={sceneCls(visible)}>
-      <div className="relative w-full max-w-[260px]">
+      <div
+        className="relative w-full max-w-[260px]"
+        style={{ transform: "scale(1.06)" }}
+      >
         <div
-          className="relative overflow-hidden rounded-[36px] bg-[#0A0C14]"
+          className="relative overflow-hidden rounded-[40px] bg-[#0A0C14]"
           style={{
             aspectRatio: "9 / 18",
-            border: "10px solid #06070B",
+            border: "12px solid #06070B",
             boxShadow:
-              "0 24px 56px -16px rgba(0,0,0,0.70), 0 8px 16px -8px rgba(0,0,0,0.40), inset 0 0.5px 0 rgba(255,255,255,0.06)",
+              "0 36px 64px -16px rgba(6,7,11,0.55), 0 12px 24px -8px rgba(6,7,11,0.35), inset 0 0 0 1px rgba(255,255,255,0.08), inset 0 0.5px 0 rgba(255,255,255,0.10)",
           }}
         >
           {/* Notch */}
