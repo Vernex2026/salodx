@@ -48,7 +48,7 @@ export default function TopPromos() {
     <section
       id="promocje"
       aria-labelledby="top-offers-heading"
-      className="relative isolate overflow-hidden"
+      className="section-atmosphere-promos relative isolate overflow-hidden"
       style={{ background: "var(--color-black)" }}
     >
 

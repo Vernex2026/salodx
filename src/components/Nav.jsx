@@ -172,8 +172,8 @@ export default function Nav() {
               </div>
 
               {/* Menu items — large editorial typography */}
-              <div className="flex flex-1 flex-col justify-center px-6 sm:px-8 lg:px-12">
-                <ul role="list" className="space-y-1">
+              <div className="flex flex-1 flex-col justify-center overflow-y-auto px-6 py-2 sm:px-8 lg:px-12">
+                <ul role="list" className="space-y-0">
                   {LINKS.map((link, i) => (
                     <li
                       key={link.href}
@@ -183,10 +183,10 @@ export default function Nav() {
                       <a
                         href={link.href}
                         onClick={() => setOpen(false)}
-                        className="group block py-3 font-display tracking-[-0.04em] text-white transition-colors duration-200 hover:underline underline-offset-8 decoration-2"
+                        className="group block py-2 font-display tracking-[-0.04em] text-white transition-colors duration-200 hover:underline underline-offset-8 decoration-2 sm:py-2.5"
                         style={{
-                          fontSize: "clamp(3rem, 8vw, 5.5rem)",
-                          lineHeight: "1",
+                          fontSize: "clamp(2rem, min(6.5vw, 7.5vh), 4.5rem)",
+                          lineHeight: "1.02",
                           fontStyle: "normal",
                           fontWeight: 400,
                         }}
@@ -211,7 +211,7 @@ export default function Nav() {
 
               {/* Bottom block — contact + meta */}
               <div
-                className="menu-item border-t border-white/10 px-6 pb-10 pt-8 sm:px-8 lg:px-12"
+                className="menu-item border-t border-white/10 px-6 pb-6 pt-6 sm:px-8 sm:pb-10 sm:pt-8 lg:px-12"
                 style={{ transitionDelay: open ? "720ms" : "0ms" }}
               >
                 <div className="flex flex-wrap items-end justify-between gap-6">
