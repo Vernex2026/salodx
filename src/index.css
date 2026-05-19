@@ -323,6 +323,17 @@ body { font-variant-numeric: tabular-nums; }
   border-radius: 6px;
 }
 
+/* Nav glass pill — global 2px white outline reads as a "boxed" highlight
+   on the hamburger / Zobacz oferty when keyboard-focused. Override with
+   a subtler 1px inner-shadow ring so the pill chrome stays unified. */
+.nav-glass a:focus-visible,
+.nav-glass button:focus-visible {
+  outline: none;
+  box-shadow:
+    inset 0 0 0 1px rgba(255, 255, 255, 0.45),
+    0 0 0 1px rgba(255, 255, 255, 0.12);
+}
+
 /* ──────────────────────────────────────────────────────────
    Light-section utility — token flip
    ────────────────────────────────────────────────────────── */

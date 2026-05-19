@@ -28,7 +28,7 @@ export default function TrustBlock() {
         {/* Numbers grid */}
         <ul
           role="list"
-          className="mt-16 grid grid-cols-2 gap-y-12 gap-x-6 sm:gap-y-14 md:grid-cols-4 lg:mt-20 lg:gap-y-16"
+          className="mt-16 grid grid-cols-2 gap-y-12 gap-x-8 sm:gap-y-14 md:grid-cols-4 md:gap-x-10 lg:mt-20 lg:gap-y-16"
         >
           {STATS.map((s, i) => (
             <StatItem key={s.label} stat={s} delay={i * 90} />
@@ -82,17 +82,18 @@ function StatItem({ stat, delay = 0 }) {
       <p
         className="font-display numeric text-[var(--color-ink)]"
         style={{
-          fontSize: "clamp(3.5rem, 9vw, 8rem)",
-          lineHeight: "0.9",
-          letterSpacing: "-0.06em",
+          fontSize: "clamp(2.5rem, 5.5vw, 4.25rem)",
+          lineHeight: "0.95",
+          letterSpacing: "-0.045em",
           fontWeight: 700,
+          whiteSpace: "nowrap",
         }}
       >
         {fmt(animated, stat.format)}
         {stat.suffix && (
           <span
             className="font-display text-[var(--color-muted)]"
-            style={{ fontSize: "clamp(1.25rem, 2vw, 1.75rem)", marginLeft: "0.15em" }}
+            style={{ fontSize: "0.45em", marginLeft: "0.15em", letterSpacing: "-0.03em" }}
           >
             {stat.suffix}
           </span>

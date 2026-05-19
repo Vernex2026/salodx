@@ -127,12 +127,18 @@ export default function HowItWorks() {
           ].map((s) => (
             <div key={s.l} className="flex flex-col items-center">
               <span
-                className="font-display text-[var(--color-ink)]"
-                style={{ fontSize: "clamp(1.5rem, 3vw, 2rem)", letterSpacing: "-0.035em", fontWeight: 400 }}
+                className="font-display numeric text-[var(--color-ink)]"
+                style={{
+                  fontSize: "clamp(1.75rem, 3.2vw, 2.25rem)",
+                  letterSpacing: "-0.04em",
+                  fontWeight: 700,
+                  lineHeight: "1.0",
+                  whiteSpace: "nowrap",
+                }}
               >
                 {s.v}
               </span>
-              <span className="mt-0.5 eyebrow text-[var(--color-faint)]">{s.l}</span>
+              <span className="mt-2 eyebrow text-[var(--color-faint)]">{s.l}</span>
             </div>
           ))}
         </div>
