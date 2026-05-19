@@ -2,7 +2,7 @@ import { useEffect, useLayoutEffect, useRef, useState } from "react";
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { useMagnetic } from "../hooks/useMagnetic";
-import HeroCardStack from "./HeroCardStack";
+import HeroCardCarousel from "./HeroCardCarousel";
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -216,7 +216,7 @@ export default function Hero() {
             data-rise="stack"
             className="hero-rise relative mx-auto w-full max-w-md lg:max-w-[560px]"
           >
-            <HeroCardStack />
+            <HeroCardCarousel />
           </div>
         </div>
       </div>
