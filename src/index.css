@@ -176,6 +176,133 @@ body { font-variant-numeric: tabular-nums; }
 }
 
 /* ──────────────────────────────────────────────────────────
+   Text shimmer — white-to-fainter-white sweep. Sharp, no blur.
+   Used on hero "już czeka." for subtle premium "alive" feel.
+   No chroma — only alpha modulation, respects no-gradient policy.
+   ────────────────────────────────────────────────────────── */
+.text-shimmer {
+  background: linear-gradient(
+    100deg,
+    rgba(255, 255, 255, 1) 0%,
+    rgba(255, 255, 255, 0.55) 45%,
+    rgba(255, 255, 255, 1) 100%
+  );
+  background-size: 220% 100%;
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  animation: text-shimmer 4s ease-in-out infinite;
+}
+@keyframes text-shimmer {
+  0%, 100% { background-position: 220% 50%; }
+  50%      { background-position: 0% 50%; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .text-shimmer {
+    animation: none;
+    color: var(--color-ink);
+    -webkit-background-clip: border-box;
+    background-clip: border-box;
+    background: none;
+  }
+}
+
+/* ──────────────────────────────────────────────────────────
+   Hero spotlight — cursor-tracked sharp radial wash.
+   No blur. Subtle alpha only. Disabled on touch + RM.
+   ────────────────────────────────────────────────────────── */
+.hero-spotlight {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 1;
+  background: radial-gradient(
+    circle 320px at var(--mx, 50%) var(--my, 50%),
+    rgba(255, 255, 255, 0.08) 0%,
+    rgba(255, 255, 255, 0.02) 40%,
+    transparent 70%
+  );
+  opacity: 0;
+  transition: opacity 600ms var(--ease-out);
+}
+.hero-spotlight[data-active="true"] {
+  opacity: 1;
+}
+@media (max-width: 1024px), (prefers-reduced-motion: reduce), (hover: none) {
+  .hero-spotlight { display: none; }
+}
+
+/* ──────────────────────────────────────────────────────────
+   Background beams — sharp animated diagonal lines.
+   1px wide, gradient mask, no blur. Aceternity pattern without
+   the soft glows.
+   ────────────────────────────────────────────────────────── */
+.beams-layer {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 0;
+  overflow: hidden;
+}
+.beam {
+  position: absolute;
+  top: -20%;
+  height: 140%;
+  width: 1px;
+  background: linear-gradient(
+    180deg,
+    transparent 0%,
+    rgba(255, 255, 255, 0.20) 50%,
+    transparent 100%
+  );
+  transform-origin: center top;
+  animation: beam-flow 8s linear infinite;
+  opacity: 0;
+}
+.beam--1 { left: 18%; animation-delay: 0s;   transform: rotate(-12deg); }
+.beam--2 { left: 42%; animation-delay: 2.7s; transform: rotate(-10deg); }
+.beam--3 { left: 68%; animation-delay: 5.3s; transform: rotate(-14deg); }
+.beam--4 { left: 88%; animation-delay: 1.4s; transform: rotate(-11deg); }
+
+@keyframes beam-flow {
+  0%   { opacity: 0; transform-origin: center top; }
+  15%  { opacity: 1; }
+  85%  { opacity: 1; }
+  100% { opacity: 0; }
+}
+.beam--1 { animation-name: beam-flow-1; }
+.beam--2 { animation-name: beam-flow-2; }
+.beam--3 { animation-name: beam-flow-3; }
+.beam--4 { animation-name: beam-flow-4; }
+@keyframes beam-flow-1 {
+  0%   { opacity: 0; transform: rotate(-12deg) translateY(-30%); }
+  15%  { opacity: 1; }
+  85%  { opacity: 1; }
+  100% { opacity: 0; transform: rotate(-12deg) translateY(30%); }
+}
+@keyframes beam-flow-2 {
+  0%   { opacity: 0; transform: rotate(-10deg) translateY(-30%); }
+  15%  { opacity: 1; }
+  85%  { opacity: 1; }
+  100% { opacity: 0; transform: rotate(-10deg) translateY(30%); }
+}
+@keyframes beam-flow-3 {
+  0%   { opacity: 0; transform: rotate(-14deg) translateY(-30%); }
+  15%  { opacity: 1; }
+  85%  { opacity: 1; }
+  100% { opacity: 0; transform: rotate(-14deg) translateY(30%); }
+}
+@keyframes beam-flow-4 {
+  0%   { opacity: 0; transform: rotate(-11deg) translateY(-30%); }
+  15%  { opacity: 1; }
+  85%  { opacity: 1; }
+  100% { opacity: 0; transform: rotate(-11deg) translateY(30%); }
+}
+@media (prefers-reduced-motion: reduce) {
+  .beam { animation: none; opacity: 0; }
+}
+
+/* ──────────────────────────────────────────────────────────
    3D Card Carousel — hero rotating bank cards (Revolut coins
    inspired). 5 cards on a Y-axis cylinder rotate continuously.
    Real card thickness via 4 edge strips per card. Saldox-branded
@@ -215,11 +342,11 @@ body { font-variant-numeric: tabular-nums; }
   margin-left: -140px;
   margin-top: -190px;
   transform-style: preserve-3d;
-  transform: rotateY(var(--card-angle)) translateZ(420px);
+  transform: rotateY(var(--card-angle)) translateZ(340px);
   transition: transform 380ms var(--ease-spring);
 }
 .card-3d:hover {
-  transform: rotateY(var(--card-angle)) translateZ(460px) scale(1.04);
+  transform: rotateY(var(--card-angle)) translateZ(380px) scale(1.04);
 }
 
 /* Card faces — front, back, 4 edge strips */

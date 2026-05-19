@@ -1,5 +1,13 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useLayoutEffect, useRef, useState } from "react";
+import { gsap } from "gsap";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { useReveal } from "../hooks/useReveal";
+
+gsap.registerPlugin(ScrollTrigger);
+
+const prefersReducedMotion = () =>
+  typeof window !== "undefined" &&
+  window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
 const STEPS = [
   {
@@ -23,12 +31,33 @@ export default function HowItWorks() {
   const [active, setActive] = useState(0);
   const sectionRef = useRef(null);
 
-  // Auto-advance light touch
-  useEffect(() => {
-    const id = window.setInterval(() => {
-      setActive((v) => (v + 1) % STEPS.length);
-    }, 4200);
-    return () => window.clearInterval(id);
+  // Scroll-driven active step. On desktop with motion enabled, active
+  // state is tied to scroll progress through the section (0-33%=step 0,
+  // 33-66%=1, 66-100%=2). On reduced-motion / mobile, fallback interval.
+  useLayoutEffect(() => {
+    if (typeof window === "undefined") return;
+    if (prefersReducedMotion() || window.matchMedia("(max-width: 768px)").matches) {
+      const id = window.setInterval(() => {
+        setActive((v) => (v + 1) % STEPS.length);
+      }, 4200);
+      return () => window.clearInterval(id);
+    }
+    const section = sectionRef.current;
+    if (!section) return;
+    const ctx = gsap.context(() => {
+      ScrollTrigger.create({
+        trigger: section,
+        start: "top 70%",
+        end: "bottom 30%",
+        scrub: 0.5,
+        onUpdate: (self) => {
+          const p = self.progress;
+          const next = p < 0.33 ? 0 : p < 0.66 ? 1 : 2;
+          setActive((cur) => (cur === next ? cur : next));
+        },
+      });
+    }, section);
+    return () => ctx.revert();
   }, []);
 
   return (
@@ -121,9 +150,9 @@ function Header() {
         id="how-heading"
         className="font-display mt-4 text-[var(--color-ink)]"
         style={{
-          fontSize: "clamp(2.5rem, 5.5vw, 4.5rem)",
-          lineHeight: "0.98",
-          letterSpacing: "-0.055em",
+          fontSize: "clamp(3rem, 8vw, 6rem)",
+          lineHeight: "0.94",
+          letterSpacing: "-0.06em",
           fontWeight: 700,
         }}
       >

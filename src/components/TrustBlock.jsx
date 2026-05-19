@@ -57,10 +57,10 @@ function Eyebrow() {
         id="trust-heading"
         className="font-display mt-4 text-[var(--color-ink)]"
         style={{
-          fontSize: "clamp(2.25rem, 5vw, 4rem)",
-          lineHeight: "1.02",
-          letterSpacing: "-0.04em",
-          fontWeight: 500,
+          fontSize: "clamp(3rem, 8vw, 6rem)",
+          lineHeight: "0.94",
+          letterSpacing: "-0.06em",
+          fontWeight: 700,
         }}
       >
         <span>Nie wierzysz?</span>{" "}
@@ -82,10 +82,10 @@ function StatItem({ stat, delay = 0 }) {
       <p
         className="font-display numeric text-[var(--color-ink)]"
         style={{
-          fontSize: "clamp(3rem, 6vw, 5rem)",
-          lineHeight: "0.95",
-          letterSpacing: "-0.05em",
-          fontWeight: 400,
+          fontSize: "clamp(3.5rem, 9vw, 8rem)",
+          lineHeight: "0.9",
+          letterSpacing: "-0.06em",
+          fontWeight: 700,
         }}
       >
         {fmt(animated, stat.format)}

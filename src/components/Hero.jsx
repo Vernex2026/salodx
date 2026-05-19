@@ -3,6 +3,8 @@ import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { useMagnetic } from "../hooks/useMagnetic";
 import HeroCardCarousel from "./HeroCardCarousel";
+import HeroSpotlight from "./HeroSpotlight";
+import BackgroundBeams from "./BackgroundBeams";
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -31,6 +33,11 @@ export default function Hero() {
           ".char-rise",
           { y: 28, opacity: 0, duration: 0.7, stagger: 0.022 },
           0.15
+        )
+        .from(
+          ".hero-rise[data-rise='headline-2']",
+          { y: 28, opacity: 0, duration: 0.8, ease: "power2.out" },
+          0.65
         )
         .from(
           ".hero-rise[data-rise='subhead']",
@@ -85,9 +92,13 @@ export default function Hero() {
       className="relative isolate overflow-hidden"
       style={{ background: "var(--color-black)" }}
     >
+      {/* Behind content: animated sharp beams + cursor spotlight */}
+      <BackgroundBeams />
+      <HeroSpotlight sectionRef={sectionRef} />
+
       <div className="relative z-10 mx-auto grid w-full max-w-[1280px] gap-10 px-6 pb-24 pt-28 sm:px-8 md:pb-32 md:pt-32 lg:grid-cols-12 lg:gap-12 lg:px-12 lg:pb-40 lg:pt-36">
         {/* ── LEFT COLUMN — Typography + CTA ─────────────────── */}
-        <div className="lg:col-span-7 lg:pr-4 flex flex-col justify-center">
+        <div className="lg:col-span-8 lg:pr-4 flex flex-col justify-center">
           {/* Pill — insider signal (minimal) */}
           <a
             href="#promocje"
@@ -119,16 +130,22 @@ export default function Hero() {
             ref={headlineRef}
             className="font-display mt-8 text-center text-white lg:text-left"
             style={{
-              fontSize: "clamp(3rem, 9vw, 7.5rem)",
-              lineHeight: "0.94",
-              letterSpacing: "-0.055em",
+              fontSize: "clamp(3.5rem, 11vw, 10rem)",
+              lineHeight: "0.88",
+              letterSpacing: "-0.06em",
               fontWeight: 700,
               transformOrigin: "left center",
               willChange: "transform",
             }}
           >
             <HeroLine text="Twój bonus" baseDelay={120} />
-            <HeroLine text="już czeka." baseDelay={520} />
+            <span
+              data-rise="headline-2"
+              className="hero-rise block text-shimmer"
+              style={{ "--rise-delay": "650ms" }}
+            >
+              już czeka.
+            </span>
           </h1>
 
           {/* Subhead */}
@@ -211,7 +228,7 @@ export default function Hero() {
         </div>
 
         {/* ── RIGHT COLUMN — Card stack hero visual ───────────── */}
-        <div className="relative lg:col-span-5">
+        <div className="relative lg:col-span-4">
           <div
             data-rise="stack"
             className="hero-rise relative mx-auto w-full max-w-md lg:max-w-[560px]"

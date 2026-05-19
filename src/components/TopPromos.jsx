@@ -60,9 +60,9 @@ export default function TopPromos() {
             id="top-offers-heading"
             className="font-display mt-4 text-white"
             style={{
-              fontSize: "clamp(2.5rem, 5.5vw, 4.5rem)",
-              lineHeight: "0.98",
-              letterSpacing: "-0.055em",
+              fontSize: "clamp(3rem, 8vw, 6rem)",
+              lineHeight: "0.94",
+              letterSpacing: "-0.06em",
               fontWeight: 700,
             }}
           >
