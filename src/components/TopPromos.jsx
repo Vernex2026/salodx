@@ -1,5 +1,6 @@
 import { useReveal } from "../hooks/useReveal";
 import BankLogo from "./BankLogo";
+import SaldoxGlassCard from "./ui/SaldoxGlassCard";
 
 const OFFERS = [
   {
@@ -12,7 +13,7 @@ const OFFERS = [
       "Wpływ ≥ 1 500 zł / m-c",
       "5 transakcji kartą",
     ],
-    accent: "#E11D48",
+    accent: "#FF1E2F",
     badge: "TOP TYGODNIA",
     featured: true,
   },
@@ -27,7 +28,7 @@ const OFFERS = [
       "Zgoda na marketing",
       "1 transakcja BLIK-iem",
     ],
-    accent: "#DC2626",
+    accent: "#00C896",
   },
   {
     bank: "ING",
@@ -39,7 +40,7 @@ const OFFERS = [
       "Wpływ ≥ 2 000 zł × 2 m-ce",
       "Aktywacja Moje ING",
     ],
-    accent: "#F97316",
+    accent: "#FF6600",
   },
 ];
 
@@ -140,141 +141,149 @@ function OfferCard({ offer, delay = 0 }) {
       className={`reveal ${visible ? "is-visible" : ""} group relative`}
       style={{ "--reveal-delay": `${delay}ms` }}
     >
-      <article
-        className="card-glass relative overflow-hidden p-7"
-        data-featured={featured ? "true" : "false"}
+      <SaldoxGlassCard
+        variant="offer"
+        bankAccentColor={accent}
+        topBadge={!!badge}
+        padding="28px"
       >
-        {/* Top accent line — solid bank color, no gradient */}
-        <div
-          aria-hidden="true"
-          className="absolute left-7 right-7 top-0 h-[2px]"
-          style={{ background: accent }}
-        />
+        <div className="relative flex flex-col">
+          {/* Featured badge — gold */}
+          {badge && (
+            <div className="relative mb-6 inline-flex w-fit items-center gap-1.5 rounded-full border border-[rgba(212,165,116,0.42)] bg-[rgba(212,165,116,0.06)] px-2.5 py-1 text-[10.5px] font-semibold uppercase tracking-[0.14em] text-[var(--color-gold)]">
+              <svg width="11" height="11" viewBox="0 0 12 12" fill="none" aria-hidden="true">
+                <path
+                  d="M6 1l1.2 3.6L11 5l-3 2.5.8 3.5L6 9l-2.8 2 .8-3.5L1 5l3.8-.4L6 1z"
+                  fill="currentColor"
+                />
+              </svg>
+              {badge}
+            </div>
+          )}
 
-        {/* Featured badge — gold (single allowed gold moment in v4) */}
-        {badge && (
-          <div className="relative mb-6 inline-flex items-center gap-1.5 rounded-full border border-[rgba(212,165,116,0.42)] bg-[rgba(212,165,116,0.06)] px-2.5 py-1 text-[10.5px] font-semibold uppercase tracking-[0.14em] text-[var(--color-gold)]">
-            <svg width="11" height="11" viewBox="0 0 12 12" fill="none" aria-hidden="true">
-              <path
-                d="M6 1l1.2 3.6L11 5l-3 2.5.8 3.5L6 9l-2.8 2 .8-3.5L1 5l3.8-.4L6 1z"
-                fill="currentColor"
-              />
-            </svg>
-            {badge}
-          </div>
-        )}
+          {/* Urgent badge */}
+          {urgent && !badge && (
+            <div className="relative mb-6 inline-flex w-fit items-center gap-1.5 rounded-full border border-white/24 px-2.5 py-1 text-[10.5px] font-semibold uppercase tracking-[0.14em] text-white">
+              <span className="live-dot" aria-hidden="true" />
+              Kończy się
+            </div>
+          )}
 
-        {/* Urgent badge — white outline pill (Revolut style, no glow) */}
-        {urgent && !badge && (
-          <div className="relative mb-6 inline-flex items-center gap-1.5 rounded-full border border-white/24 px-2.5 py-1 text-[10.5px] font-semibold uppercase tracking-[0.14em] text-white">
-            <span className="live-dot" aria-hidden="true" />
-            Kończy się
-          </div>
-        )}
+          {/* Header */}
+          <header className="relative flex items-center gap-3">
+            <BankLogo bank={bank} size={40} />
+            <div className="leading-tight">
+              <h3 className="font-sans text-[15px] font-semibold tracking-[-0.01em] text-white">
+                {bank}
+              </h3>
+              <span className="text-[12.5px] text-white/45">{product}</span>
+            </div>
+          </header>
 
-        {/* Header */}
-        <header className="relative flex items-center gap-3">
-          <BankLogo bank={bank} size={40} />
-          <div className="leading-tight">
-            <h3 className="font-sans text-[15px] font-semibold tracking-[-0.01em] text-white">
-              {bank}
-            </h3>
-            <span className="text-[12.5px] text-white/45">{product}</span>
-          </div>
-        </header>
-
-        {/* Bonus amount */}
-        <div className="relative mt-7">
-          <div className="eyebrow text-white/40">Bonus powitalny</div>
-          <p className="mt-2 flex items-baseline gap-2">
-            <span
-              className="font-display numeric text-white"
-              style={{
-                fontSize: featured ? "6rem" : "5rem",
-                lineHeight: "0.95",
-                letterSpacing: "-0.05em",
-                fontWeight: 400,
-              }}
-            >
-              {bonus}
+          {/* Bonus amount — Instrument Serif italic per owner spec */}
+          <div className="relative mt-7">
+            <div className="eyebrow text-white/40">Bonus powitalny</div>
+            <p className="mt-2 flex items-baseline gap-2">
+              <span
+                className="numeric text-white"
+                style={{
+                  fontFamily: "'Instrument Serif', 'Geist', serif",
+                  fontStyle: "italic",
+                  fontSize: featured ? "6.25rem" : "5.25rem",
+                  lineHeight: "0.92",
+                  letterSpacing: "-0.02em",
+                  fontWeight: 400,
+                }}
+              >
+                {bonus}
+              </span>
+              <span
+                className="text-white/55"
+                style={{
+                  fontFamily: "'Instrument Serif', 'Geist', serif",
+                  fontStyle: "italic",
+                  fontSize: "1.6rem",
+                  fontWeight: 400,
+                }}
+              >
+                zł
+              </span>
+            </p>
+            <span className="mt-3 inline-block rounded-full border border-white/12 bg-white/[0.06] px-3 py-1 text-[11.5px] font-medium text-white/75">
+              {extra}
             </span>
-            <span
-              className="font-display text-white/55"
-              style={{ fontSize: "1.4rem", fontWeight: 400 }}
-            >
-              zł
-            </span>
-          </p>
-          <span
-            className="mt-2 inline-block rounded-full bg-white/[0.06] px-3 py-1 text-[11.5px] font-medium text-white/70"
-          >
-            {extra}
-          </span>
-        </div>
+          </div>
 
-        {/* Requirements */}
-        <ul className="relative mt-6 space-y-1.5 text-[13px] text-white/60">
-          {requirements.map((r) => (
-            <li key={r} className="flex items-start gap-2">
+          {/* Requirements */}
+          <ul className="relative mt-6 space-y-1.5 text-[13px] text-white/65">
+            {requirements.map((r) => (
+              <li key={r} className="flex items-start gap-2">
+                <svg
+                  aria-hidden="true"
+                  width="14"
+                  height="14"
+                  viewBox="0 0 14 14"
+                  className="mt-0.5 shrink-0 text-[var(--mint-live)]"
+                >
+                  <path
+                    d="M3 7.5l2.5 2.5 6-6"
+                    stroke="currentColor"
+                    strokeWidth="1.8"
+                    fill="none"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                  />
+                </svg>
+                {r}
+              </li>
+            ))}
+          </ul>
+
+          {/* Footer — deadline + CTA (glass pill with text per spec) */}
+          <footer className="relative mt-7 flex items-end justify-between gap-4 border-t border-white/8 pt-5">
+            <div>
+              <div className="eyebrow text-white/35">Do końca</div>
+              <div className="mt-0.5 flex items-baseline gap-1.5">
+                <span
+                  className="numeric text-white"
+                  style={{
+                    fontFamily: "'Instrument Serif', 'Geist', serif",
+                    fontStyle: "italic",
+                    fontSize: "1.85rem",
+                    letterSpacing: "-0.01em",
+                    fontWeight: 400,
+                  }}
+                >
+                  {days}
+                </span>
+                <span className="text-[13px] text-white/55">dni</span>
+              </div>
+            </div>
+            <button
+              type="button"
+              className="inline-flex items-center gap-1.5 rounded-full border border-white/16 bg-white/[0.08] px-4 py-2 text-[13px] font-medium text-white transition-all hover:border-white/24 hover:bg-white/[0.12]"
+            >
+              Sprawdź
               <svg
                 aria-hidden="true"
-                width="14"
-                height="14"
+                width="12"
+                height="12"
                 viewBox="0 0 14 14"
-                className="mt-0.5 shrink-0 text-[var(--mint-live)]"
+                className="transition-transform group-hover:translate-x-0.5"
               >
                 <path
-                  d="M3 7.5l2.5 2.5 6-6"
+                  d="M2.5 7h9M8 3.5L11.5 7 8 10.5"
                   stroke="currentColor"
-                  strokeWidth="1.8"
+                  strokeWidth="1.7"
                   fill="none"
                   strokeLinecap="round"
                   strokeLinejoin="round"
                 />
               </svg>
-              {r}
-            </li>
-          ))}
-        </ul>
-
-        {/* Footer — deadline + CTA */}
-        <footer className="relative mt-7 flex items-end justify-between gap-4 border-t border-white/8 pt-5">
-          <div>
-            <div className="eyebrow text-white/35">Do końca</div>
-            <div className="mt-0.5 flex items-baseline gap-1.5">
-              <span
-                className="font-display numeric text-white"
-                style={{ fontSize: "1.65rem", letterSpacing: "-0.035em", fontWeight: 400 }}
-              >
-                {days}
-              </span>
-              <span className="text-[13px] text-white/55">dni</span>
-            </div>
-          </div>
-          <button
-            type="button"
-            className="apple-press group/btn inline-flex items-center gap-1.5 rounded-full bg-white px-4 py-2.5 text-[13px] font-semibold text-[var(--color-ink)] transition-transform hover:scale-105"
-          >
-            Sprawdź
-            <svg
-              aria-hidden="true"
-              width="12"
-              height="12"
-              viewBox="0 0 14 14"
-              className="transition-transform group-hover/btn:translate-x-0.5"
-            >
-              <path
-                d="M2.5 7h9M8 3.5L11.5 7 8 10.5"
-                stroke="currentColor"
-                strokeWidth="1.7"
-                fill="none"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-              />
-            </svg>
-          </button>
-        </footer>
-      </article>
+            </button>
+          </footer>
+        </div>
+      </SaldoxGlassCard>
     </li>
   );
 }

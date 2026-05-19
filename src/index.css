@@ -552,115 +552,26 @@ body { font-variant-numeric: tabular-nums; }
    keeps solid surfaces.
    ────────────────────────────────────────────────────────── */
 
-/* Dark glass — used on dark sections (offer cards, hero/promocje).
-   v8 bumped the tint, stroke and inner highlights so the glass reads
-   as glass even from a distance. Requires atmospheric depth behind it
-   (see .section-atmosphere-promos) to give the blur something to show. */
-.card-glass {
-  position: relative;
-  background: linear-gradient(
-    180deg,
-    rgba(255, 255, 255, 0.10) 0%,
-    rgba(255, 255, 255, 0.04) 50%,
-    rgba(255, 255, 255, 0.025) 100%
-  );
-  -webkit-backdrop-filter: blur(32px) saturate(170%);
-  backdrop-filter: blur(32px) saturate(170%);
-  border: 1px solid rgba(255, 255, 255, 0.14);
-  border-radius: 24px;
-  box-shadow:
-    inset 0 1px 0 rgba(255, 255, 255, 0.30),
-    inset 0 -1px 0 rgba(0, 0, 0, 0.30),
-    0 1px 2px rgba(0, 0, 0, 0.40),
-    0 24px 56px -16px rgba(0, 0, 0, 0.55);
-  transition:
-    transform 280ms var(--ease-out),
-    border-color 280ms var(--ease-out),
-    box-shadow 280ms var(--ease-out);
-}
-.card-glass:hover {
-  transform: translateY(-2px);
-  border-color: rgba(255, 255, 255, 0.26);
-  box-shadow:
-    inset 0 1px 0 rgba(255, 255, 255, 0.36),
-    inset 0 -1px 0 rgba(0, 0, 0, 0.30),
-    0 2px 6px rgba(0, 0, 0, 0.40),
-    0 32px 64px -16px rgba(0, 0, 0, 0.65);
-}
+/* NOTE: .card-glass (CSS backdrop-filter implementation) was removed in
+   v9 — the offer cards now use SaldoxGlassCard (liquid-glass-react
+   with SVG feDisplacementMap + chromaticAberration). The other three
+   glass surfaces (.nav-glass, .phone-glass-frame, .mobile-cta) still
+   use CSS backdrop-filter until they get migrated. */
 
-/* Gradient stroke around glass cards — the "piękne ramki" the
-   user asked for. Implemented via mask-composite exclude trick
-   so the gradient lives in a 1.5px ring just inside the border. */
-.card-glass::before {
-  content: "";
-  position: absolute;
+/* liquid-glass-react renders two invisible position:relative helper
+   divs that — left in normal flow — push the wrapper to ~3x the
+   intended card height. Force them to absolute so they overlap the
+   main glass surface instead of stacking under it. */
+.saldox-liquid-wrap > div.opacity-0 {
+  position: absolute !important;
   inset: 0;
-  border-radius: inherit;
-  padding: 1.5px;
-  background: linear-gradient(
-    135deg,
-    rgba(255, 255, 255, 0.45) 0%,
-    rgba(255, 255, 255, 0.06) 35%,
-    rgba(255, 255, 255, 0.18) 65%,
-    rgba(255, 255, 255, 0.45) 100%
-  );
-  -webkit-mask:
-    linear-gradient(#fff 0 0) content-box,
-    linear-gradient(#fff 0 0);
-  -webkit-mask-composite: xor;
-          mask-composite: exclude;
-  pointer-events: none;
-  z-index: 1;
+  margin: 0;
 }
 
-/* Inner lit-from-above gradient — gives the glass its "real glass"
-   character. Subtle white at the very top + a faint white kiss at the
-   bottom edge for depth. Sits below content (z-0) but above background. */
-.card-glass::after {
-  content: "";
-  position: absolute;
-  inset: 0;
-  border-radius: inherit;
-  background: linear-gradient(
-    180deg,
-    rgba(255, 255, 255, 0.07) 0%,
-    rgba(255, 255, 255, 0.0) 18%,
-    rgba(255, 255, 255, 0.0) 82%,
-    rgba(255, 255, 255, 0.025) 100%
-  );
-  pointer-events: none;
-  z-index: 0;
-}
-/* Ensure user content sits above the ::after highlight. */
-.card-glass > * {
-  position: relative;
-  z-index: 2;
-}
-
-/* Featured offer card (mBank 500 zł) — warm gold stroke */
-.card-glass[data-featured="true"] {
-  box-shadow:
-    inset 0 1px 0 rgba(255, 255, 255, 0.34),
-    inset 0 -1px 0 rgba(0, 0, 0, 0.30),
-    0 0 0 1px rgba(212, 165, 116, 0.22),
-    0 1px 2px rgba(0, 0, 0, 0.40),
-    0 32px 64px -16px rgba(0, 0, 0, 0.65);
-}
-.card-glass[data-featured="true"]::before {
-  background: linear-gradient(
-    135deg,
-    rgba(212, 165, 116, 0.85) 0%,
-    rgba(212, 165, 116, 0.10) 35%,
-    rgba(212, 165, 116, 0.35) 65%,
-    rgba(212, 165, 116, 0.85) 100%
-  );
-}
-
-/* Atmospheric depth behind the offer cards. Without this, the
-   backdrop-filter on .card-glass has nothing to refract — solid
-   black blurred is still solid black. Three soft per-bank halos
-   (red / red / orange) + a faint top "light from above" white
-   give the glass real character. */
+/* Atmospheric depth behind the liquid-glass offer cards. SaldoxGlassCard
+   uses SVG feDisplacementMap — it refracts what's behind it. So the
+   section needs subtle cold-spectrum color blobs (blue + violet) for the
+   glass to break up into rainbows on its edges. Owner-specified palette. */
 .section-atmosphere-promos {
   position: relative;
   isolation: isolate;
@@ -670,10 +581,8 @@ body { font-variant-numeric: tabular-nums; }
   position: absolute;
   inset: 0;
   background:
-    radial-gradient(40% 50% at 22% 60%, rgba(225, 29, 72, 0.16) 0%, transparent 65%),
-    radial-gradient(36% 46% at 50% 55%, rgba(220, 38, 38, 0.14) 0%, transparent 60%),
-    radial-gradient(40% 50% at 78% 62%, rgba(249, 115, 22, 0.18) 0%, transparent 65%),
-    radial-gradient(70% 50% at 50% 0%, rgba(255, 255, 255, 0.04) 0%, transparent 70%);
+    radial-gradient(ellipse 50% 40% at 30% 30%, rgba(77, 124, 255, 0.08) 0%, transparent 60%),
+    radial-gradient(ellipse 50% 40% at 70% 70%, rgba(123, 92, 255, 0.06) 0%, transparent 60%);
   z-index: 0;
   pointer-events: none;
 }
@@ -737,7 +646,6 @@ body { font-variant-numeric: tabular-nums; }
   /* Drop blur radius for vestibular-sensitive users — keeps the
      tint so the layout still reads, just less expensive + less
      visually noisy. */
-  .card-glass,
   .nav-glass,
   .phone-glass-frame,
   .mobile-cta {
