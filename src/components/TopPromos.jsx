@@ -5,6 +5,7 @@ import SaldoxGlassCard from "./ui/SaldoxGlassCard";
 const OFFERS = [
   {
     bank: "mBank",
+    bankKey: "mbank",
     product: "Konto Intensive",
     bonus: 500,
     extra: "+ zwrot 1% za zakupy",
@@ -19,6 +20,7 @@ const OFFERS = [
   },
   {
     bank: "Santander",
+    bankKey: "santander",
     product: "Konto Jakie Chcę",
     bonus: 300,
     extra: "+ 200 zł cashback Allegro",
@@ -32,6 +34,7 @@ const OFFERS = [
   },
   {
     bank: "ING",
+    bankKey: "ing",
     product: "Konto Direct",
     bonus: 450,
     extra: "+ 4% na koncie oszczędnościowym",
@@ -133,7 +136,7 @@ function SectionHeader({ children }) {
 
 function OfferCard({ offer, delay = 0 }) {
   const [ref, visible] = useReveal({ threshold: 0.15 });
-  const { bank, product, bonus, extra, days, requirements, accent, badge, featured, urgent } = offer;
+  const { bank, bankKey, product, bonus, extra, days, requirements, badge, featured, urgent } = offer;
 
   return (
     <li
@@ -143,9 +146,8 @@ function OfferCard({ offer, delay = 0 }) {
     >
       <SaldoxGlassCard
         variant="offer"
-        bankAccentColor={accent}
+        bank={bankKey}
         topBadge={!!badge}
-        padding="28px"
       >
         <div className="relative flex flex-col">
           {/* Featured badge — gold */}

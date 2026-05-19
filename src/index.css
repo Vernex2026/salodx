@@ -552,26 +552,81 @@ body { font-variant-numeric: tabular-nums; }
    keeps solid surfaces.
    ────────────────────────────────────────────────────────── */
 
-/* NOTE: .card-glass (CSS backdrop-filter implementation) was removed in
-   v9 — the offer cards now use SaldoxGlassCard (liquid-glass-react
-   with SVG feDisplacementMap + chromaticAberration). The other three
-   glass surfaces (.nav-glass, .phone-glass-frame, .mobile-cta) still
-   use CSS backdrop-filter until they get migrated. */
+/* v10 — Real transparent glass per owner spec.
+   Owner: "Prawdziwe szkło NIE MA WŁASNEGO KOLORU. Refraktuje co jest
+   za nim." So .offer-card is a pure transparent shell — no color
+   background, just a faint white tint + backdrop-filter. The color
+   comes from .iridescent-bg-placeholder sitting BEHIND each card. */
 
-/* liquid-glass-react renders two invisible position:relative helper
-   divs that — left in normal flow — push the wrapper to ~3x the
-   intended card height. Force them to absolute so they overlap the
-   main glass surface instead of stacking under it. */
-.saldox-liquid-wrap > div.opacity-0 {
-  position: absolute !important;
-  inset: 0;
-  margin: 0;
+.offer-card {
+  position: relative;
+  padding: 32px;
+  border-radius: 24px;
+  background: rgba(255, 255, 255, 0.04);
+  -webkit-backdrop-filter: blur(40px) saturate(160%);
+          backdrop-filter: blur(40px) saturate(160%);
+  border: 1px solid rgba(255, 255, 255, 0.10);
+  box-shadow:
+    inset 0 0.5px 0 rgba(255, 255, 255, 0.14),
+    inset 0 -0.5px 0 rgba(0, 0, 0, 0.40),
+    0 12px 48px rgba(0, 0, 0, 0.60),
+    0 32px 96px rgba(0, 0, 0, 0.32);
+  overflow: hidden;
 }
 
-/* Atmospheric depth behind the liquid-glass offer cards. SaldoxGlassCard
-   uses SVG feDisplacementMap — it refracts what's behind it. So the
-   section needs subtle cold-spectrum color blobs (blue + violet) for the
-   glass to break up into rainbows on its edges. Owner-specified palette. */
+/* Top accent bar — 1px line in the bank's brand color */
+.offer-card::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 12%;
+  right: 12%;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, var(--bank-color, rgba(255,255,255,0.4)), transparent);
+  opacity: 0.7;
+  z-index: 2;
+  pointer-events: none;
+}
+
+/* Top inner shine — 1px white kiss right on the edge */
+.offer-card::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 12%;
+  right: 12%;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.40), transparent);
+  z-index: 3;
+  pointer-events: none;
+}
+
+.offer-card[data-bank="mbank"]     { --bank-color: #FF1E2F; }
+.offer-card[data-bank="santander"] { --bank-color: #00C896; }
+.offer-card[data-bank="ing"]       { --bank-color: #FF6600; }
+
+/* Iridescent background placeholder — sits BEHIND each .offer-card
+   (sibling element with -z-10). The blue/violet/cyan blobs get
+   refracted through the card's backdrop-filter into a soft hologram.
+   When real PNG assets land in /public/decorative/, SaldoxGlassCard
+   swaps this for an <img>. */
+.iridescent-bg-placeholder {
+  background:
+    radial-gradient(circle at 30% 40%, #4D7CFF 0%, transparent 50%),
+    radial-gradient(circle at 70% 60%, #7B5CFF 0%, transparent 50%),
+    radial-gradient(circle at 50% 80%, #00E5FF 0%, transparent 50%);
+  filter: blur(40px) saturate(150%);
+  opacity: 0.5;
+  will-change: transform;
+}
+@media (max-width: 768px) {
+  .iridescent-bg-placeholder {
+    opacity: 0.35;
+  }
+}
+
+/* Section bg — cold-spectrum halos, far subtler than v8/v9. No more
+   red/orange anywhere in this section. */
 .section-atmosphere-promos {
   position: relative;
   isolation: isolate;
@@ -581,8 +636,8 @@ body { font-variant-numeric: tabular-nums; }
   position: absolute;
   inset: 0;
   background:
-    radial-gradient(ellipse 50% 40% at 30% 30%, rgba(77, 124, 255, 0.08) 0%, transparent 60%),
-    radial-gradient(ellipse 50% 40% at 70% 70%, rgba(123, 92, 255, 0.06) 0%, transparent 60%);
+    radial-gradient(ellipse 50% 40% at 30% 30%, rgba(77, 124, 255, 0.06) 0%, transparent 60%),
+    radial-gradient(ellipse 50% 40% at 70% 70%, rgba(123, 92, 255, 0.04) 0%, transparent 60%);
   z-index: 0;
   pointer-events: none;
 }
