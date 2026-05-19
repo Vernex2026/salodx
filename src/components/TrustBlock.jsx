@@ -18,16 +18,9 @@ export default function TrustBlock() {
     <section
       id="trust"
       aria-labelledby="trust-heading"
-      className="relative isolate overflow-hidden bg-[var(--color-onyx-1)]"
+      className="relative isolate overflow-hidden"
+      style={{ background: "var(--color-black)" }}
     >
-      <div
-        aria-hidden="true"
-        className="pointer-events-none absolute inset-0 z-0 opacity-70"
-        style={{
-          background:
-            "radial-gradient(ellipse 50% 40% at 50% 100%, rgba(123,92,255,0.20) 0%, transparent 60%), radial-gradient(ellipse 40% 30% at 20% 0%, rgba(77,124,255,0.14) 0%, transparent 60%)",
-        }}
-      />
 
       <div className="relative z-10 mx-auto max-w-[1280px] px-6 py-24 sm:px-8 md:py-32 lg:px-12 lg:py-40">
         <Eyebrow />
@@ -66,11 +59,12 @@ function Eyebrow() {
         style={{
           fontSize: "clamp(2.25rem, 5vw, 4rem)",
           lineHeight: "1.02",
-          letterSpacing: "-0.025em",
+          letterSpacing: "-0.04em",
+          fontWeight: 500,
         }}
       >
         <span>Nie wierzysz?</span>{" "}
-        <span className="italic text-[var(--color-muted)]">Spójrz na liczby.</span>
+        <span className="text-[var(--color-muted)]">Spójrz na liczby.</span>
       </h2>
     </div>
   );
@@ -86,17 +80,18 @@ function StatItem({ stat, delay = 0 }) {
       style={{ "--reveal-delay": `${delay}ms` }}
     >
       <p
-        className="font-display italic numeric text-[var(--color-ink)]"
+        className="font-display numeric text-[var(--color-ink)]"
         style={{
           fontSize: "clamp(3rem, 6vw, 5rem)",
           lineHeight: "0.95",
-          letterSpacing: "-0.035em",
+          letterSpacing: "-0.05em",
+          fontWeight: 400,
         }}
       >
         {fmt(animated, stat.format)}
         {stat.suffix && (
           <span
-            className="font-display italic text-[var(--color-muted)]"
+            className="font-display text-[var(--color-muted)]"
             style={{ fontSize: "clamp(1.25rem, 2vw, 1.75rem)", marginLeft: "0.15em" }}
           >
             {stat.suffix}
@@ -118,7 +113,7 @@ function Testimonial() {
       {/* Open quote — large display */}
       <div
         aria-hidden="true"
-        className="font-display italic text-[var(--electric-violet-2)]"
+        className="font-display text-white/70"
         style={{ fontSize: "5rem", lineHeight: "0.5", marginBottom: "0.5rem" }}
       >
         “
@@ -142,13 +137,13 @@ function Testimonial() {
       </blockquote>
 
       <figcaption className="mt-8 flex items-center justify-center gap-3">
-        {/* Avatar — electric gradient (gold reserved for TopPromos badge) */}
+        {/* Avatar — solid white circle, black initials (Revolut neutrality) */}
         <div
           aria-hidden="true"
-          className="flex h-12 w-12 items-center justify-center rounded-full font-display text-[18px] font-medium text-white"
+          className="flex h-12 w-12 items-center justify-center rounded-full font-display text-[18px] font-bold text-[var(--color-black)]"
           style={{
-            background: "linear-gradient(135deg, #4D7CFF 0%, #7B5CFF 100%)",
-            boxShadow: "0 4px 12px rgba(123,92,255,0.32), inset 0 0.5px 0 rgba(255,255,255,0.3)",
+            background: "var(--color-white)",
+            letterSpacing: "-0.03em",
           }}
         >
           MT
@@ -179,7 +174,7 @@ function RatingRow() {
             <Star key={i} delay={400 + i * 80} />
           ))}
         </div>
-        <span className="font-display italic text-[18px] text-[var(--color-ink)]">
+        <span className="font-display numeric text-[18px] font-bold text-[var(--color-ink)]" style={{letterSpacing:"-0.04em"}}>
           4,9
         </span>
         <span className="text-[var(--color-faint)]">/ 5</span>

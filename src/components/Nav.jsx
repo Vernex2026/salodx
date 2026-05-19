@@ -59,22 +59,22 @@ export default function Nav() {
               aria-hidden="true"
               className="relative flex h-8 w-8 items-center justify-center overflow-hidden rounded-[10px]"
               style={{
-                background: "linear-gradient(135deg, #4D7CFF 0%, #7B5CFF 100%)",
+                background: "var(--color-white)",
                 boxShadow:
-                  "0 4px 12px rgba(123,92,255,0.32), inset 0 0.5px 0 rgba(255,255,255,0.5)",
+                  "none",
               }}
             >
-              <span className="font-display italic text-[18px] font-normal leading-none text-white">
+              <span className="font-display text-[18px] font-bold leading-none text-[var(--color-black)]">
                 S
               </span>
             </span>
-            <span className="font-display text-[22px] font-normal tracking-[-0.02em] text-[var(--color-ink)]">
+            <span className="font-display text-[22px] font-bold tracking-[-0.04em] text-[var(--color-ink)]">
               Saldox
             </span>
           </a>
 
           {/* Center: Live indicator (desktop) */}
-          <div className="hidden items-center gap-2 rounded-full border border-[var(--color-hairline)] bg-white/[0.04] px-3 py-1.5 text-[12.5px] font-medium text-[var(--color-muted)] backdrop-blur-md md:flex">
+          <div className="hidden items-center gap-2 rounded-full border border-[var(--color-hairline)] bg-white/[0.04] px-3 py-1.5 text-[12.5px] font-medium text-[var(--color-muted)] md:flex">
             <span className="live-dot" aria-hidden="true" />
             <span>
               <span className="text-[var(--color-ink)] numeric font-semibold">47</span> ofert
@@ -87,7 +87,7 @@ export default function Nav() {
           <div className="flex items-center gap-3">
             <a
               href="#promocje"
-              className="hidden rounded-full border border-[var(--color-hairline)] bg-white/[0.04] px-4 py-2 text-[13px] font-medium text-[var(--color-ink)] backdrop-blur-md transition-colors hover:bg-white/[0.10] sm:inline-block"
+              className="hidden rounded-full border border-[var(--color-hairline)] bg-white/[0.04] px-4 py-2 text-[13px] font-medium text-[var(--color-ink)] transition-colors hover:bg-white/[0.10] sm:inline-block"
             >
               Zobacz oferty
             </a>
@@ -99,7 +99,7 @@ export default function Nav() {
               aria-label={open ? "Zamknij menu" : "Otwórz menu"}
               aria-expanded={open}
               aria-controls="menu-overlay"
-              className="hamburger relative inline-flex h-11 w-11 items-center justify-center rounded-full border border-[var(--color-hairline)] bg-white/[0.04] text-[var(--color-ink)] backdrop-blur-md transition-colors hover:bg-white/[0.10]"
+              className="hamburger relative inline-flex h-11 w-11 items-center justify-center rounded-full border border-[var(--color-hairline)] bg-white/[0.04] text-[var(--color-ink)] transition-colors hover:bg-white/[0.10]"
               data-open={open}
             >
               <span aria-hidden="true" className="relative block h-3.5 w-5">
@@ -144,16 +144,16 @@ export default function Nav() {
                     aria-hidden="true"
                     className="relative flex h-8 w-8 items-center justify-center overflow-hidden rounded-[10px]"
                     style={{
-                      background: "linear-gradient(135deg, #4D7CFF 0%, #7B5CFF 100%)",
+                      background: "var(--color-white)",
                       boxShadow:
-                        "0 4px 12px rgba(123,92,255,0.32), inset 0 0.5px 0 rgba(255,255,255,0.5)",
+                        "none",
                     }}
                   >
-                    <span className="font-display italic text-[18px] font-normal leading-none text-white">
+                    <span className="font-display text-[18px] font-bold leading-none text-[var(--color-black)]">
                       S
                     </span>
                   </span>
-                  <span className="font-display text-[22px] font-normal tracking-[-0.02em] text-white">
+                  <span className="font-display text-[22px] font-bold tracking-[-0.04em] text-white">
                     Saldox
                   </span>
                 </a>
@@ -163,7 +163,7 @@ export default function Nav() {
                   type="button"
                   onClick={() => setOpen(false)}
                   aria-label="Zamknij menu"
-                  className="inline-flex h-11 w-11 items-center justify-center rounded-full border border-white/15 bg-white/[0.06] text-white backdrop-blur-md transition-colors hover:bg-white/[0.12]"
+                  className="inline-flex h-11 w-11 items-center justify-center rounded-full border border-white/15 bg-white/[0.06] text-white transition-colors hover:bg-white/[0.12]"
                 >
                   <svg width="14" height="14" viewBox="0 0 14 14" fill="none" aria-hidden="true">
                     <path d="M3 3l8 8M11 3l-8 8" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" />
@@ -183,15 +183,16 @@ export default function Nav() {
                       <a
                         href={link.href}
                         onClick={() => setOpen(false)}
-                        className="group block py-3 font-display tracking-[-0.02em] text-white transition-colors duration-200 hover:text-[var(--plasma-cyan)]"
+                        className="group block py-3 font-display tracking-[-0.04em] text-white transition-colors duration-200 hover:underline underline-offset-8 decoration-2"
                         style={{
                           fontSize: "clamp(3rem, 8vw, 5.5rem)",
                           lineHeight: "1",
-                          fontStyle: "italic",
+                          fontStyle: "normal",
+                          fontWeight: 400,
                         }}
                       >
                         <span className="inline-flex items-center gap-6">
-                          <span className="numeric text-[14px] not-italic font-mono text-white/40 tracking-[0.12em]">
+                          <span className="numeric text-[14px] font-mono text-white/40 tracking-[0.12em]">
                             0{i + 1}
                           </span>
                           <span className="relative inline-block">
@@ -218,7 +219,7 @@ export default function Nav() {
                     <div className="eyebrow text-white/40">Kontakt</div>
                     <a
                       href="mailto:biuro@saldox.pl"
-                      className="mt-2 inline-block font-display text-[26px] italic tracking-[-0.02em] text-white transition-colors hover:text-[var(--plasma-cyan)] sm:text-[32px]"
+                      className="mt-2 inline-block font-display text-[26px] font-medium tracking-[-0.02em] text-white transition-colors hover:underline underline-offset-8 decoration-2 sm:text-[32px]"
                     >
                       biuro@saldox.pl
                     </a>

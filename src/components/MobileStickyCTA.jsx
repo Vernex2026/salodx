@@ -25,7 +25,7 @@ export default function MobileStickyCTA() {
     <div className="mobile-cta md:hidden" data-visible={visible} aria-hidden={!visible}>
       <a
         href="#promocje"
-        className="cta-electric flex w-full items-center justify-center text-[14.5px]"
+        className="cta-primary cta-primary--light flex w-full items-center justify-center text-[14.5px]"
         style={{ padding: "14px 24px" }}
       >
         Zobacz dzisiejsze oferty
