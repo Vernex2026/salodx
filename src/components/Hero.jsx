@@ -1,10 +1,20 @@
-import { useEffect, useLayoutEffect, useRef, useState } from "react";
+import { lazy, Suspense, useEffect, useLayoutEffect, useRef, useState } from "react";
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { useMagnetic } from "../hooks/useMagnetic";
-import HeroCardCarousel from "./HeroCardCarousel";
+import HeroCardFallback from "./HeroCardFallback";
 import HeroSpotlight from "./HeroSpotlight";
 import BackgroundBeams from "./BackgroundBeams";
+import ErrorBoundary from "./ErrorBoundary";
+
+const HeroCardScene = lazy(() => import("./HeroCardScene"));
+
+const isLightweightClient = () => {
+  if (typeof window === "undefined") return true;
+  if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return true;
+  if (window.matchMedia("(max-width: 1024px)").matches) return true;
+  return false;
+};
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -18,6 +28,15 @@ export default function Hero() {
   const headlineRef = useRef(null);
 
   const [gsapActive] = useState(() => !prefersReducedMotion());
+  const [useScene, setUseScene] = useState(false);
+
+  useEffect(() => {
+    if (isLightweightClient()) return;
+    // Defer scene mount one frame so the typography reveal animation
+    // has the main thread to itself for the first paint.
+    const id = window.requestAnimationFrame(() => setUseScene(true));
+    return () => window.cancelAnimationFrame(id);
+  }, []);
 
   useMagnetic(primaryCtaRef, { strength: 0.18, radius: 110, max: 5 });
 
@@ -227,13 +246,21 @@ export default function Hero() {
           </div>
         </div>
 
-        {/* ── RIGHT COLUMN — Card stack hero visual ───────────── */}
+        {/* ── RIGHT COLUMN — 3D bank-card scene ──────────────── */}
         <div className="relative lg:col-span-4">
           <div
             data-rise="stack"
             className="hero-rise relative mx-auto w-full max-w-md lg:max-w-[560px]"
           >
-            <HeroCardCarousel />
+            {useScene ? (
+              <ErrorBoundary fallback={<HeroCardFallback />}>
+                <Suspense fallback={<HeroCardFallback />}>
+                  <HeroCardScene />
+                </Suspense>
+              </ErrorBoundary>
+            ) : (
+              <HeroCardFallback />
+            )}
           </div>
         </div>
       </div>

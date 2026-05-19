@@ -303,165 +303,18 @@ body { font-variant-numeric: tabular-nums; }
 }
 
 /* ──────────────────────────────────────────────────────────
-   3D Card Carousel — hero rotating bank cards (Revolut coins
-   inspired). 5 cards on a Y-axis cylinder rotate continuously.
-   Real card thickness via 4 edge strips per card. Saldox-branded
-   back face. Pause on hover, lock on reduced-motion.
+   Hero 3D scene wrapper — R3F Canvas sits in the right column;
+   the wrapper just provides the aspect box and a fallback ground
+   for any pre-load flash.
    ────────────────────────────────────────────────────────── */
-
-@keyframes carousel-spin-y {
-  to { transform: rotateY(360deg); }
+.hero-scene {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 1 / 1.06;
+  background: transparent;
 }
-
-.carousel-3d {
-  position: absolute;
-  inset: 0;
-  transform-style: preserve-3d;
-  animation: carousel-spin-y 28s linear infinite;
-  will-change: transform;
-}
-.carousel-3d-wrap:hover .carousel-3d {
-  animation-play-state: paused;
-}
-
-@media (prefers-reduced-motion: reduce) {
-  .carousel-3d {
-    animation: none;
-    transform: rotateY(0deg);
-  }
-}
-
-/* Each card — positioned on a 420px-radius cylinder around the
-   carousel centre. --card-angle is set per-instance inline. */
-.card-3d {
-  position: absolute;
-  width: 280px;
-  height: 380px;
-  left: 50%;
-  top: 50%;
-  margin-left: -140px;
-  margin-top: -190px;
-  transform-style: preserve-3d;
-  transform: rotateY(var(--card-angle)) translateZ(340px);
-  transition: transform 380ms var(--ease-spring);
-}
-.card-3d:hover {
-  transform: rotateY(var(--card-angle)) translateZ(380px) scale(1.04);
-}
-
-/* Card faces — front, back, 4 edge strips */
-.card-3d__face {
-  position: absolute;
-  inset: 0;
-  backface-visibility: hidden;
-  -webkit-backface-visibility: hidden;
-  border-radius: 18px;
-  overflow: hidden;
-}
-.card-3d__front {
-  background: #0F1320;
-  border: 1px solid rgba(255, 255, 255, 0.08);
-  box-shadow:
-    0 1px 2px rgba(0, 0, 0, 0.40),
-    0 24px 56px -16px rgba(0, 0, 0, 0.60);
-  transform: translateZ(4px);
-}
-.card-3d__back {
-  background: #0A0C14;
-  border: 1px solid rgba(255, 255, 255, 0.06);
-  transform: translateZ(-4px) rotateY(180deg);
-}
-
-/* Realistic card thickness — 8px edge strips on all 4 sides */
-.card-3d__edge {
-  position: absolute;
-  background: linear-gradient(180deg, #1A2030 0%, #06070B 100%);
-}
-.card-3d__edge--top {
-  left: 0;
-  right: 0;
-  top: -4px;
-  height: 8px;
-  transform-origin: center top;
-  transform: rotateX(-90deg);
-  border-radius: 18px 18px 0 0;
-}
-.card-3d__edge--bottom {
-  left: 0;
-  right: 0;
-  bottom: -4px;
-  height: 8px;
-  transform-origin: center bottom;
-  transform: rotateX(90deg);
-  border-radius: 0 0 18px 18px;
-}
-.card-3d__edge--left {
-  top: 0;
-  bottom: 0;
-  left: -4px;
-  width: 8px;
-  transform-origin: left center;
-  transform: rotateY(90deg);
-  border-radius: 18px 0 0 18px;
-  background: linear-gradient(90deg, #1A2030 0%, #06070B 100%);
-}
-.card-3d__edge--right {
-  top: 0;
-  bottom: 0;
-  right: -4px;
-  width: 8px;
-  transform-origin: right center;
-  transform: rotateY(-90deg);
-  border-radius: 0 18px 18px 0;
-  background: linear-gradient(270deg, #1A2030 0%, #06070B 100%);
-}
-
-/* Spotlight sweep — sharp gradient sheen, no blur. Pinned at scene
-   center, the rotating cards pass through it. */
-.carousel-spotlight {
-  position: absolute;
-  left: 50%;
-  top: 50%;
-  width: 320px;
-  height: 420px;
-  margin-left: -160px;
-  margin-top: -210px;
-  pointer-events: none;
-  z-index: 20;
-  background: linear-gradient(
-    180deg,
-    transparent 0%,
-    rgba(255, 255, 255, 0.10) 48%,
-    rgba(255, 255, 255, 0.16) 52%,
-    transparent 100%
-  );
-  mix-blend-mode: overlay;
-  border-radius: 24px;
-  animation: spotlight-pulse 6s ease-in-out infinite;
-}
-@keyframes spotlight-pulse {
-  0%, 100% { opacity: 0.35; }
-  50%      { opacity: 0.85; }
-}
-@media (prefers-reduced-motion: reduce) {
-  .carousel-spotlight { animation: none; opacity: 0.4; }
-}
-
-/* Mobile: kill the carousel, show only mBank as hero card */
-@media (max-width: 768px) {
-  .carousel-3d { animation: none; transform: none; }
-  .card-3d {
-    transition: none;
-    transform: none;
-    position: relative;
-    left: auto; top: auto;
-    margin: 0 auto;
-  }
-  .card-3d:not(.card-3d--hero) { display: none; }
-  .card-3d__edge { display: none; }
-  .card-3d__back { display: none; }
-  .card-3d__front { transform: none; position: relative; }
-  .carousel-spotlight { display: none; }
+.hero-scene canvas {
+  outline: none !important;
 }
 
 :where(a, button, [role="button"], input, textarea, select):focus-visible {
