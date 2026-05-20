@@ -83,10 +83,10 @@ export default function Hero() {
       aria-labelledby="hero-heading"
       data-gsap-active={gsapActive ? "true" : "false"}
       className="relative isolate min-h-screen overflow-hidden"
-      style={{ background: "#050811" }}
+      style={{ background: "#00030a" }}
     >
-      {/* Full-bleed particle cloud — owns the visual atmospherics now */}
-      <ParticleCloud className="z-0" count={22000} />
+      {/* Full-bleed particle cloud — wave-deformed plasma (v15 default 75k) */}
+      <ParticleCloud className="z-0" />
 
       {/* Centered content — diamond's empty waist is the headline window */}
       <div className="relative z-10 mx-auto flex min-h-screen w-full max-w-[1100px] flex-col items-center justify-center px-6 pb-24 pt-28 text-center sm:px-8 md:pb-32 md:pt-32 lg:px-12 lg:pb-40 lg:pt-36">
