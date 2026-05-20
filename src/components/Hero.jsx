@@ -2,8 +2,7 @@ import { useEffect, useLayoutEffect, useRef, useState } from "react";
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { useMagnetic } from "../hooks/useMagnetic";
-import HeroSpotlight from "./HeroSpotlight";
-import BackgroundBeams from "./BackgroundBeams";
+import { ParticleCloud } from "./decorative/ParticleCloud";
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -83,150 +82,144 @@ export default function Hero() {
       id="top"
       aria-labelledby="hero-heading"
       data-gsap-active={gsapActive ? "true" : "false"}
-      className="relative isolate overflow-hidden"
-      style={{ background: "var(--color-black)" }}
+      className="relative isolate min-h-screen overflow-hidden"
+      style={{ background: "#050811" }}
     >
-      {/* Behind content: sharp diagonal beams + cursor spotlight only */}
-      <BackgroundBeams />
-      <HeroSpotlight sectionRef={sectionRef} />
+      {/* Full-bleed particle cloud — owns the visual atmospherics now */}
+      <ParticleCloud className="z-0" count={22000} />
 
-      <div className="relative z-10 mx-auto grid w-full max-w-[1280px] grid-cols-12 gap-6 px-6 pb-24 pt-28 sm:px-8 md:pb-32 md:pt-32 lg:gap-8 lg:px-12 lg:pb-40 lg:pt-36">
-        {/* LEFT COLUMN — col-span-7 content */}
-        <div className="col-span-12 flex flex-col justify-center lg:col-span-7">
-          {/* Pill — insider signal (minimal) */}
-          <a
-            href="#promocje"
-            data-rise="pill"
-            className="hero-rise group mx-auto inline-flex items-center gap-2.5 self-center rounded-full border border-white/14 bg-white/[0.04] py-1.5 pl-2 pr-4 text-[13px] font-medium text-white transition-colors hover:border-white/24 hover:bg-white/[0.08] lg:mx-0 lg:self-start"
+      {/* Centered content — diamond's empty waist is the headline window */}
+      <div className="relative z-10 mx-auto flex min-h-screen w-full max-w-[1100px] flex-col items-center justify-center px-6 pb-24 pt-28 text-center sm:px-8 md:pb-32 md:pt-32 lg:px-12 lg:pb-40 lg:pt-36">
+        {/* Pill */}
+        <a
+          href="#promocje"
+          data-rise="pill"
+          className="hero-rise group inline-flex items-center gap-2.5 rounded-full border border-white/14 bg-white/[0.04] py-1.5 pl-2 pr-4 text-[13px] font-medium text-white transition-colors hover:border-white/24 hover:bg-white/[0.08]"
+        >
+          <span className="relative flex h-5 w-5 items-center justify-center rounded-full bg-white/[0.06]">
+            <span className="live-dot" aria-hidden="true" />
+          </span>
+          <span className="text-white/65">
+            <span className="font-semibold text-white">47 ofert</span> dziś
+            <span className="mx-1.5 text-white/25">·</span>
+            24 banki
+          </span>
+          <svg
+            aria-hidden="true"
+            width="12"
+            height="12"
+            viewBox="0 0 12 12"
+            className="text-white/40 transition-transform group-hover:translate-x-0.5"
           >
-            <span className="relative flex h-5 w-5 items-center justify-center rounded-full bg-white/[0.06]">
-              <span className="live-dot" aria-hidden="true" />
-            </span>
-            <span className="text-white/65">
-              <span className="font-semibold text-white">47 ofert</span> dziś
-              <span className="mx-1.5 text-white/25">·</span>
-              24 banki
-            </span>
+            <path d="M3 6h6m-2-2l2 2-2 2" stroke="currentColor" strokeWidth="1.4" fill="none" strokeLinecap="round" strokeLinejoin="round" />
+          </svg>
+        </a>
+
+        {/* Headline — Instrument Serif per v14 spec */}
+        <h1
+          id="hero-heading"
+          ref={headlineRef}
+          className="mt-8 text-white"
+          style={{
+            fontFamily: "'Instrument Serif', 'Geist', serif",
+            fontSize: "clamp(2.75rem, 8vw, 7.5rem)",
+            lineHeight: "1.0",
+            letterSpacing: "-0.03em",
+            fontWeight: 400,
+            transformOrigin: "center center",
+            willChange: "transform",
+          }}
+        >
+          <HeroLine text="Twój bonus" baseDelay={120} />
+          <span
+            data-rise="headline-2"
+            className="hero-rise block text-white/70"
+            style={{ "--rise-delay": "650ms" }}
+          >
+            już czeka.
+          </span>
+        </h1>
+
+        {/* Subhead */}
+        <p
+          data-rise="subhead"
+          className="hero-rise mt-7 max-w-[460px] text-[17px] leading-[1.5] text-white/65 sm:text-[19px]"
+          style={{ "--rise-delay": "900ms" }}
+        >
+          Codziennie skanujemy 24 banki. Pokazujemy tylko oferty warte Twojego czasu.
+        </p>
+
+        {/* CTAs */}
+        <div
+          data-rise="ctas"
+          className="hero-rise mt-10 flex flex-col items-center gap-4 sm:flex-row sm:gap-5"
+          style={{ "--rise-delay": "1100ms" }}
+        >
+          <a
+            ref={primaryCtaRef}
+            href="#promocje"
+            className="cta-primary cta-primary--light"
+          >
+            Zobacz dzisiejsze oferty
             <svg
               aria-hidden="true"
-              width="12"
-              height="12"
-              viewBox="0 0 12 12"
-              className="text-white/40 transition-transform group-hover:translate-x-0.5"
+              className="arrow"
+              width="16"
+              height="16"
+              viewBox="0 0 16 16"
+              fill="none"
             >
-              <path d="M3 6h6m-2-2l2 2-2 2" stroke="currentColor" strokeWidth="1.4" fill="none" strokeLinecap="round" strokeLinejoin="round" />
+              <path
+                d="M3 8h10M9 4l4 4-4 4"
+                stroke="currentColor"
+                strokeWidth="1.7"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+              />
             </svg>
           </a>
 
-          {/* Hero headline — Geist Bold "Twój bonus" white + "już czeka."
-              white/55, per owner screenshot 1:1 match. */}
-          <h1
-            id="hero-heading"
-            ref={headlineRef}
-            className="font-display mt-8 text-center text-white lg:text-left"
-            style={{
-              fontSize: "clamp(2.5rem, 7.5vw, 7rem)",
-              lineHeight: "0.92",
-              letterSpacing: "-0.05em",
-              fontWeight: 700,
-              transformOrigin: "left center",
-              willChange: "transform",
-            }}
-          >
-            <HeroLine text="Twój bonus" baseDelay={120} />
-            <span
-              data-rise="headline-2"
-              className="hero-rise block text-white/55"
-              style={{ "--rise-delay": "650ms" }}
+          <a href="#how" className="cta-ghost">
+            Jak to działa?
+            <svg
+              aria-hidden="true"
+              className="arrow"
+              width="14"
+              height="14"
+              viewBox="0 0 14 14"
+              fill="none"
             >
-              już czeka.
-            </span>
-          </h1>
-
-          {/* Subhead */}
-          <p
-            data-rise="subhead"
-            className="hero-rise mx-auto mt-7 max-w-[460px] text-center text-[17px] leading-[1.5] text-white/65 sm:text-[19px] lg:mx-0 lg:text-left"
-            style={{ "--rise-delay": "900ms" }}
-          >
-            Codziennie skanujemy 24 banki. Pokazujemy tylko oferty warte Twojego czasu.
-          </p>
-
-          {/* CTAs */}
-          <div
-            data-rise="ctas"
-            className="hero-rise mt-10 flex flex-col items-center gap-4 sm:flex-row sm:gap-5 lg:justify-start"
-            style={{ "--rise-delay": "1100ms" }}
-          >
-            <a
-              ref={primaryCtaRef}
-              href="#promocje"
-              className="cta-primary cta-primary--light"
-            >
-              Zobacz dzisiejsze oferty
-              <svg
-                aria-hidden="true"
-                className="arrow"
-                width="16"
-                height="16"
-                viewBox="0 0 16 16"
-                fill="none"
-              >
-                <path
-                  d="M3 8h10M9 4l4 4-4 4"
-                  stroke="currentColor"
-                  strokeWidth="1.7"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                />
-              </svg>
-            </a>
-
-            <a href="#how" className="cta-ghost">
-              Jak to działa?
-              <svg
-                aria-hidden="true"
-                className="arrow"
-                width="14"
-                height="14"
-                viewBox="0 0 14 14"
-                fill="none"
-              >
-                <path
-                  d="M2.5 7h9M8 3.5L11.5 7 8 10.5"
-                  stroke="currentColor"
-                  strokeWidth="1.6"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                />
-              </svg>
-            </a>
-          </div>
-
-          {/* Trust pill */}
-          <div
-            data-rise="trust"
-            className="hero-rise mt-9 flex flex-wrap items-center justify-center gap-x-4 gap-y-2 text-[13.5px] text-white/40 lg:justify-start"
-            style={{ "--rise-delay": "1300ms" }}
-          >
-            <span className="flex items-center gap-2 text-white/55">
-              <span className="live-dot" aria-hidden="true" />
-              <span>
-                <span className="font-semibold text-white">47</span> ofert
-                <span className="mx-1.5 text-white/20">·</span>
-                <span className="font-semibold text-white">24</span> banki
-              </span>
-            </span>
-            <span className="hidden h-1 w-1 rounded-full bg-white/15 sm:inline-block" />
-            <span>ostatnia aktualizacja: 12 min temu</span>
-          </div>
+              <path
+                d="M2.5 7h9M8 3.5L11.5 7 8 10.5"
+                stroke="currentColor"
+                strokeWidth="1.6"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+              />
+            </svg>
+          </a>
         </div>
 
-        {/* RIGHT COLUMN — intentionally empty per v13 spec (breathing room) */}
-        <div className="hidden lg:col-span-5 lg:block" aria-hidden="true" />
+        {/* Trust pill */}
+        <div
+          data-rise="trust"
+          className="hero-rise mt-9 flex flex-wrap items-center justify-center gap-x-4 gap-y-2 text-[13.5px] text-white/40"
+          style={{ "--rise-delay": "1300ms" }}
+        >
+          <span className="flex items-center gap-2 text-white/55">
+            <span className="live-dot" aria-hidden="true" />
+            <span>
+              <span className="font-semibold text-white">47</span> ofert
+              <span className="mx-1.5 text-white/20">·</span>
+              <span className="font-semibold text-white">24</span> banki
+            </span>
+          </span>
+          <span className="hidden h-1 w-1 rounded-full bg-white/15 sm:inline-block" />
+          <span>ostatnia aktualizacja: 12 min temu</span>
+        </div>
       </div>
 
-      {/* Bottom hairline — sharp section divider, Revolut style */}
+      {/* Bottom hairline — sharp section divider */}
       <div
         aria-hidden="true"
         className="pointer-events-none absolute inset-x-0 bottom-0 z-[2] h-px"
