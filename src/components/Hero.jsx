@@ -125,9 +125,9 @@ export default function Hero() {
             ref={headlineRef}
             className="font-display mt-8 text-center text-white lg:text-left"
             style={{
-              fontSize: "clamp(3.5rem, 11vw, 10rem)",
-              lineHeight: "0.88",
-              letterSpacing: "-0.06em",
+              fontSize: "clamp(2.5rem, 7.5vw, 7rem)",
+              lineHeight: "0.92",
+              letterSpacing: "-0.05em",
               fontWeight: 700,
               transformOrigin: "left center",
               willChange: "transform",
