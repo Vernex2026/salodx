@@ -333,6 +333,68 @@ body { font-variant-numeric: tabular-nums; }
   }
 }
 
+/* Layer 2 — Project NEXUS case study slab. Ekstremalnie zaokrąglony
+   (48px) ciemny glass blok per Vernex pivot spec. Sit pod Hero
+   wewnątrz tej samej <section id="top"> — particles przebijają z tyłu. */
+.project-nexus-slab {
+  position: relative;
+  width: 100%;
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 64px 56px;
+  border-radius: 48px;
+  background: rgba(10, 10, 15, 0.78);
+  -webkit-backdrop-filter: blur(36px) saturate(110%);
+          backdrop-filter: blur(36px) saturate(110%);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  box-shadow:
+    0 30px 60px -12px rgba(0, 0, 0, 0.55),
+    inset 0 1px 0 rgba(255, 255, 255, 0.06),
+    inset 0 0 120px rgba(0, 0, 0, 0.35);
+  display: flex;
+  flex-direction: column;
+  gap: 40px;
+}
+@media (max-width: 640px) {
+  .project-nexus-slab {
+    padding: 36px 28px;
+    border-radius: 32px;
+    gap: 28px;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .project-nexus-slab {
+    -webkit-backdrop-filter: blur(16px);
+            backdrop-filter: blur(16px);
+  }
+}
+
+/* Cmd+K command palette — pill rise, overlay fade, modal pop */
+@keyframes cmdk-pill-rise {
+  from { opacity: 0; transform: translate(-50%, 16px); }
+  to   { opacity: 1; transform: translate(-50%, 0); }
+}
+@keyframes cmdk-overlay-in {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+@keyframes cmdk-modal-in {
+  from { opacity: 0; transform: translateY(12px) scale(0.985); }
+  to   { opacity: 1; transform: translateY(0) scale(1); }
+}
+@keyframes cmdk-cursor-blink {
+  0%, 100% { opacity: 1; }
+  50%      { opacity: 0; }
+}
+.cmdk-cursor {
+  display: inline-block;
+  margin-left: 2px;
+  animation: cmdk-cursor-blink 800ms steps(2, jump-none) infinite;
+}
+@media (prefers-reduced-motion: reduce) {
+  .cmdk-cursor { animation: none; opacity: 0.6; }
+}
+
 /* Procedural starfield twinkle (HeroStarfield component) */
 .hero-starfield {
   animation: starsTwinkle 6s ease-in-out infinite;

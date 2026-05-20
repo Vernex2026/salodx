@@ -2,6 +2,7 @@ import { useEffect, useLayoutEffect, useRef, useState } from "react";
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { useMagnetic } from "../hooks/useMagnetic";
+import { useReveal } from "../hooks/useReveal";
 import { ParticleCloud } from "./decorative/ParticleCloud";
 
 gsap.registerPlugin(ScrollTrigger);
@@ -46,11 +47,6 @@ export default function Hero() {
           ".hero-rise[data-rise='ctas']",
           { y: 16, opacity: 0, duration: 0.6 },
           "-=0.45"
-        )
-        .from(
-          ".hero-rise[data-rise='trust']",
-          { y: 14, opacity: 0, duration: 0.55 },
-          "-=0.40"
         );
 
       gsap.to(headlineRef.current, {
@@ -59,8 +55,8 @@ export default function Hero() {
         opacity: 0.85,
         ease: "none",
         scrollTrigger: {
-          trigger: section,
-          start: "top top",
+          trigger: ".hero-content-card",
+          start: "top top+=80",
           end: "bottom 30%",
           scrub: 0.5,
         },
@@ -82,42 +78,31 @@ export default function Hero() {
       id="top"
       aria-labelledby="hero-heading"
       data-gsap-active={gsapActive ? "true" : "false"}
-      className="relative isolate min-h-screen overflow-hidden"
+      className="relative isolate overflow-hidden"
       style={{ background: "#00030a" }}
     >
-      {/* Full-bleed particle cloud — wave-deformed plasma (v15 default 75k) */}
+      {/* Full-bleed particle cloud — shared between Layer 1 + Layer 2 (single WebGL instance) */}
       <ParticleCloud className="z-0" />
 
-      {/* Centered frame — content card sits in the middle of the viewport */}
+      {/* Layer 1 — Hero (Vernex pitch) */}
       <div className="relative z-10 mx-auto flex min-h-screen w-full items-center justify-center px-6 py-24 sm:px-8 md:py-32 lg:px-12 lg:py-40">
         <div className="hero-content-card">
-          {/* Pill */}
-          <a
-            href="#promocje"
+          {/* Tag — Geist Mono brackets */}
+          <div
             data-rise="pill"
-            className="hero-rise group inline-flex items-center gap-2.5 rounded-full border border-white/14 bg-white/[0.04] py-1.5 pl-2 pr-4 text-[13px] font-medium text-white transition-colors hover:border-white/24 hover:bg-white/[0.08]"
+            className="hero-rise"
+            style={{
+              fontFamily: "'Geist Mono', ui-monospace, SFMono-Regular, monospace",
+              fontSize: "12px",
+              fontWeight: 500,
+              letterSpacing: "0.08em",
+              color: "rgba(255,255,255,0.55)",
+            }}
           >
-            <span className="relative flex h-5 w-5 items-center justify-center rounded-full bg-white/[0.06]">
-              <span className="live-dot" aria-hidden="true" />
-            </span>
-            <span style={{ color: "#A1A1AA" }}>
-              <span className="font-semibold text-white">47 ofert</span> dziś
-              <span className="mx-1.5" style={{ color: "#52525B" }}>·</span>
-              24 banki
-            </span>
-            <svg
-              aria-hidden="true"
-              width="12"
-              height="12"
-              viewBox="0 0 12 12"
-              style={{ color: "#71717A" }}
-              className="transition-transform group-hover:translate-x-0.5"
-            >
-              <path d="M3 6h6m-2-2l2 2-2 2" stroke="currentColor" strokeWidth="1.4" fill="none" strokeLinecap="round" strokeLinejoin="round" />
-            </svg>
-          </a>
+            [ VERNEX ENGINEERING // GPU_ACCELERATED ]
+          </div>
 
-          {/* Headline — Geist 800 brutalist grotesk, hierarchia bieli (v16) */}
+          {/* Headline — Geist 800 brutalist grotesk, hierarchia bieli */}
           <h1
             id="hero-heading"
             ref={headlineRef}
@@ -132,26 +117,29 @@ export default function Hero() {
               willChange: "transform",
             }}
           >
-            <HeroLine text="Twój bonus" baseDelay={120} />
+            <HeroLine text="Surowa Moc." baseDelay={120} />
             <span
               data-rise="headline-2"
               className="hero-rise block"
               style={{ "--rise-delay": "650ms", color: "#A1A1AA" }}
             >
-              już czeka.
+              Inteligentny Interfejs.
             </span>
           </h1>
 
-          {/* Subhead — #D4D4D8 per hierarchia bieli */}
+          {/* Subhead — Vernex pitch */}
           <p
             data-rise="subhead"
-            className="hero-rise mt-6 max-w-[520px] text-[17px] leading-[1.55] sm:text-[18px]"
+            className="hero-rise mt-6 max-w-[600px] text-[17px] leading-[1.55] sm:text-[18px]"
             style={{ "--rise-delay": "900ms", color: "#D4D4D8" }}
           >
-            Codziennie skanujemy 24 banki. Pokazujemy tylko oferty warte Twojego czasu.
+            Przekraczamy granice standardowego frontendu. Budujemy wysoko wydajne
+            architektury napędzane akceleracją sprzętową (WebGL) oraz agenty AI
+            oparte na najnowszym stacku (Vercel, AI SDK, Supabase). Bezkompromisowy
+            design dla bezkompromisowej technologii.
           </p>
 
-          {/* CTAs — items-start (left-aligned), white pill primary */}
+          {/* Single CTA — scroll do Layer 2 */}
           <div
             data-rise="ctas"
             className="hero-rise mt-10 flex flex-col items-start gap-4 sm:flex-row sm:items-center sm:gap-5"
@@ -159,10 +147,10 @@ export default function Hero() {
           >
             <a
               ref={primaryCtaRef}
-              href="#promocje"
+              href="#nexus"
               className="cta-primary cta-primary--light"
             >
-              Zobacz dzisiejsze oferty
+              Zobacz naszą inżynierię
               <svg
                 aria-hidden="true"
                 className="arrow"
@@ -180,55 +168,123 @@ export default function Hero() {
                 />
               </svg>
             </a>
-
-            <a href="#how" className="cta-ghost">
-              Jak to działa?
-              <svg
-                aria-hidden="true"
-                className="arrow"
-                width="14"
-                height="14"
-                viewBox="0 0 14 14"
-                fill="none"
-              >
-                <path
-                  d="M2.5 7h9M8 3.5L11.5 7 8 10.5"
-                  stroke="currentColor"
-                  strokeWidth="1.6"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                />
-              </svg>
-            </a>
-          </div>
-
-          {/* Trust pill — zinc-500 base, white spans on the numbers */}
-          <div
-            data-rise="trust"
-            className="hero-rise mt-9 flex flex-wrap items-center gap-x-4 gap-y-2 text-[13.5px]"
-            style={{ "--rise-delay": "1300ms", color: "#71717A" }}
-          >
-            <span className="flex items-center gap-2">
-              <span className="live-dot" aria-hidden="true" />
-              <span>
-                <span className="font-semibold text-white">47</span> ofert
-                <span className="mx-1.5" style={{ color: "#3F3F46" }}>·</span>
-                <span className="font-semibold text-white">24</span> banki
-              </span>
-            </span>
-            <span className="hidden h-1 w-1 rounded-full sm:inline-block" style={{ background: "#3F3F46" }} />
-            <span>ostatnia aktualizacja: 12 min temu</span>
           </div>
         </div>
       </div>
 
-      {/* Bottom hairline — sharp section divider */}
+      {/* Layer 2 — Project NEXUS case study slab */}
+      <div
+        id="nexus"
+        className="relative z-10 mx-auto w-full max-w-[1280px] px-6 pb-24 sm:px-8 md:pb-32 lg:px-12 lg:pb-40"
+      >
+        <div className="project-nexus-slab">
+          <NexusTag />
+          <NexusHeadline />
+          <NexusBlock
+            eyebrow="Problem"
+            body={'Jak zwizualizować potężne strumienie danych, które „myśli” autonomiczny agent AI? Płaskie okna czatu to standard 2022 roku. Użytkownik traci kontrolę i wgląd w proces poznawczy maszyny.'}
+            delay={0}
+          />
+          <NexusBlock
+            eyebrow="Rozwiązanie"
+            body="Stworzyliśmy wizualny reaktor oparty na autorskim silniku WebGL (widoczny w tle tej strony), zdolny płynnie renderować 75 000 cząsteczek danych na GPU w 60 klatkach na sekundę, bezpośrednio w przeglądarce. Interfejs oparty na fizyce szkła (Glassmorphism), który oddziela użytkownika od pracującej w tle plazmy danych. To nie jest animacja. To żyjący system danych."
+            delay={120}
+          />
+          <NexusBlock
+            eyebrow="Dlaczego to topka"
+            body="Ten PoC dowodzi, że Vernex potrafi obsłużyć najbardziej wymagające wizualnie systemy finansowe i AI na najwyższym poziomie wydajności, bez kompromisów w czytelności."
+            delay={240}
+          />
+        </div>
+      </div>
+
+      {/* Bottom hairline */}
       <div
         aria-hidden="true"
         className="pointer-events-none absolute inset-x-0 bottom-0 z-[2] h-px"
         style={{ background: "rgba(255,255,255,0.08)" }}
       />
     </section>
+  );
+}
+
+/* ── Layer 2 sub-components ───────────────────────────────────── */
+
+function NexusTag() {
+  const [ref, visible] = useReveal({ threshold: 0.5 });
+  return (
+    <div
+      ref={ref}
+      className={`reveal ${visible ? "is-visible" : ""}`}
+      style={{
+        fontFamily: "'Geist Mono', ui-monospace, SFMono-Regular, monospace",
+        fontSize: "12px",
+        fontWeight: 500,
+        letterSpacing: "0.08em",
+        color: "rgba(255,255,255,0.55)",
+      }}
+    >
+      [ CASE_STUDY // PROOF_OF_CONCEPT ]
+    </div>
+  );
+}
+
+function NexusHeadline() {
+  const [ref, visible] = useReveal({ threshold: 0.3 });
+  return (
+    <h2
+      ref={ref}
+      className={`reveal ${visible ? "is-visible" : ""} m-0 text-white`}
+      style={{
+        fontFamily: "'Geist', -apple-system, BlinkMacSystemFont, 'Inter', sans-serif",
+        fontSize: "clamp(2.25rem, 5vw, 3.75rem)",
+        fontWeight: 800,
+        lineHeight: 1.1,
+        letterSpacing: "-0.04em",
+        "--reveal-delay": "60ms",
+      }}
+    >
+      Project{" "}
+      <span style={{ letterSpacing: "0.25em" }}>N E X U S</span>
+      {": "}
+      <span style={{ color: "#A1A1AA" }}>
+        Wizualizacja AI w czasie rzeczywistym.
+      </span>
+    </h2>
+  );
+}
+
+function NexusBlock({ eyebrow, body, delay = 0 }) {
+  const [ref, visible] = useReveal({ threshold: 0.2 });
+  return (
+    <div
+      ref={ref}
+      className={`reveal ${visible ? "is-visible" : ""}`}
+      style={{ "--reveal-delay": `${delay}ms` }}
+    >
+      <div
+        style={{
+          fontFamily: "'Geist Mono', ui-monospace, SFMono-Regular, monospace",
+          fontSize: "12px",
+          fontWeight: 600,
+          letterSpacing: "0.18em",
+          color: "#71717A",
+          textTransform: "uppercase",
+        }}
+      >
+        {eyebrow}
+      </div>
+      <p
+        className="text-[16px] leading-[1.6] sm:text-[17px]"
+        style={{
+          color: "#D4D4D8",
+          maxWidth: "720px",
+          margin: "12px 0 0",
+        }}
+      >
+        {body}
+      </p>
+    </div>
   );
 }
 
