@@ -847,55 +847,67 @@ body { font-variant-numeric: tabular-nums; }
 }
 
 /* Light variant — for HowItWorks (.section-light) and any future
-   light section. Frosted white glass, dark text, soft drop shadow. */
+   light section. Clean frosted white glass + flat physical border +
+   diffuse soft shadow. Owner verdict on the v1 attempt: "plastikowa
+   rurka PCV" — fixed here by dropping the inset white sheen and
+   inverting all dark-theme design tokens so text reads. */
 .nav-glass[data-light="true"] {
-  background: rgba(255, 255, 255, 0.85);
-  border: 1px solid rgba(0, 0, 0, 0.06);
-  box-shadow:
-    inset 0 1px 0 rgba(255, 255, 255, 0.60),
-    0 1px 2px rgba(0, 0, 0, 0.04),
-    0 12px 32px -8px rgba(0, 0, 0, 0.10);
-}
-/* Invert text + icon colors inside the pill */
-.nav-glass[data-light="true"] {
+  /* 1. Clean glass — no fake inset gradients */
+  background: rgba(255, 255, 255, 0.75);
+  border: 1px solid rgba(0, 0, 0, 0.05);
+  box-shadow: 0 20px 40px -10px rgba(0, 0, 0, 0.05);
+
+  /* Invert design tokens for the scope — every text-[var(...)] /
+     border-[var(...)] inside the pill picks up dark equivalents */
+  --color-ink: #09090b;
+  --color-muted: #52525b;
+  --color-faint: #71717a;
+  --color-hairline: rgba(0, 0, 0, 0.06);
+  --color-hairline-2: rgba(0, 0, 0, 0.18);
   color: #09090b;
 }
-.nav-glass[data-light="true"] [class*="text-white"]:not(.live-dot),
-.nav-glass[data-light="true"] [style*="color: rgb(255, 255, 255)"] {
-  color: #09090b !important;
-}
-.nav-glass[data-light="true"] [style*="color: rgb(161, 161, 170)"] {
-  color: #52525b !important;
-}
-.nav-glass[data-light="true"] [style*="color: rgb(82, 82, 91)"],
-.nav-glass[data-light="true"] [style*="color: rgb(113, 113, 122)"] {
-  color: #71717a !important;
-}
-/* Logo block — flip from white square + dark "S" to dark square + white "S" */
+/* Logo block — flip the white square + dark "S" to dark square + white "S" */
 .nav-glass[data-light="true"] a[href="#top"] > span[aria-hidden="true"] {
   background: #09090b !important;
 }
 .nav-glass[data-light="true"] a[href="#top"] > span[aria-hidden="true"] > span {
   color: #ffffff !important;
 }
-/* Live counter pill — light tint instead of white/04 on dark */
-.nav-glass[data-light="true"] .md\:flex,
-.nav-glass[data-light="true"] a[href="#promocje"],
+/* Action button "Zobacz oferty" — black pill with white text, the
+   only high-contrast hit in the light bar so it actually attracts
+   the eye */
+.nav-glass[data-light="true"] a[href="#promocje"] {
+  background: #09090b !important;
+  color: #ffffff !important;
+  border-color: #09090b !important;
+  font-weight: 600 !important;
+}
+.nav-glass[data-light="true"] a[href="#promocje"]:hover {
+  background: #1a1a1f !important;
+  border-color: #1a1a1f !important;
+}
+/* Center counter pill (47 ofert · 24 banki) — subtle dark tint
+   instead of the dark-mode white/0.04 */
+.nav-glass[data-light="true"] nav > div.hidden.items-center {
+  background: rgba(0, 0, 0, 0.04) !important;
+  border-color: rgba(0, 0, 0, 0.06) !important;
+}
+/* Hamburger pill — same subtle dark tint, dark line bars */
 .nav-glass[data-light="true"] .hamburger {
-  background: rgba(9, 9, 11, 0.04) !important;
-  border-color: rgba(9, 9, 11, 0.08) !important;
+  background: rgba(0, 0, 0, 0.04) !important;
+  border-color: rgba(0, 0, 0, 0.06) !important;
 }
-.nav-glass[data-light="true"] a[href="#promocje"]:hover,
 .nav-glass[data-light="true"] .hamburger:hover {
-  background: rgba(9, 9, 11, 0.08) !important;
-  border-color: rgba(9, 9, 11, 0.16) !important;
+  background: rgba(0, 0, 0, 0.08) !important;
+  border-color: rgba(0, 0, 0, 0.16) !important;
 }
-/* Hamburger lines + separator dot need explicit dark fill */
 .nav-glass[data-light="true"] .hamburger-line {
   background: #09090b !important;
 }
-.nav-glass[data-light="true"] [class*="bg-white"] {
-  background: rgba(9, 9, 11, 0.04) !important;
+/* Live-dot indicator inner shell (white circle around mint dot) flips
+   to a faint dark tint */
+.nav-glass[data-light="true"] nav > div.hidden.items-center > span:first-child {
+  background: rgba(0, 0, 0, 0.04) !important;
 }
 
 /* Light glass — phone wrapper in HowItWorks (cream section) */
