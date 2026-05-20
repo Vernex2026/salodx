@@ -4,20 +4,12 @@ import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { useMagnetic } from "../hooks/useMagnetic";
 import HeroSpotlight from "./HeroSpotlight";
 import BackgroundBeams from "./BackgroundBeams";
-import FlowingLightBackground from "./decorative/FlowingLightBackground";
-import HeroStarfield from "./decorative/HeroStarfield";
 
 gsap.registerPlugin(ScrollTrigger);
 
 const prefersReducedMotion = () =>
   typeof window !== "undefined" &&
   window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-
-const COSMIC_BG =
-  "radial-gradient(ellipse 60% 50% at 25% 30%, rgba(77, 124, 255, 0.18) 0%, transparent 60%)," +
-  "radial-gradient(ellipse 50% 40% at 75% 70%, rgba(123, 92, 255, 0.20) 0%, transparent 55%)," +
-  "radial-gradient(ellipse 80% 60% at 50% 100%, rgba(0, 229, 255, 0.10) 0%, transparent 65%)," +
-  "linear-gradient(180deg, #050811 0%, #0A0F1E 50%, #050811 100%)";
 
 export default function Hero() {
   const sectionRef = useRef(null);
@@ -91,18 +83,10 @@ export default function Hero() {
       id="top"
       aria-labelledby="hero-heading"
       data-gsap-active={gsapActive ? "true" : "false"}
-      className="relative isolate min-h-screen overflow-hidden"
-      style={{ background: COSMIC_BG }}
+      className="relative isolate overflow-hidden"
+      style={{ background: "var(--color-black)" }}
     >
-      {/* Layer order (back→front): video → starfield → beams → spotlight → content */}
-      <FlowingLightBackground
-        opacity={0.65}
-        blendMode="screen"
-        scale={1.6}
-        speed={0.7}
-        preload="auto"
-      />
-      <HeroStarfield count={150} />
+      {/* Behind content: sharp diagonal beams + cursor spotlight only */}
       <BackgroundBeams />
       <HeroSpotlight sectionRef={sectionRef} />
 
@@ -134,27 +118,26 @@ export default function Hero() {
             </svg>
           </a>
 
-          {/* Hero headline — Instrument Serif italic + electric gradient
-              second line per v13 spec. */}
+          {/* Hero headline — Geist Bold "Twój bonus" white + "już czeka."
+              white/55, per owner screenshot 1:1 match. */}
           <h1
             id="hero-heading"
             ref={headlineRef}
-            className="hero-headline mt-8 text-center lg:text-left"
+            className="font-display mt-8 text-center text-white lg:text-left"
             style={{
-              fontFamily: "'Instrument Serif', serif",
-              fontSize: "clamp(3rem, 10vw, 9rem)",
-              lineHeight: "0.95",
-              letterSpacing: "-0.03em",
-              fontWeight: 400,
+              fontSize: "clamp(3.5rem, 11vw, 10rem)",
+              lineHeight: "0.88",
+              letterSpacing: "-0.06em",
+              fontWeight: 700,
               transformOrigin: "left center",
               willChange: "transform",
             }}
           >
-            <HeroLine text="Twój bonus" baseDelay={120} italic color="#F5F7FA" />
+            <HeroLine text="Twój bonus" baseDelay={120} />
             <span
               data-rise="headline-2"
-              className="hero-rise block display-electric-gradient"
-              style={{ "--rise-delay": "650ms", fontStyle: "normal" }}
+              className="hero-rise block text-white/55"
+              style={{ "--rise-delay": "650ms" }}
             >
               już czeka.
             </span>
@@ -178,7 +161,7 @@ export default function Hero() {
             <a
               ref={primaryCtaRef}
               href="#promocje"
-              className="cta-primary cta-primary--electric"
+              className="cta-primary cta-primary--light"
             >
               Zobacz dzisiejsze oferty
               <svg
