@@ -15,6 +15,7 @@ export default function Hero() {
   const sectionRef = useRef(null);
   const primaryCtaRef = useRef(null);
   const headlineRef = useRef(null);
+  const slabRef = useRef(null);
 
   const [gsapActive] = useState(() => !prefersReducedMotion());
 
@@ -61,6 +62,19 @@ export default function Hero() {
           scrub: 0.5,
         },
       });
+
+      if (slabRef.current) {
+        gsap.to(slabRef.current, {
+          yPercent: -8,
+          ease: "none",
+          scrollTrigger: {
+            trigger: slabRef.current,
+            start: "top bottom",
+            end: "bottom top",
+            scrub: 0.5,
+          },
+        });
+      }
     }, section);
 
     return () => ctx.revert();
@@ -71,6 +85,30 @@ export default function Hero() {
     const id = setTimeout(() => ScrollTrigger.refresh(), 320);
     return () => clearTimeout(id);
   }, [gsapActive]);
+
+  useEffect(() => {
+    const el = slabRef.current;
+    if (!el) return;
+    let frame = 0;
+    let nextX = 0;
+    let nextY = 0;
+    const flush = () => {
+      el.style.setProperty("--mouse-x", `${nextX}px`);
+      el.style.setProperty("--mouse-y", `${nextY}px`);
+      frame = 0;
+    };
+    const onMove = (e) => {
+      const rect = el.getBoundingClientRect();
+      nextX = e.clientX - rect.left;
+      nextY = e.clientY - rect.top;
+      if (!frame) frame = requestAnimationFrame(flush);
+    };
+    el.addEventListener("mousemove", onMove);
+    return () => {
+      el.removeEventListener("mousemove", onMove);
+      if (frame) cancelAnimationFrame(frame);
+    };
+  }, []);
 
   return (
     <section
@@ -177,24 +215,10 @@ export default function Hero() {
         id="nexus"
         className="relative z-10 mx-auto w-full max-w-[1280px] px-6 pb-24 sm:px-8 md:pb-32 lg:px-12 lg:pb-40"
       >
-        <div className="project-nexus-slab">
+        <div ref={slabRef} className="project-nexus-slab">
           <NexusTag />
           <NexusHeadline />
-          <NexusBlock
-            eyebrow="Problem"
-            body={'Jak zwizualizować potężne strumienie danych, które „myśli” autonomiczny agent AI? Płaskie okna czatu to standard 2022 roku. Użytkownik traci kontrolę i wgląd w proces poznawczy maszyny.'}
-            delay={0}
-          />
-          <NexusBlock
-            eyebrow="Rozwiązanie"
-            body="Stworzyliśmy wizualny reaktor oparty na autorskim silniku WebGL (widoczny w tle tej strony), zdolny płynnie renderować 75 000 cząsteczek danych na GPU w 60 klatkach na sekundę, bezpośrednio w przeglądarce. Interfejs oparty na fizyce szkła (Glassmorphism), który oddziela użytkownika od pracującej w tle plazmy danych. To nie jest animacja. To żyjący system danych."
-            delay={120}
-          />
-          <NexusBlock
-            eyebrow="Dlaczego to topka"
-            body="Ten PoC dowodzi, że Vernex potrafi obsłużyć najbardziej wymagające wizualnie systemy finansowe i AI na najwyższym poziomie wydajności, bez kompromisów w czytelności."
-            delay={240}
-          />
+          <NexusOneliner />
         </div>
       </div>
 
@@ -211,17 +235,18 @@ export default function Hero() {
 /* ── Layer 2 sub-components ───────────────────────────────────── */
 
 function NexusTag() {
-  const [ref, visible] = useReveal({ threshold: 0.5 });
+  const [ref, visible] = useReveal({ threshold: 0.35 });
   return (
     <div
       ref={ref}
-      className={`reveal ${visible ? "is-visible" : ""}`}
+      className={`nexus-reveal ${visible ? "is-visible" : ""}`}
       style={{
         fontFamily: "'Geist Mono', ui-monospace, SFMono-Regular, monospace",
         fontSize: "12px",
         fontWeight: 500,
         letterSpacing: "0.08em",
         color: "rgba(255,255,255,0.55)",
+        "--nexus-delay": "0ms",
       }}
     >
       [ CASE_STUDY // PROOF_OF_CONCEPT ]
@@ -234,57 +259,54 @@ function NexusHeadline() {
   return (
     <h2
       ref={ref}
-      className={`reveal ${visible ? "is-visible" : ""} m-0 text-white`}
+      className="m-0 text-white"
       style={{
-        fontFamily: "'Geist', -apple-system, BlinkMacSystemFont, 'Inter', sans-serif",
+        fontFamily:
+          "'Geist', -apple-system, BlinkMacSystemFont, 'Inter', sans-serif",
         fontSize: "clamp(2.25rem, 5vw, 3.75rem)",
         fontWeight: 800,
         lineHeight: 1.1,
         letterSpacing: "-0.04em",
-        "--reveal-delay": "60ms",
       }}
     >
-      Project{" "}
-      <span style={{ letterSpacing: "0.25em" }}>N E X U S</span>
-      {": "}
-      <span style={{ color: "#A1A1AA" }}>
+      <span
+        className={`nexus-reveal ${visible ? "is-visible" : ""} block`}
+        style={{ "--nexus-delay": "120ms" }}
+      >
+        Project <span style={{ letterSpacing: "0.25em" }}>N E X U S</span>
+        {":"}
+      </span>
+      <span
+        className={`nexus-reveal ${visible ? "is-visible" : ""} block`}
+        style={{ "--nexus-delay": "240ms", color: "#A1A1AA" }}
+      >
         Wizualizacja AI w czasie rzeczywistym.
       </span>
     </h2>
   );
 }
 
-function NexusBlock({ eyebrow, body, delay = 0 }) {
-  const [ref, visible] = useReveal({ threshold: 0.2 });
+function NexusOneliner() {
+  const [ref, visible] = useReveal({ threshold: 0.3 });
   return (
-    <div
+    <p
       ref={ref}
-      className={`reveal ${visible ? "is-visible" : ""}`}
-      style={{ "--reveal-delay": `${delay}ms` }}
+      className={`nexus-reveal ${visible ? "is-visible" : ""}`}
+      style={{
+        fontFamily:
+          "'Geist', -apple-system, BlinkMacSystemFont, 'Inter', sans-serif",
+        fontSize: "19px",
+        fontWeight: 400,
+        lineHeight: 1.55,
+        color: "#A1A1AA",
+        maxWidth: "640px",
+        margin: 0,
+        "--nexus-delay": "380ms",
+      }}
     >
-      <div
-        style={{
-          fontFamily: "'Geist Mono', ui-monospace, SFMono-Regular, monospace",
-          fontSize: "12px",
-          fontWeight: 600,
-          letterSpacing: "0.18em",
-          color: "#71717A",
-          textTransform: "uppercase",
-        }}
-      >
-        {eyebrow}
-      </div>
-      <p
-        className="text-[16px] leading-[1.6] sm:text-[17px]"
-        style={{
-          color: "#D4D4D8",
-          maxWidth: "720px",
-          margin: "12px 0 0",
-        }}
-      >
-        {body}
-      </p>
-    </div>
+      Zbudowaliśmy reaktor WebGL renderujący 75 000 cząsteczek na GPU.
+      Odwracamy zasady interfejsów dla LLM.
+    </p>
   );
 }
 
