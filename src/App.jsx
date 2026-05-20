@@ -1,12 +1,6 @@
 import Nav from "./components/Nav";
 import Hero from "./components/Hero";
-import PremiumZenSplitLayout from "./components/PremiumZenSplitLayout";
-import TopPromos from "./components/TopPromos";
-import HowItWorks from "./components/HowItWorks";
-import TrustBlock from "./components/TrustBlock";
-import GeminiFeatureBlock from "./components/GeminiFeatureBlock";
 import Footer from "./components/Footer";
-import MobileStickyCTA from "./components/MobileStickyCTA";
 
 export default function App() {
   return (
@@ -22,16 +16,9 @@ export default function App() {
 
       <main>
         <Hero />
-        <PremiumZenSplitLayout />
-        <HowItWorks />
-        <TopPromos />
-        <TrustBlock />
-        <GeminiFeatureBlock />
       </main>
 
       <Footer />
-
-      <MobileStickyCTA />
     </>
   );
 }

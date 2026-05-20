@@ -2,11 +2,10 @@ import { useEffect, useRef, useState } from "react";
 import { createPortal } from "react-dom";
 
 const LINKS = [
-  { label: "Promocje", href: "#promocje" },
-  { label: "Banki",    href: "#banki" },
-  { label: "Pożyczki", href: "#pozyczki" },
-  { label: "Blog",     href: "#blog" },
-  { label: "FAQ",      href: "#faq" },
+  { label: "Praca",        href: "#praca" },
+  { label: "Stack",        href: "#stack" },
+  { label: "Case studies", href: "#nexus" },
+  { label: "Kontakt",      href: "mailto:biuro@vernex.pl" },
 ];
 
 export default function Nav() {
@@ -71,43 +70,32 @@ export default function Nav() {
           <a
             href="#top"
             className="group flex items-center gap-2.5"
-            aria-label="Saldox — strona główna"
+            aria-label="Vernex — strona główna"
           >
             <span
               aria-hidden="true"
               className="relative flex h-8 w-8 items-center justify-center overflow-hidden rounded-[10px]"
               style={{
                 background: "var(--color-white)",
-                boxShadow:
-                  "none",
+                boxShadow: "none",
               }}
             >
               <span className="font-display text-[18px] font-bold leading-none text-[var(--color-black)]">
-                S
+                V
               </span>
             </span>
             <span className="font-display text-[22px] font-bold tracking-[-0.04em] text-[var(--color-ink)]">
-              Saldox
+              Vernex
             </span>
           </a>
-
-          {/* Center: Live indicator (desktop) */}
-          <div className="hidden items-center gap-2 rounded-full border border-[var(--color-hairline)] bg-white/[0.04] px-3 py-1.5 text-[12.5px] font-medium text-[var(--color-muted)] md:flex">
-            <span className="live-dot" aria-hidden="true" />
-            <span>
-              <span className="text-[var(--color-ink)] numeric font-semibold">47</span> ofert
-              <span className="mx-1.5 text-[var(--color-hairline-2)]">·</span>
-              <span className="text-[var(--color-ink)] numeric font-semibold">24</span> banki
-            </span>
-          </div>
 
           {/* Right cluster */}
           <div className="flex items-center gap-3">
             <a
-              href="#promocje"
+              href="mailto:biuro@vernex.pl"
               className="hidden h-10 items-center rounded-full border border-[var(--color-hairline)] bg-white/[0.04] px-4 text-[13px] font-medium text-[var(--color-ink)] transition-colors hover:border-white/20 hover:bg-white/[0.08] sm:inline-flex"
             >
-              Zobacz oferty
+              Skontaktuj się
             </a>
 
             <button
@@ -163,16 +151,15 @@ export default function Nav() {
                     className="relative flex h-8 w-8 items-center justify-center overflow-hidden rounded-[10px]"
                     style={{
                       background: "var(--color-white)",
-                      boxShadow:
-                        "none",
+                      boxShadow: "none",
                     }}
                   >
                     <span className="font-display text-[18px] font-bold leading-none text-[var(--color-black)]">
-                      S
+                      V
                     </span>
                   </span>
                   <span className="font-display text-[22px] font-bold tracking-[-0.04em] text-white">
-                    Saldox
+                    Vernex
                   </span>
                 </a>
 
@@ -236,38 +223,15 @@ export default function Nav() {
                   <div>
                     <div className="eyebrow text-white/40">Kontakt</div>
                     <a
-                      href="mailto:biuro@saldox.pl"
+                      href="mailto:biuro@vernex.pl"
                       className="mt-2 inline-block font-display text-[26px] font-medium tracking-[-0.02em] text-white transition-colors hover:underline underline-offset-8 decoration-2 sm:text-[32px]"
                     >
-                      biuro@saldox.pl
+                      biuro@vernex.pl
                     </a>
                   </div>
-                  <div className="flex flex-col items-start gap-3">
-                    <a
-                      href="#newsletter"
-                      onClick={() => setOpen(false)}
-                      className="group inline-flex items-center gap-2 text-[14px] font-medium text-white/80 transition-colors hover:text-white"
-                    >
-                      Zapisz się na newsletter
-                      <svg
-                        aria-hidden="true"
-                        width="14"
-                        height="14"
-                        viewBox="0 0 14 14"
-                        className="transition-transform group-hover:translate-x-1"
-                      >
-                        <path
-                          d="M2.5 7h9M8 3.5L11.5 7 8 10.5"
-                          stroke="currentColor"
-                          strokeWidth="1.6"
-                          fill="none"
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                        />
-                      </svg>
-                    </a>
+                  <div className="flex flex-col items-end gap-3">
                     <div className="text-[12px] text-white/40">
-                      Saldox · 2026 · Premium hub promocji bankowych
+                      Vernex · 2026 · Engineering Studio · WebGL + AI
                     </div>
                   </div>
                 </div>

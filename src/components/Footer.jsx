@@ -20,15 +20,15 @@ export default function Footer() {
               fontWeight: 700,
             }}
           >
-            <span className="block">Twój bonus</span>
-            <span className="block text-white/55">już czeka.</span>
+            <span className="block">Porozmawiajmy.</span>
+            <span className="block text-white/55">O Twoim produkcie.</span>
           </h2>
           <p className="mt-6 max-w-md text-[16px] leading-[1.55] text-white/55 sm:text-[17px]">
-            Sprawdź dzisiejsze oferty z 24 banków. Trwa krócej niż kawa.
+            Wyślij brief. Wracamy z rekomendacją architektury w 48h.
           </p>
           <div className="mt-9 flex flex-col items-start gap-4 sm:flex-row sm:items-center">
-            <a href="#promocje" className="cta-primary cta-primary--light">
-              Zobacz dzisiejsze oferty
+            <a href="mailto:biuro@vernex.pl" className="cta-primary cta-primary--light">
+              Wyślij brief
               <svg
                 className="arrow"
                 aria-hidden="true"
@@ -46,28 +46,6 @@ export default function Footer() {
                 />
               </svg>
             </a>
-            <a
-              href="#newsletter"
-              className="inline-flex items-center gap-2 px-2 py-3 text-[14px] font-medium text-white/70 transition-colors hover:text-white"
-            >
-              Zapisz się na newsletter
-              <svg
-                aria-hidden="true"
-                width="14"
-                height="14"
-                viewBox="0 0 14 14"
-                className="transition-transform group-hover:translate-x-0.5"
-              >
-                <path
-                  d="M2.5 7h9M8 3.5L11.5 7 8 10.5"
-                  stroke="currentColor"
-                  strokeWidth="1.6"
-                  fill="none"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                />
-              </svg>
-            </a>
           </div>
         </div>
       </div>
@@ -80,42 +58,33 @@ export default function Footer() {
             <a
               href="#top"
               className="group inline-flex items-center gap-2.5"
-              aria-label="Saldox — strona główna"
+              aria-label="Vernex — strona główna"
             >
               <span
                 aria-hidden="true"
                 className="relative flex h-8 w-8 items-center justify-center overflow-hidden rounded-[10px]"
                 style={{ background: "var(--color-white)" }}
               >
-                <span className="font-display text-[18px] font-bold text-[var(--color-black)]" style={{letterSpacing:"-0.04em"}}>S</span>
+                <span className="font-display text-[18px] font-bold text-[var(--color-black)]" style={{letterSpacing:"-0.04em"}}>V</span>
               </span>
               <span className="font-display text-[22px] font-bold tracking-[-0.04em] text-white">
-                Saldox
+                Vernex
               </span>
             </a>
             <p className="mt-3 max-w-sm text-[13px] leading-[1.55] text-white/45">
-              Niezależny hub premium ofert bankowych. Nie pośrednik. Nie sprzedawca.
-              Po prostu Twój filtr.
+              Engineering studio. WebGL, AI agents, premium frontend.
+              Wrocław / Warszawa / Remote.
             </p>
           </div>
 
           {/* Links */}
-          <nav aria-label="Linki" className="grid grid-cols-2 gap-x-10 gap-y-6 sm:grid-cols-3 lg:gap-x-14">
-            <FooterCol
-              title="Produkt"
-              links={[
-                ["Promocje", "#promocje"],
-                ["Banki", "#banki"],
-                ["Pożyczki", "#pozyczki"],
-                ["FAQ", "#faq"],
-              ]}
-            />
+          <nav aria-label="Linki" className="grid grid-cols-2 gap-x-10 gap-y-6 sm:grid-cols-2 lg:gap-x-14">
             <FooterCol
               title="Firma"
               links={[
                 ["O nas", "#o-nas"],
-                ["Blog", "#blog"],
-                ["Kontakt", "mailto:biuro@saldox.pl"],
+                ["Case studies", "#nexus"],
+                ["Kontakt", "mailto:biuro@vernex.pl"],
               ]}
             />
             <FooterCol
@@ -133,13 +102,10 @@ export default function Footer() {
       {/* Bottom bar */}
       <div className="relative mx-auto max-w-[1280px] border-t border-white/8 px-6 py-6 sm:px-8 lg:px-12">
         <div className="flex flex-col items-start justify-between gap-3 text-[12px] text-white/40 sm:flex-row sm:items-center">
-          <div>© 2026 Saldox · Wszelkie prawa zastrzeżone.</div>
+          <div>© 2026 Vernex · Wszelkie prawa zastrzeżone.</div>
           <div className="flex items-center gap-2">
             <span className="live-dot" aria-hidden="true" />
-            <span>
-              Ostatnia aktualizacja bazy:{" "}
-              <span className="numeric font-medium text-white/60">4 min temu</span>
-            </span>
+            <span>Engineering Studio · WebGL + AI</span>
           </div>
         </div>
       </div>
