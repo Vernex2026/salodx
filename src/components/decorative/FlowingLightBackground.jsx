@@ -5,12 +5,21 @@ import { useEffect, useRef } from "react";
    muted + loop + playsInline + IntersectionObserver pause-when-hidden.
    `prefers-reduced-motion` swaps the video for a static CSS gradient
    so vestibular-sensitive users still see the same color story but
-   without motion. */
+   without motion.
+
+   v13 added scale / position / speed / preload props so the same
+   asset can run different intensities in different sections (hero
+   gets bigger + slower + priority preload; section 1 keeps default
+   + lazy preload). */
 
 export default function FlowingLightBackground({
   className = "",
   opacity = 0.85,
   blendMode = "screen",
+  scale = 1.1,
+  position = "center",
+  speed = 1.0,
+  preload = "metadata",
 }) {
   const videoRef = useRef(null);
   const containerRef = useRef(null);
@@ -19,6 +28,14 @@ export default function FlowingLightBackground({
     const video = videoRef.current;
     const container = containerRef.current;
     if (!video || !container) return;
+    const applySpeed = () => {
+      if (Number.isFinite(speed) && speed > 0) {
+        video.playbackRate = speed;
+      }
+    };
+    if (video.readyState >= 1) applySpeed();
+    else video.addEventListener("loadedmetadata", applySpeed, { once: true });
+
     const observer = new IntersectionObserver(
       ([entry]) => {
         if (entry.isIntersecting) {
@@ -30,12 +47,17 @@ export default function FlowingLightBackground({
       { threshold: 0.1 }
     );
     observer.observe(container);
-    return () => observer.disconnect();
-  }, []);
+    return () => {
+      observer.disconnect();
+      video.removeEventListener("loadedmetadata", applySpeed);
+    };
+  }, [speed]);
 
   const reducedMotion =
     typeof window !== "undefined" &&
     window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+  const sizePct = `${scale * 100}%`;
 
   if (reducedMotion) {
     return (
@@ -72,9 +94,12 @@ export default function FlowingLightBackground({
         muted
         loop
         playsInline
-        preload="metadata"
-        className="absolute left-1/2 top-1/2 h-[110%] w-[110%] -translate-x-1/2 -translate-y-1/2 object-cover"
+        preload={preload}
+        className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 object-cover"
         style={{
+          width: sizePct,
+          height: sizePct,
+          objectPosition: position,
           opacity,
           mixBlendMode: blendMode,
           filter: "saturate(115%) brightness(95%)",
