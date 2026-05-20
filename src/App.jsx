@@ -20,8 +20,8 @@ export default function App() {
 
       <main>
         <Hero />
-        <TopPromos />
         <HowItWorks />
+        <TopPromos />
         <TrustBlock />
       </main>
 

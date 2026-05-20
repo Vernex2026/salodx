@@ -2,22 +2,13 @@ import { useEffect, useLayoutEffect, useRef, useState } from "react";
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { useMagnetic } from "../hooks/useMagnetic";
-import HeroSpotlight from "./HeroSpotlight";
-import BackgroundBeams from "./BackgroundBeams";
-import FlowingLightBackground from "./decorative/FlowingLightBackground";
-import HeroStarfield from "./decorative/HeroStarfield";
+import { ParticleCloud } from "./decorative/ParticleCloud";
 
 gsap.registerPlugin(ScrollTrigger);
 
 const prefersReducedMotion = () =>
   typeof window !== "undefined" &&
   window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-
-const COSMIC_BG =
-  "radial-gradient(ellipse 60% 50% at 25% 30%, rgba(77, 124, 255, 0.18) 0%, transparent 60%)," +
-  "radial-gradient(ellipse 50% 40% at 75% 70%, rgba(123, 92, 255, 0.20) 0%, transparent 55%)," +
-  "radial-gradient(ellipse 80% 60% at 50% 100%, rgba(0, 229, 255, 0.10) 0%, transparent 65%)," +
-  "linear-gradient(180deg, #050811 0%, #0A0F1E 50%, #050811 100%)";
 
 export default function Hero() {
   const sectionRef = useRef(null);
@@ -92,35 +83,26 @@ export default function Hero() {
       aria-labelledby="hero-heading"
       data-gsap-active={gsapActive ? "true" : "false"}
       className="relative isolate min-h-screen overflow-hidden"
-      style={{ background: COSMIC_BG }}
+      style={{ background: "#00030a" }}
     >
-      {/* Layer order (back→front): video → starfield → beams → spotlight → content */}
-      <FlowingLightBackground
-        opacity={0.65}
-        blendMode="screen"
-        scale={1.6}
-        speed={0.7}
-        preload="auto"
-      />
-      <HeroStarfield count={150} />
-      <BackgroundBeams />
-      <HeroSpotlight sectionRef={sectionRef} />
+      {/* Full-bleed particle cloud — wave-deformed plasma (v15 default 75k) */}
+      <ParticleCloud className="z-0" />
 
-      <div className="relative z-10 mx-auto grid w-full max-w-[1280px] grid-cols-12 gap-6 px-6 pb-24 pt-28 sm:px-8 md:pb-32 md:pt-32 lg:gap-8 lg:px-12 lg:pb-40 lg:pt-36">
-        {/* LEFT COLUMN — col-span-7 content */}
-        <div className="col-span-12 flex flex-col justify-center lg:col-span-7">
-          {/* Pill — insider signal (minimal) */}
+      {/* Centered frame — content card sits in the middle of the viewport */}
+      <div className="relative z-10 mx-auto flex min-h-screen w-full items-center justify-center px-6 py-24 sm:px-8 md:py-32 lg:px-12 lg:py-40">
+        <div className="hero-content-card">
+          {/* Pill */}
           <a
             href="#promocje"
             data-rise="pill"
-            className="hero-rise group mx-auto inline-flex items-center gap-2.5 self-center rounded-full border border-white/14 bg-white/[0.04] py-1.5 pl-2 pr-4 text-[13px] font-medium text-white transition-colors hover:border-white/24 hover:bg-white/[0.08] lg:mx-0 lg:self-start"
+            className="hero-rise group inline-flex items-center gap-2.5 rounded-full border border-white/14 bg-white/[0.04] py-1.5 pl-2 pr-4 text-[13px] font-medium text-white transition-colors hover:border-white/24 hover:bg-white/[0.08]"
           >
             <span className="relative flex h-5 w-5 items-center justify-center rounded-full bg-white/[0.06]">
               <span className="live-dot" aria-hidden="true" />
             </span>
-            <span className="text-white/65">
+            <span style={{ color: "#A1A1AA" }}>
               <span className="font-semibold text-white">47 ofert</span> dziś
-              <span className="mx-1.5 text-white/25">·</span>
+              <span className="mx-1.5" style={{ color: "#52525B" }}>·</span>
               24 banki
             </span>
             <svg
@@ -128,57 +110,57 @@ export default function Hero() {
               width="12"
               height="12"
               viewBox="0 0 12 12"
-              className="text-white/40 transition-transform group-hover:translate-x-0.5"
+              style={{ color: "#71717A" }}
+              className="transition-transform group-hover:translate-x-0.5"
             >
               <path d="M3 6h6m-2-2l2 2-2 2" stroke="currentColor" strokeWidth="1.4" fill="none" strokeLinecap="round" strokeLinejoin="round" />
             </svg>
           </a>
 
-          {/* Hero headline — Instrument Serif italic + electric gradient
-              second line per v13 spec. */}
+          {/* Headline — Geist 800 brutalist grotesk, hierarchia bieli (v16) */}
           <h1
             id="hero-heading"
             ref={headlineRef}
-            className="hero-headline mt-8 text-center lg:text-left"
+            className="m-0 mt-8 text-white"
             style={{
-              fontFamily: "'Instrument Serif', serif",
-              fontSize: "clamp(3rem, 10vw, 9rem)",
-              lineHeight: "0.95",
-              letterSpacing: "-0.03em",
-              fontWeight: 400,
+              fontFamily: "'Geist', -apple-system, BlinkMacSystemFont, 'Inter', sans-serif",
+              fontSize: "clamp(2.5rem, 7vw, 4.75rem)",
+              fontWeight: 800,
+              lineHeight: 1.05,
+              letterSpacing: "-0.04em",
               transformOrigin: "left center",
               willChange: "transform",
             }}
           >
-            <HeroLine text="Twój bonus" baseDelay={120} italic color="#F5F7FA" />
+            <HeroLine text="Twój bonus" baseDelay={120} />
             <span
               data-rise="headline-2"
-              className="hero-rise block display-electric-gradient"
-              style={{ "--rise-delay": "650ms", fontStyle: "normal" }}
+              className="hero-rise block"
+              style={{ "--rise-delay": "650ms", color: "#A1A1AA" }}
             >
               już czeka.
             </span>
           </h1>
 
-          {/* Subhead */}
+          {/* Subhead — #D4D4D8 per hierarchia bieli */}
           <p
             data-rise="subhead"
-            className="hero-rise mx-auto mt-7 max-w-[460px] text-center text-[17px] leading-[1.5] text-white/65 sm:text-[19px] lg:mx-0 lg:text-left"
-            style={{ "--rise-delay": "900ms" }}
+            className="hero-rise mt-6 max-w-[520px] text-[17px] leading-[1.55] sm:text-[18px]"
+            style={{ "--rise-delay": "900ms", color: "#D4D4D8" }}
           >
             Codziennie skanujemy 24 banki. Pokazujemy tylko oferty warte Twojego czasu.
           </p>
 
-          {/* CTAs */}
+          {/* CTAs — items-start (left-aligned), white pill primary */}
           <div
             data-rise="ctas"
-            className="hero-rise mt-10 flex flex-col items-center gap-4 sm:flex-row sm:gap-5 lg:justify-start"
+            className="hero-rise mt-10 flex flex-col items-start gap-4 sm:flex-row sm:items-center sm:gap-5"
             style={{ "--rise-delay": "1100ms" }}
           >
             <a
               ref={primaryCtaRef}
               href="#promocje"
-              className="cta-primary cta-primary--electric"
+              className="cta-primary cta-primary--light"
             >
               Zobacz dzisiejsze oferty
               <svg
@@ -220,30 +202,27 @@ export default function Hero() {
             </a>
           </div>
 
-          {/* Trust pill */}
+          {/* Trust pill — zinc-500 base, white spans on the numbers */}
           <div
             data-rise="trust"
-            className="hero-rise mt-9 flex flex-wrap items-center justify-center gap-x-4 gap-y-2 text-[13.5px] text-white/40 lg:justify-start"
-            style={{ "--rise-delay": "1300ms" }}
+            className="hero-rise mt-9 flex flex-wrap items-center gap-x-4 gap-y-2 text-[13.5px]"
+            style={{ "--rise-delay": "1300ms", color: "#71717A" }}
           >
-            <span className="flex items-center gap-2 text-white/55">
+            <span className="flex items-center gap-2">
               <span className="live-dot" aria-hidden="true" />
               <span>
                 <span className="font-semibold text-white">47</span> ofert
-                <span className="mx-1.5 text-white/20">·</span>
+                <span className="mx-1.5" style={{ color: "#3F3F46" }}>·</span>
                 <span className="font-semibold text-white">24</span> banki
               </span>
             </span>
-            <span className="hidden h-1 w-1 rounded-full bg-white/15 sm:inline-block" />
+            <span className="hidden h-1 w-1 rounded-full sm:inline-block" style={{ background: "#3F3F46" }} />
             <span>ostatnia aktualizacja: 12 min temu</span>
           </div>
         </div>
-
-        {/* RIGHT COLUMN — intentionally empty per v13 spec (breathing room) */}
-        <div className="hidden lg:col-span-5 lg:block" aria-hidden="true" />
       </div>
 
-      {/* Bottom hairline — sharp section divider, Revolut style */}
+      {/* Bottom hairline — sharp section divider */}
       <div
         aria-hidden="true"
         className="pointer-events-none absolute inset-x-0 bottom-0 z-[2] h-px"

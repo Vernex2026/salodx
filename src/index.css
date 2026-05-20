@@ -238,6 +238,83 @@ body { font-variant-numeric: tabular-nums; }
   }
 }
 
+/* v15 — Dark glass plate behind hero headline so it reads over the
+   QuantumCore bloom blowout. inline-block on the <h1> shrinks the
+   plate to the text width. */
+.hero-headline-plate {
+  position: relative;
+  padding: 18px 44px;
+  border-radius: 32px;
+  background: rgba(5, 8, 17, 0.55);
+  -webkit-backdrop-filter: blur(22px) saturate(135%);
+          backdrop-filter: blur(22px) saturate(135%);
+  border: 1px solid rgba(255, 255, 255, 0.10);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.12),
+    inset 0 -1px 0 rgba(0, 0, 0, 0.35),
+    0 24px 64px rgba(0, 0, 0, 0.50);
+}
+.hero-headline-plate::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  padding: 1px;
+  background: linear-gradient(
+    135deg,
+    rgba(255, 255, 255, 0.22) 0%,
+    rgba(255, 255, 255, 0.04) 50%,
+    rgba(255, 255, 255, 0.22) 100%
+  );
+  -webkit-mask:
+    linear-gradient(#fff 0 0) content-box,
+    linear-gradient(#fff 0 0);
+  -webkit-mask-composite: xor;
+          mask-composite: exclude;
+  pointer-events: none;
+}
+@media (max-width: 640px) {
+  .hero-headline-plate {
+    padding: 14px 28px;
+    border-radius: 24px;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .hero-headline-plate {
+    -webkit-backdrop-filter: blur(12px) saturate(120%);
+            backdrop-filter: blur(12px) saturate(120%);
+  }
+}
+
+/* v16 — full hero content card. Owner spec: pill + headline + subhead
+   + CTAs + trust all wrapped in one optical-separation glass plate
+   so brutalist Geist 800 typo reads over the QuantumCore bloom. */
+.hero-content-card {
+  position: relative;
+  max-width: 680px;
+  width: 100%;
+  padding: 48px;
+  border-radius: 24px;
+  background: rgba(9, 9, 11, 0.40);
+  -webkit-backdrop-filter: blur(32px);
+          backdrop-filter: blur(32px);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  box-shadow: 0 24px 48px rgba(0, 0, 0, 0.40);
+  text-align: left;
+}
+@media (max-width: 640px) {
+  .hero-content-card {
+    padding: 28px;
+    border-radius: 20px;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .hero-content-card {
+    -webkit-backdrop-filter: blur(16px);
+            backdrop-filter: blur(16px);
+  }
+}
+
 /* Procedural starfield twinkle (HeroStarfield component) */
 .hero-starfield {
   animation: starsTwinkle 6s ease-in-out infinite;
