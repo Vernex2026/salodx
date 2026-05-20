@@ -286,37 +286,38 @@ body { font-variant-numeric: tabular-nums; }
   }
 }
 
-/* v16+ — full hero content card. VisionOS-tier glass per owner spec:
-   soczewka (blur 48 + saturate 180) podbija plazmę pod spodem,
-   asymetryczny gradient daje "masę szkła", warstwowe inset shadows
-   symulują światło na zaokrąglonym rancie polerowanego krzyształu,
-   asymetryczna ramka (jaśniejsza góra / ciemniejszy dół) bo światło
-   pada z góry. */
+/* v16++ — full hero content card. Dark Material per owner spec:
+   wcześniejsza wersja z saturate(180%) podbijała plazmę za szybą
+   tak agresywnie, że "zjadała" tekst. VisionOS-style szkło na
+   agresywnym tle nie wzmacnia, tylko TŁUMI — głęboki tint węglowy
+   działa jak tarcza dla typografii. */
 .hero-content-card {
   position: relative;
   max-width: 680px;
   width: 100%;
   padding: 48px;
   border-radius: 32px;
+  /* MASA — Dark Material — głęboki carbon gradient zamiast
+     przezroczystej szyby */
   background: linear-gradient(
     135deg,
-    rgba(255, 255, 255, 0.08) 0%,
-    rgba(255, 255, 255, 0.01) 100%
+    rgba(20, 20, 25, 0.60) 0%,
+    rgba(10, 10, 15, 0.80) 100%
   );
-  -webkit-backdrop-filter: blur(48px) saturate(180%);
-          backdrop-filter: blur(48px) saturate(180%);
-  border: 1px solid rgba(255, 255, 255, 0.10);
-  border-bottom: 1px solid rgba(255, 255, 255, 0.03);
+  /* TŁUMIENIE — saturate(100%) — szkło uspokaja plazmę, nie podbija */
+  -webkit-backdrop-filter: blur(48px) saturate(100%);
+          backdrop-filter: blur(48px) saturate(100%);
+  /* MIKRORAMKA — asymetryczna, dolna jeszcze ciemniejsza */
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.01);
   box-shadow:
-    /* A) lewitacja — zewnętrzny głęboki cień */
-    0 32px 64px -16px rgba(0, 0, 0, 0.60),
-    /* B) górna faza szkła — ostry highlight na rancie */
-    inset 0 1px 1px rgba(255, 255, 255, 0.25),
+    /* A) lewitacja — głębszy outer dla mroczniejszego odcięcia */
+    0 40px 80px -16px rgba(0, 0, 0, 0.80),
+    /* B) górna faza szkła — twardszy highlight rantu */
+    inset 0 1px 1px rgba(255, 255, 255, 0.15),
     /* C) boczne załamania */
     inset 1px 0 2px rgba(255, 255, 255, 0.05),
-    inset -1px 0 2px rgba(255, 255, 255, 0.02),
-    /* D) dolna faza — minimalny kiss */
-    inset 0 -1px 1px rgba(255, 255, 255, 0.03);
+    inset -1px 0 2px rgba(255, 255, 255, 0.02);
   text-align: left;
 }
 @media (max-width: 640px) {
@@ -327,8 +328,8 @@ body { font-variant-numeric: tabular-nums; }
 }
 @media (prefers-reduced-motion: reduce) {
   .hero-content-card {
-    -webkit-backdrop-filter: blur(24px) saturate(140%);
-            backdrop-filter: blur(24px) saturate(140%);
+    -webkit-backdrop-filter: blur(24px) saturate(100%);
+            backdrop-filter: blur(24px) saturate(100%);
   }
 }
 
