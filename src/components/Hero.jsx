@@ -134,26 +134,26 @@ export default function Hero() {
             </svg>
           </a>
 
-          {/* Hero headline — Instrument Serif italic + electric gradient second line */}
+          {/* Hero headline — Geist Bold, "Twój bonus" full white +
+              "już czeka." white/55 per owner screenshot (1:1 match). */}
           <h1
             id="hero-heading"
             ref={headlineRef}
-            className="mt-8 text-center lg:text-left"
+            className="font-display mt-8 text-center text-white lg:text-left"
             style={{
-              fontFamily: "'Instrument Serif', 'Geist', serif",
-              fontSize: "clamp(3rem, 10vw, 9rem)",
-              lineHeight: "0.95",
-              letterSpacing: "-0.03em",
-              fontWeight: 400,
+              fontSize: "clamp(3.5rem, 11vw, 10rem)",
+              lineHeight: "0.88",
+              letterSpacing: "-0.06em",
+              fontWeight: 700,
               transformOrigin: "left center",
               willChange: "transform",
             }}
           >
-            <HeroLine text="Twój bonus" baseDelay={120} italic color="#F5F7FA" />
+            <HeroLine text="Twój bonus" baseDelay={120} />
             <span
               data-rise="headline-2"
-              className="hero-rise block display-electric-gradient"
-              style={{ "--rise-delay": "650ms", fontStyle: "normal" }}
+              className="hero-rise block text-white/55"
+              style={{ "--rise-delay": "650ms" }}
             >
               już czeka.
             </span>
