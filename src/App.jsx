@@ -1,5 +1,7 @@
 import Nav from "./components/Nav";
 import Hero from "./components/Hero";
+import Bento from "./components/Bento";
+import Process from "./components/Process";
 import Footer from "./components/Footer";
 
 export default function App() {
@@ -16,6 +18,8 @@ export default function App() {
 
       <main>
         <Hero />
+        <Bento />
+        <Process />
       </main>
 
       <Footer />
