@@ -802,6 +802,25 @@ body { font-variant-numeric: tabular-nums; }
   pointer-events: none;
 }
 
+/* Ambient damping overlay — sits between FlowingLightBackground and the
+   cards. Brutal radial vignette eats the corners into darkness +
+   backdrop-blur kills the sharp neon striations so the offer cards
+   read as the hero, not the plasma. */
+.ambient-overlay {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 1;
+  background: radial-gradient(
+    circle at 50% 50%,
+    rgba(5, 5, 8, 0.45) 0%,
+    rgba(5, 5, 8, 0.85) 75%,
+    #050508 100%
+  );
+  -webkit-backdrop-filter: blur(8px);
+          backdrop-filter: blur(8px);
+}
+
 /* Floating glass nav pill — Zen-browser-style top nav */
 .nav-glass {
   background: rgba(10, 12, 20, 0.55);
