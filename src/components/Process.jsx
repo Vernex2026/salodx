@@ -23,10 +23,10 @@ export default function Process() {
     <section
       id="proces"
       aria-labelledby="process-heading"
-      className="relative isolate overflow-hidden"
-      style={{ background: "#000000" }}
+      className="section-light relative isolate overflow-hidden"
+      style={{ background: "#FAFAFA" }}
     >
-      <div className="relative z-10 mx-auto max-w-[1280px] px-6 py-24 sm:px-8 md:py-32 lg:px-12 lg:py-40">
+      <div className="relative z-10 mx-auto max-w-[1280px] px-6 py-32 sm:px-8 sm:py-40 md:py-48 lg:px-12 lg:py-56">
         <ProcessHeader />
 
         <ol
@@ -51,19 +51,20 @@ function ProcessHeader() {
     >
       <h2
         id="process-heading"
-        className="font-display text-white"
+        className="font-display"
         style={{
           fontFamily:
             "'Geist', -apple-system, BlinkMacSystemFont, 'Inter', sans-serif",
-          fontSize: "clamp(2.5rem, 7vw, 4.5rem)",
+          fontSize: "clamp(3rem, 9vw, 6rem)",
           fontWeight: 800,
-          lineHeight: 1.05,
-          letterSpacing: "-0.04em",
+          lineHeight: 1.02,
+          letterSpacing: "-0.045em",
           margin: 0,
+          color: "#06070B",
         }}
       >
         Jak pracujemy.{" "}
-        <span style={{ color: "#A1A1AA" }}>Bez agencji, bez chaosu.</span>
+        <span style={{ color: "#71717A" }}>Bez agencji, bez chaosu.</span>
       </h2>
     </div>
   );
@@ -84,7 +85,7 @@ function ProcessStep({ step, delay = 0 }) {
           fontSize: "13px",
           fontWeight: 500,
           letterSpacing: "0.15em",
-          color: "#52525B",
+          color: "#A1A1AA",
         }}
       >
         {step.number}
@@ -93,11 +94,11 @@ function ProcessStep({ step, delay = 0 }) {
         style={{
           fontFamily:
             "'Geist', -apple-system, BlinkMacSystemFont, 'Inter', sans-serif",
-          fontSize: "clamp(1.5rem, 2.4vw, 2rem)",
-          fontWeight: 700,
-          lineHeight: 1.1,
-          letterSpacing: "-0.03em",
-          color: "#FFFFFF",
+          fontSize: "clamp(1.875rem, 3vw, 2.625rem)",
+          fontWeight: 800,
+          lineHeight: 1.08,
+          letterSpacing: "-0.035em",
+          color: "#06070B",
           margin: "16px 0 0 0",
         }}
       >
@@ -107,10 +108,10 @@ function ProcessStep({ step, delay = 0 }) {
         style={{
           fontFamily:
             "'Geist', -apple-system, BlinkMacSystemFont, 'Inter', sans-serif",
-          fontSize: "16px",
+          fontSize: "17px",
           fontWeight: 400,
           lineHeight: 1.6,
-          color: "#A1A1AA",
+          color: "#52525B",
           margin: "16px 0 0 0",
           maxWidth: "32ch",
         }}

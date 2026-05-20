@@ -341,7 +341,7 @@ body { font-variant-numeric: tabular-nums; }
   width: 100%;
   max-width: 1100px;
   margin: 0 auto;
-  padding: 64px 56px;
+  padding: 96px 64px;
   border-radius: 48px;
   background: rgba(10, 10, 15, 0.78);
   -webkit-backdrop-filter: blur(36px) saturate(110%);
@@ -353,19 +353,79 @@ body { font-variant-numeric: tabular-nums; }
     inset 0 0 120px rgba(0, 0, 0, 0.35);
   display: flex;
   flex-direction: column;
-  gap: 40px;
+  gap: 28px;
+}
+.project-nexus-slab > * {
+  position: relative;
+  z-index: 2;
+}
+/* Cursor-follow border glow — Vercel/Linear bordered light effect.
+   Radial gradient masked to border only; opacity 0 → 1 on hover.
+   Disabled on touch (no hover capability). */
+.project-nexus-slab::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  padding: 1px;
+  background: radial-gradient(
+    320px circle at var(--mouse-x, -200px) var(--mouse-y, -200px),
+    rgba(255, 255, 255, 0.45),
+    transparent 60%
+  );
+  -webkit-mask:
+    linear-gradient(#fff 0 0) content-box,
+    linear-gradient(#fff 0 0);
+  -webkit-mask-composite: xor;
+          mask-composite: exclude;
+  opacity: 0;
+  transition: opacity 220ms var(--ease-out);
+  pointer-events: none;
+  z-index: 1;
+}
+.project-nexus-slab:hover::before {
+  opacity: 1;
+}
+@media (hover: none) {
+  .project-nexus-slab::before { display: none; }
 }
 @media (max-width: 640px) {
   .project-nexus-slab {
-    padding: 36px 28px;
+    padding: 56px 32px;
     border-radius: 32px;
-    gap: 28px;
+    gap: 24px;
   }
 }
 @media (prefers-reduced-motion: reduce) {
   .project-nexus-slab {
     -webkit-backdrop-filter: blur(16px);
             backdrop-filter: blur(16px);
+  }
+}
+
+/* NEXUS line-by-line blur reveal — Apple ease-soft, staggered via
+   --nexus-delay CSS var. Used for tag, headline lines, oneliner. */
+.nexus-reveal {
+  opacity: 0;
+  filter: blur(12px);
+  transform: translateY(20px);
+  transition:
+    opacity 800ms var(--ease-soft) var(--nexus-delay, 0ms),
+    filter 800ms var(--ease-soft) var(--nexus-delay, 0ms),
+    transform 800ms var(--ease-soft) var(--nexus-delay, 0ms);
+  will-change: opacity, filter, transform;
+}
+.nexus-reveal.is-visible {
+  opacity: 1;
+  filter: blur(0);
+  transform: translateY(0);
+}
+@media (prefers-reduced-motion: reduce) {
+  .nexus-reveal {
+    opacity: 1;
+    filter: none;
+    transform: none;
+    transition: none;
   }
 }
 
