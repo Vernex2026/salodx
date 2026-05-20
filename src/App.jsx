@@ -1,4 +1,5 @@
 import Nav from "./components/Nav";
+import Hero from "./components/Hero";
 import PremiumZenSplitLayout from "./components/PremiumZenSplitLayout";
 import TopPromos from "./components/TopPromos";
 import HowItWorks from "./components/HowItWorks";
@@ -20,6 +21,7 @@ export default function App() {
       <Nav />
 
       <main>
+        <Hero />
         <PremiumZenSplitLayout />
         <HowItWorks />
         <TopPromos />
