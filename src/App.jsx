@@ -1,10 +1,11 @@
 import Nav from "./components/Nav";
 import Hero from "./components/Hero";
-import Bento from "./components/Bento";
-import CodeTeardown from "./components/CodeTeardown";
-import Process from "./components/Process";
+import Pipeline from "./components/Pipeline";
+import AIPanel from "./components/AIPanel";
+import CaseStudies from "./components/CaseStudies";
 import Footer from "./components/Footer";
 import CommandPalette from "./components/CommandPalette";
+import { ParticleCloud } from "./components/decorative/ParticleCloud";
 
 export default function App() {
   return (
@@ -16,13 +17,22 @@ export default function App() {
         Przejdź do treści
       </a>
 
+      {/* Global ParticleCloud — fixed full-viewport, lives behind all sections */}
+      <div
+        aria-hidden="true"
+        className="pointer-events-none fixed inset-0 z-0"
+        style={{ background: "#00030a" }}
+      >
+        <ParticleCloud className="absolute inset-0" />
+      </div>
+
       <Nav />
 
-      <main>
+      <main className="relative z-10">
         <Hero />
-        <Bento />
-        <CodeTeardown />
-        <Process />
+        <Pipeline />
+        <AIPanel />
+        <CaseStudies />
       </main>
 
       <Footer />

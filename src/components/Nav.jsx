@@ -2,10 +2,10 @@ import { useEffect, useRef, useState } from "react";
 import { createPortal } from "react-dom";
 
 const LINKS = [
-  { label: "Praca",        href: "#praca" },
-  { label: "Stack",        href: "#stack" },
-  { label: "Case studies", href: "#nexus" },
-  { label: "Kontakt",      href: "mailto:biuro@vernex.pl" },
+  { label: "Proces",        href: "#pipeline" },
+  { label: "Panel AI",      href: "#panel" },
+  { label: "Case studies",  href: "#cases" },
+  { label: "Kontakt",       href: "mailto:biuro@vernex.pl" },
 ];
 
 export default function Nav() {

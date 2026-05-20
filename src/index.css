@@ -333,100 +333,544 @@ body { font-variant-numeric: tabular-nums; }
   }
 }
 
-/* Layer 2 — Project NEXUS case study slab. Ekstremalnie zaokrąglony
-   (48px) ciemny glass blok per Vernex pivot spec. Sit pod Hero
-   wewnątrz tej samej <section id="top"> — particles przebijają z tyłu. */
-.project-nexus-slab {
-  position: relative;
-  width: 100%;
-  max-width: 1100px;
-  margin: 0 auto;
-  padding: 96px 64px;
-  border-radius: 48px;
-  background: rgba(10, 10, 15, 0.78);
-  -webkit-backdrop-filter: blur(36px) saturate(110%);
-          backdrop-filter: blur(36px) saturate(110%);
-  border: 1px solid rgba(255, 255, 255, 0.08);
-  box-shadow:
-    0 30px 60px -12px rgba(0, 0, 0, 0.55),
-    inset 0 1px 0 rgba(255, 255, 255, 0.06),
-    inset 0 0 120px rgba(0, 0, 0, 0.35);
-  display: flex;
-  flex-direction: column;
-  gap: 28px;
-}
-.project-nexus-slab > * {
-  position: relative;
-  z-index: 2;
-}
-/* Cursor-follow border glow — Vercel/Linear bordered light effect.
-   Radial gradient masked to border only; opacity 0 → 1 on hover.
-   Disabled on touch (no hover capability). */
-.project-nexus-slab::before {
-  content: "";
-  position: absolute;
-  inset: 0;
-  border-radius: inherit;
-  padding: 1px;
-  background: radial-gradient(
-    320px circle at var(--mouse-x, -200px) var(--mouse-y, -200px),
-    rgba(255, 255, 255, 0.45),
-    transparent 60%
+/* ──────────────────────────────────────────────────────────
+   v4 "Pipeline of Truth" — Hero dimmer, Pipeline, AIPanel,
+   CaseStudies. ParticleCloud lives globally w App.jsx jako
+   fixed bg; sekcje są glass nad nim.
+   ────────────────────────────────────────────────────────── */
+
+/* Hero — overlay przyciemniający particles do ~55% per owner spec */
+.hero-dimmer {
+  background: linear-gradient(
+    180deg,
+    rgba(0, 3, 10, 0.40) 0%,
+    rgba(0, 3, 10, 0.55) 100%
   );
-  -webkit-mask:
-    linear-gradient(#fff 0 0) content-box,
-    linear-gradient(#fff 0 0);
-  -webkit-mask-composite: xor;
-          mask-composite: exclude;
-  opacity: 0;
-  transition: opacity 220ms var(--ease-out);
-  pointer-events: none;
-  z-index: 1;
-}
-.project-nexus-slab:hover::before {
-  opacity: 1;
-}
-@media (hover: none) {
-  .project-nexus-slab::before { display: none; }
-}
-@media (max-width: 640px) {
-  .project-nexus-slab {
-    padding: 56px 32px;
-    border-radius: 32px;
-    gap: 24px;
-  }
-}
-@media (prefers-reduced-motion: reduce) {
-  .project-nexus-slab {
-    -webkit-backdrop-filter: blur(16px);
-            backdrop-filter: blur(16px);
-  }
 }
 
-/* NEXUS line-by-line blur reveal — Apple ease-soft, staggered via
-   --nexus-delay CSS var. Used for tag, headline lines, oneliner. */
-.nexus-reveal {
+/* Universal blur-reveal — staggerowany via --pipeline-reveal-delay
+   CSS var. Apple ease-soft. Używany w Pipeline / AIPanel / CaseStudies. */
+.pipeline-reveal {
   opacity: 0;
-  filter: blur(12px);
-  transform: translateY(20px);
+  filter: blur(10px);
+  transform: translateY(18px);
   transition:
-    opacity 800ms var(--ease-soft) var(--nexus-delay, 0ms),
-    filter 800ms var(--ease-soft) var(--nexus-delay, 0ms),
-    transform 800ms var(--ease-soft) var(--nexus-delay, 0ms);
+    opacity 720ms var(--ease-soft) var(--pipeline-reveal-delay, 0ms),
+    filter 720ms var(--ease-soft) var(--pipeline-reveal-delay, 0ms),
+    transform 720ms var(--ease-soft) var(--pipeline-reveal-delay, 0ms);
   will-change: opacity, filter, transform;
 }
-.nexus-reveal.is-visible {
+.pipeline-reveal.is-visible {
   opacity: 1;
   filter: blur(0);
   transform: translateY(0);
 }
 @media (prefers-reduced-motion: reduce) {
-  .nexus-reveal {
+  .pipeline-reveal {
     opacity: 1;
     filter: none;
     transform: none;
     transition: none;
   }
+}
+
+/* ── Pipeline section ────────────────────────────────────── */
+.pipeline-section {
+  --pipeline-blur: 0px;
+  --pipeline-darken: 0;
+  background: transparent;
+}
+.pipeline-blur-overlay {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  -webkit-backdrop-filter: blur(var(--pipeline-blur));
+          backdrop-filter: blur(var(--pipeline-blur));
+  background: rgba(0, 3, 10, calc(0.55 + var(--pipeline-darken) * 0.30));
+  transition: background 200ms linear;
+}
+
+.pipeline-card {
+  position: relative;
+  padding: 40px;
+  border-radius: 28px;
+  background: rgba(10, 10, 15, 0.62);
+  -webkit-backdrop-filter: blur(24px) saturate(110%);
+          backdrop-filter: blur(24px) saturate(110%);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  box-shadow:
+    0 24px 48px -12px rgba(0, 0, 0, 0.55),
+    inset 0 1px 0 rgba(255, 255, 255, 0.06);
+}
+@media (max-width: 640px) {
+  .pipeline-card {
+    padding: 28px 24px;
+    border-radius: 22px;
+  }
+}
+
+.pipeline-progress {
+  flex: 1;
+  height: 2px;
+  background: rgba(255, 255, 255, 0.08);
+  border-radius: 1px;
+  overflow: hidden;
+  max-width: 240px;
+}
+.pipeline-progress-fill {
+  height: 100%;
+  background: #FFFFFF;
+  border-radius: 1px;
+  transition: width 480ms var(--ease-soft);
+}
+
+/* ── AIPanel — mock browser + prompt panel ───────────────── */
+.aipanel-stage {
+  position: relative;
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 24px;
+}
+@media (min-width: 1024px) {
+  .aipanel-stage {
+    grid-template-columns: minmax(0, 1.4fr) minmax(0, 1fr);
+    align-items: start;
+    gap: 32px;
+  }
+}
+
+.aipanel-browser {
+  position: relative;
+  border-radius: 18px;
+  background: #F4F4F0;
+  border: 1px solid rgba(255, 255, 255, 0.10);
+  box-shadow:
+    0 32px 64px -16px rgba(0, 0, 0, 0.65),
+    0 4px 12px rgba(0, 0, 0, 0.30);
+  overflow: hidden;
+}
+.aipanel-browser-chrome {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 12px 16px;
+  background: #E8E8E2;
+  border-bottom: 1px solid rgba(6, 7, 11, 0.10);
+}
+.aipanel-browser-dots {
+  display: flex;
+  gap: 6px;
+}
+.aipanel-browser-dots span {
+  display: block;
+  width: 11px;
+  height: 11px;
+  border-radius: 50%;
+}
+.aipanel-browser-url {
+  flex: 1;
+  text-align: center;
+  font-family: 'Geist Mono', ui-monospace, monospace;
+  font-size: 12px;
+  color: rgba(6, 7, 11, 0.55);
+  background: #FFFFFF;
+  border-radius: 8px;
+  padding: 6px 12px;
+  max-width: 280px;
+  margin: 0 auto;
+}
+.aipanel-browser-canvas {
+  padding: 48px 40px 56px;
+  background: #FFFFFF;
+  min-height: 360px;
+}
+@media (max-width: 640px) {
+  .aipanel-browser-canvas {
+    padding: 32px 24px 40px;
+    min-height: 280px;
+  }
+}
+.aipanel-mock-content {
+  max-width: 480px;
+}
+.aipanel-mock-eyebrow {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-family: 'Geist Mono', ui-monospace, monospace;
+  font-size: 11px;
+  font-weight: 500;
+  letter-spacing: 0.08em;
+  color: rgba(6, 7, 11, 0.55);
+}
+.aipanel-mock-badge {
+  display: inline-block;
+  padding: 3px 8px;
+  border-radius: 999px;
+  background: #00E5A0;
+  color: #06070B;
+  font-weight: 700;
+  font-size: 10px;
+  letter-spacing: 0.12em;
+  animation: aipanel-badge-pop 320ms var(--ease-spring);
+}
+@keyframes aipanel-badge-pop {
+  from { opacity: 0; transform: scale(0.6); }
+  to   { opacity: 1; transform: scale(1); }
+}
+.aipanel-mock-heading {
+  margin: 18px 0 0 0;
+  font-family: 'Geist', sans-serif;
+  font-size: clamp(2rem, 4vw, 3rem);
+  font-weight: 800;
+  line-height: 1.05;
+  letter-spacing: -0.04em;
+  transition: color 360ms var(--ease-soft);
+}
+.aipanel-mock-cta {
+  margin-top: 24px;
+  padding: 14px 24px;
+  border: none;
+  border-radius: 999px;
+  font-family: 'Geist', sans-serif;
+  font-weight: 600;
+  font-size: 15px;
+  cursor: pointer;
+  transform-origin: left center;
+  transition: background 360ms var(--ease-soft), color 360ms var(--ease-soft);
+}
+
+.aipanel-prompt-panel {
+  position: relative;
+  padding: 24px;
+  border-radius: 20px;
+  background: rgba(10, 10, 15, 0.85);
+  -webkit-backdrop-filter: blur(24px) saturate(120%);
+          backdrop-filter: blur(24px) saturate(120%);
+  border: 1px solid rgba(255, 255, 255, 0.10);
+  box-shadow:
+    0 24px 48px -12px rgba(0, 0, 0, 0.65),
+    inset 0 1px 0 rgba(255, 255, 255, 0.06);
+  font-family: 'Geist Mono', ui-monospace, monospace;
+  color: #E4E4E7;
+}
+.aipanel-prompt-header {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 11px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.55);
+}
+.aipanel-prompt-icon {
+  color: #00E5A0;
+  display: inline-flex;
+}
+.aipanel-prompt-status {
+  margin-left: auto;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 10px;
+  color: rgba(255, 255, 255, 0.70);
+}
+.aipanel-prompt-input {
+  margin-top: 16px;
+  padding: 14px 16px;
+  border-radius: 12px;
+  background: rgba(0, 0, 0, 0.45);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  font-size: 14px;
+  display: flex;
+  gap: 10px;
+  min-height: 52px;
+  align-items: flex-start;
+}
+.aipanel-prompt-input > span:first-child {
+  color: #00E5A0;
+  font-weight: 700;
+}
+.aipanel-prompt-text {
+  white-space: pre-wrap;
+  word-break: break-word;
+}
+.aipanel-cursor {
+  display: inline-block;
+  margin-left: 2px;
+  width: 7px;
+  background: #FFFFFF;
+  color: transparent;
+  animation: cmdk-cursor-blink 800ms steps(2, jump-none) infinite;
+}
+.aipanel-prompt-log {
+  margin-top: 14px;
+  padding: 14px 16px;
+  border-radius: 12px;
+  background: rgba(0, 0, 0, 0.30);
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  font-size: 13px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  max-height: 200px;
+  overflow-y: auto;
+}
+.aipanel-log-line {
+  display: flex;
+  align-items: flex-start;
+  animation: aipanel-log-in 380ms var(--ease-soft);
+}
+@keyframes aipanel-log-in {
+  from { opacity: 0; transform: translateX(-6px); }
+  to   { opacity: 1; transform: translateX(0); }
+}
+.aipanel-prompt-suggestions {
+  margin-top: 18px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  align-items: center;
+}
+.aipanel-prompt-suggestion-label {
+  font-size: 10px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.40);
+  margin-right: 4px;
+}
+.aipanel-chip {
+  padding: 6px 12px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  font-size: 11px;
+  color: rgba(255, 255, 255, 0.65);
+  transition: background 200ms ease, border-color 200ms ease;
+}
+.aipanel-chip.is-active {
+  background: rgba(0, 229, 160, 0.12);
+  border-color: rgba(0, 229, 160, 0.40);
+  color: #00E5A0;
+}
+
+/* ── CaseStudies — Trading mock + CRM mock ───────────────── */
+.case-card {
+  padding: 40px;
+  border-radius: 28px;
+  background: rgba(15, 15, 22, 0.62);
+  -webkit-backdrop-filter: blur(24px) saturate(110%);
+          backdrop-filter: blur(24px) saturate(110%);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  box-shadow:
+    0 24px 56px -16px rgba(0, 0, 0, 0.55),
+    inset 0 1px 0 rgba(255, 255, 255, 0.05);
+}
+@media (max-width: 640px) {
+  .case-card {
+    padding: 28px 22px;
+    border-radius: 22px;
+  }
+}
+.case-badge {
+  display: inline-block;
+  padding: 5px 11px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.10);
+  font-family: 'Geist Mono', ui-monospace, monospace;
+  font-size: 11px;
+  color: rgba(255, 255, 255, 0.75);
+}
+
+.trading-mock {
+  position: relative;
+  padding: 20px;
+  border-radius: 18px;
+  background: #0A0B11;
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+.trading-mock-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-family: 'Geist Mono', ui-monospace, monospace;
+  font-size: 13px;
+}
+.trading-mock-symbol {
+  letter-spacing: -0.01em;
+}
+.trading-mock-live {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 11px;
+  letter-spacing: 0.08em;
+  color: #00E5A0;
+}
+.trading-chart {
+  width: 100%;
+  height: 200px;
+  display: block;
+}
+.candle {
+  animation: trading-candle-in 320ms var(--ease-soft);
+}
+@keyframes trading-candle-in {
+  from { opacity: 0; transform: translateX(6px); }
+  to   { opacity: 1; transform: translateX(0); }
+}
+.trading-orderbook {
+  font-family: 'Geist Mono', ui-monospace, monospace;
+  font-size: 12px;
+}
+.trading-orderbook-head {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr 1fr;
+  gap: 8px;
+  padding-bottom: 8px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+  color: rgba(255, 255, 255, 0.45);
+  font-size: 10px;
+  letter-spacing: 0.12em;
+}
+.trading-orderbook-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr 1fr;
+  gap: 8px;
+  padding: 4px 0;
+  transition: background 200ms ease;
+}
+.trading-orderbook-row.is-flash {
+  background: rgba(0, 229, 160, 0.06);
+}
+
+.crm-mock {
+  position: relative;
+  padding: 24px;
+  border-radius: 18px;
+  background: #0A0B11;
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+}
+.crm-mock-source-label {
+  font-family: 'Geist Mono', ui-monospace, monospace;
+  font-size: 10px;
+  letter-spacing: 0.12em;
+  color: rgba(255, 255, 255, 0.45);
+  margin-bottom: 10px;
+}
+.crm-mock-source {
+  display: flex;
+  flex-direction: column;
+}
+.crm-mock-cards {
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+.crm-mock-card {
+  padding: 14px 16px;
+  border-radius: 8px;
+  min-width: 140px;
+  color: #06070B;
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.35);
+  font-family: 'Geist', sans-serif;
+  transform-origin: center;
+}
+.crm-mock-card.is-fly {
+  animation: crm-card-fly 5s var(--ease-soft) infinite;
+}
+@keyframes crm-card-fly {
+  0%, 35%   { opacity: 1; transform: translateY(0) rotate(var(--r, 0deg)); }
+  60%       { opacity: 0.4; transform: translateY(40px) rotate(0deg) scale(0.85); }
+  75%, 100% { opacity: 0; transform: translateY(80px) rotate(0deg) scale(0.6); }
+}
+.crm-mock-card-title {
+  font-weight: 700;
+  font-size: 13px;
+}
+.crm-mock-card-meta {
+  margin-top: 4px;
+  font-size: 11px;
+  opacity: 0.65;
+}
+.crm-mock-arrow {
+  display: flex;
+  justify-content: center;
+}
+.crm-mock-target {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+.crm-mock-target-head {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+}
+.crm-mock-target-status {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-family: 'Geist Mono', ui-monospace, monospace;
+  font-size: 11px;
+  color: #00E5A0;
+}
+.crm-mock-grid {
+  display: flex;
+  flex-direction: column;
+  background: rgba(0, 0, 0, 0.30);
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  border-radius: 12px;
+  overflow: hidden;
+}
+.crm-mock-grid-head,
+.crm-mock-grid-row {
+  display: grid;
+  grid-template-columns: 60px 1.6fr 1fr 80px;
+  gap: 12px;
+  padding: 10px 14px;
+  font-family: 'Geist Mono', ui-monospace, monospace;
+  font-size: 12px;
+  align-items: center;
+}
+.crm-mock-grid-head {
+  background: rgba(255, 255, 255, 0.03);
+  color: rgba(255, 255, 255, 0.45);
+  font-size: 10px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+}
+.crm-mock-grid-row {
+  border-bottom: 1px solid rgba(255, 255, 255, 0.04);
+  animation: crm-row-in 420ms var(--ease-soft) backwards;
+}
+.crm-mock-grid-row:last-child {
+  border-bottom: none;
+}
+@keyframes crm-row-in {
+  from { opacity: 0; transform: translateY(6px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+.crm-mock-progress {
+  height: 4px;
+  background: rgba(255, 255, 255, 0.06);
+  border-radius: 2px;
+  overflow: hidden;
+}
+.crm-mock-progress-fill {
+  height: 100%;
+  background: #00E5A0;
+  border-radius: 2px;
+  transition: width 200ms linear;
 }
 
 /* Cmd+K command palette — pill rise, overlay fade, modal pop */
