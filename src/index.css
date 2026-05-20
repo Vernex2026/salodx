@@ -286,6 +286,35 @@ body { font-variant-numeric: tabular-nums; }
   }
 }
 
+/* v16 — full hero content card. Owner spec: pill + headline + subhead
+   + CTAs + trust all wrapped in one optical-separation glass plate
+   so brutalist Geist 800 typo reads over the QuantumCore bloom. */
+.hero-content-card {
+  position: relative;
+  max-width: 680px;
+  width: 100%;
+  padding: 48px;
+  border-radius: 24px;
+  background: rgba(9, 9, 11, 0.40);
+  -webkit-backdrop-filter: blur(32px);
+          backdrop-filter: blur(32px);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  box-shadow: 0 24px 48px rgba(0, 0, 0, 0.40);
+  text-align: left;
+}
+@media (max-width: 640px) {
+  .hero-content-card {
+    padding: 28px;
+    border-radius: 20px;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .hero-content-card {
+    -webkit-backdrop-filter: blur(16px);
+            backdrop-filter: blur(16px);
+  }
+}
+
 /* Procedural starfield twinkle (HeroStarfield component) */
 .hero-starfield {
   animation: starsTwinkle 6s ease-in-out infinite;
