@@ -57,6 +57,8 @@ export default function TopPromos() {
       style={{ background: "var(--color-black)" }}
     >
       <FlowingLightBackground opacity={0.85} blendMode="screen" preload="none" />
+      {/* Ambient damping — tłumi plazmę żeby karty były bohaterem */}
+      <div className="ambient-overlay" aria-hidden="true" />
 
       <div className="relative z-10 mx-auto max-w-[1280px] px-6 py-24 sm:px-8 md:py-32 lg:px-12 lg:py-40">
         {/* Header */}
@@ -191,12 +193,12 @@ function OfferCard({ offer, delay = 0 }) {
               <span
                 className="numeric text-white"
                 style={{
-                  fontFamily: "'Instrument Serif', 'Geist', serif",
-                  fontStyle: "italic",
-                  fontSize: featured ? "6.25rem" : "5.25rem",
-                  lineHeight: "0.92",
-                  letterSpacing: "-0.02em",
-                  fontWeight: 400,
+                  fontFamily: "'Geist', 'Inter', -apple-system, sans-serif",
+                  fontVariantNumeric: "tabular-nums",
+                  fontSize: featured ? "5.75rem" : "5rem",
+                  lineHeight: "0.95",
+                  letterSpacing: "-0.04em",
+                  fontWeight: 300,
                 }}
               >
                 {bonus}
@@ -204,10 +206,10 @@ function OfferCard({ offer, delay = 0 }) {
               <span
                 className="text-white/55"
                 style={{
-                  fontFamily: "'Instrument Serif', 'Geist', serif",
-                  fontStyle: "italic",
-                  fontSize: "1.6rem",
+                  fontFamily: "'Geist', 'Inter', -apple-system, sans-serif",
+                  fontSize: "1.5rem",
                   fontWeight: 400,
+                  letterSpacing: "-0.02em",
                 }}
               >
                 zł
@@ -251,10 +253,10 @@ function OfferCard({ offer, delay = 0 }) {
                 <span
                   className="numeric text-white"
                   style={{
-                    fontFamily: "'Instrument Serif', 'Geist', serif",
-                    fontStyle: "italic",
-                    fontSize: "1.85rem",
-                    letterSpacing: "-0.01em",
+                    fontFamily: "'Geist', 'Inter', -apple-system, sans-serif",
+                    fontVariantNumeric: "tabular-nums",
+                    fontSize: "1.75rem",
+                    letterSpacing: "-0.03em",
                     fontWeight: 400,
                   }}
                 >

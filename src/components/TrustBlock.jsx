@@ -122,16 +122,18 @@ function Testimonial() {
 
       <blockquote>
         <p
-          className="font-display text-[var(--color-ink)]"
+          className="text-[var(--color-ink)]"
           style={{
-            fontSize: "clamp(1.4rem, 2.6vw, 2rem)",
-            lineHeight: "1.32",
+            fontFamily: "'Geist', 'Inter', -apple-system, sans-serif",
+            fontWeight: 400,
+            fontSize: "clamp(1.45rem, 2.7vw, 2.05rem)",
+            lineHeight: "1.4",
             letterSpacing: "-0.015em",
           }}
         >
           Codziennie skanują 24 banki i mówią mi tylko o ofertach pod mój profil.
           Zero spamu.{" "}
-          <span className="italic text-[var(--color-muted)]">
+          <span className="text-[var(--color-muted)]">
             Wreszcie ktoś robi to porządnie zamiast porównywarki sprzed dekady.
           </span>
         </p>
