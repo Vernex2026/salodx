@@ -1,8 +1,10 @@
 import Nav from "./components/Nav";
 import Hero from "./components/Hero";
 import Bento from "./components/Bento";
+import CodeTeardown from "./components/CodeTeardown";
 import Process from "./components/Process";
 import Footer from "./components/Footer";
+import CommandPalette from "./components/CommandPalette";
 
 export default function App() {
   return (
@@ -19,10 +21,13 @@ export default function App() {
       <main>
         <Hero />
         <Bento />
+        <CodeTeardown />
         <Process />
       </main>
 
       <Footer />
+
+      <CommandPalette />
     </>
   );
 }
