@@ -12,14 +12,31 @@ const LINKS = [
 export default function Nav() {
   const [open, setOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
+  const [overLight, setOverLight] = useState(false);
   const hamburgerRef = useRef(null);
 
-  // Scrolled state — glass nav after 64px
+  // Scrolled state + light-section detection — every scroll tick we
+  // check whether any .section-light element overlaps the nav pill's
+  // vertical strip. If yes, swap to light glass + dark text.
   useEffect(() => {
-    const onScroll = () => setScrolled(window.scrollY > 64);
+    const onScroll = () => {
+      setScrolled(window.scrollY > 64);
+      const navCenterY = 42; // top: 12 + height 60 / 2
+      const lights = document.querySelectorAll(".section-light");
+      let touchingLight = false;
+      lights.forEach((s) => {
+        const r = s.getBoundingClientRect();
+        if (r.top <= navCenterY && r.bottom >= navCenterY) touchingLight = true;
+      });
+      setOverLight(touchingLight);
+    };
     onScroll();
     window.addEventListener("scroll", onScroll, { passive: true });
-    return () => window.removeEventListener("scroll", onScroll);
+    window.addEventListener("resize", onScroll, { passive: true });
+    return () => {
+      window.removeEventListener("scroll", onScroll);
+      window.removeEventListener("resize", onScroll);
+    };
   }, []);
 
   // Scroll lock + Esc when menu open
@@ -47,6 +64,7 @@ export default function Nav() {
         <nav
           aria-label="Główna nawigacja"
           data-scrolled={scrolled || open ? "true" : "false"}
+          data-light={overLight && !open ? "true" : "false"}
           className="nav-glass flex h-[60px] items-center justify-between rounded-full pl-4 pr-2 sm:pl-5 sm:pr-3"
         >
           {/* Wordmark */}

@@ -821,21 +821,81 @@ body { font-variant-numeric: tabular-nums; }
           backdrop-filter: blur(8px);
 }
 
-/* Floating glass nav pill — Zen-browser-style top nav */
+/* Floating glass nav pill — Zen-browser-style top nav.
+   Default = dark glass for dark sections (Hero, TopPromos, Trust).
+   When scroll detects an overlapping .section-light element, the nav
+   gets data-light="true" and flips to light frosted glass with dark
+   text for harmony with white sections (HowItWorks). */
 .nav-glass {
   background: rgba(10, 12, 20, 0.55);
   -webkit-backdrop-filter: blur(32px) saturate(180%);
-  backdrop-filter: blur(32px) saturate(180%);
+          backdrop-filter: blur(32px) saturate(180%);
   border: 1px solid rgba(255, 255, 255, 0.14);
   box-shadow:
     inset 0 1px 0 rgba(255, 255, 255, 0.18),
     0 1px 2px rgba(0, 0, 0, 0.40),
     0 12px 32px -8px rgba(0, 0, 0, 0.50);
-  transition: background 240ms var(--ease-out);
+  transition:
+    background 400ms cubic-bezier(0.25, 1, 0.5, 1),
+    border-color 400ms cubic-bezier(0.25, 1, 0.5, 1),
+    box-shadow 400ms cubic-bezier(0.25, 1, 0.5, 1),
+    color 400ms cubic-bezier(0.25, 1, 0.5, 1);
   will-change: backdrop-filter;
 }
-.nav-glass[data-scrolled="true"] {
+.nav-glass[data-scrolled="true"]:not([data-light="true"]) {
   background: rgba(10, 12, 20, 0.70);
+}
+
+/* Light variant — for HowItWorks (.section-light) and any future
+   light section. Frosted white glass, dark text, soft drop shadow. */
+.nav-glass[data-light="true"] {
+  background: rgba(255, 255, 255, 0.85);
+  border: 1px solid rgba(0, 0, 0, 0.06);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.60),
+    0 1px 2px rgba(0, 0, 0, 0.04),
+    0 12px 32px -8px rgba(0, 0, 0, 0.10);
+}
+/* Invert text + icon colors inside the pill */
+.nav-glass[data-light="true"] {
+  color: #09090b;
+}
+.nav-glass[data-light="true"] [class*="text-white"]:not(.live-dot),
+.nav-glass[data-light="true"] [style*="color: rgb(255, 255, 255)"] {
+  color: #09090b !important;
+}
+.nav-glass[data-light="true"] [style*="color: rgb(161, 161, 170)"] {
+  color: #52525b !important;
+}
+.nav-glass[data-light="true"] [style*="color: rgb(82, 82, 91)"],
+.nav-glass[data-light="true"] [style*="color: rgb(113, 113, 122)"] {
+  color: #71717a !important;
+}
+/* Logo block — flip from white square + dark "S" to dark square + white "S" */
+.nav-glass[data-light="true"] a[href="#top"] > span[aria-hidden="true"] {
+  background: #09090b !important;
+}
+.nav-glass[data-light="true"] a[href="#top"] > span[aria-hidden="true"] > span {
+  color: #ffffff !important;
+}
+/* Live counter pill — light tint instead of white/04 on dark */
+.nav-glass[data-light="true"] .md\:flex,
+.nav-glass[data-light="true"] a[href="#promocje"],
+.nav-glass[data-light="true"] .hamburger {
+  background: rgba(9, 9, 11, 0.04) !important;
+  border-color: rgba(9, 9, 11, 0.08) !important;
+}
+.nav-glass[data-light="true"] a[href="#promocje"]:hover,
+.nav-glass[data-light="true"] .hamburger:hover {
+  background: rgba(9, 9, 11, 0.08) !important;
+  border-color: rgba(9, 9, 11, 0.16) !important;
+}
+/* Hamburger lines + separator dot need explicit dark fill */
+.nav-glass[data-light="true"] .hamburger-line {
+  background: #09090b !important;
+}
+.nav-glass[data-light="true"] [class*="bg-white"] {
+  background: rgba(9, 9, 11, 0.04) !important;
 }
 
 /* Light glass — phone wrapper in HowItWorks (cream section) */
