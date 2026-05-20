@@ -115,15 +115,16 @@ export default function Hero() {
           </svg>
         </a>
 
-        {/* Headline — Instrument Serif per v14 spec */}
+        {/* Headline — Instrument Serif on a dark glass plate so the
+            text reads over the bright QuantumCore bloom blowout */}
         <h1
           id="hero-heading"
           ref={headlineRef}
-          className="mt-8 text-white"
+          className="hero-headline-plate mt-8 inline-block text-white"
           style={{
             fontFamily: "'Instrument Serif', 'Geist', serif",
-            fontSize: "clamp(2.75rem, 8vw, 7.5rem)",
-            lineHeight: "1.0",
+            fontSize: "clamp(2.5rem, 7.5vw, 6.5rem)",
+            lineHeight: "1.05",
             letterSpacing: "-0.03em",
             fontWeight: 400,
             transformOrigin: "center center",
