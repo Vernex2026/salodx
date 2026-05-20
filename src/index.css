@@ -208,6 +208,50 @@ body { font-variant-numeric: tabular-nums; }
 }
 
 /* ──────────────────────────────────────────────────────────
+   v13 hero typography — electric gradient on "już czeka." +
+   procedural starfield twinkle. Used in <Hero> + <HeroStarfield>.
+   ────────────────────────────────────────────────────────── */
+.display-electric-gradient {
+  background: linear-gradient(
+    105deg,
+    #4D7CFF 0%,
+    #7B5CFF 45%,
+    #00E5FF 100%
+  );
+  background-size: 200% 100%;
+  -webkit-background-clip: text;
+          background-clip: text;
+  color: transparent;
+  filter:
+    drop-shadow(0 0 24px rgba(123, 92, 255, 0.40))
+    drop-shadow(0 0 64px rgba(77, 124, 255, 0.20));
+  animation: gradientShift 12s ease-in-out infinite;
+}
+@keyframes gradientShift {
+  0%, 100% { background-position: 0% 50%; }
+  50%      { background-position: 100% 50%; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .display-electric-gradient {
+    animation: none;
+    background-position: 50% 50%;
+  }
+}
+
+/* Procedural starfield twinkle (HeroStarfield component) */
+.hero-starfield {
+  animation: starsTwinkle 6s ease-in-out infinite;
+  will-change: opacity;
+}
+@keyframes starsTwinkle {
+  0%, 100% { opacity: 0.60; }
+  50%      { opacity: 1.00; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .hero-starfield { animation: none; opacity: 0.75; }
+}
+
+/* ──────────────────────────────────────────────────────────
    Hero spotlight — cursor-tracked sharp radial wash.
    No blur. Subtle alpha only. Disabled on touch + RM.
    ────────────────────────────────────────────────────────── */
@@ -506,6 +550,34 @@ body { font-variant-numeric: tabular-nums; }
 .cta-coral:active,
 .cta-electric:active {
   transform: translateY(0);
+}
+
+/* v13 — electric gradient pill on cosmic hero. Heavy violet/blue
+   glow shadow, intensifies on hover. */
+.cta-primary--electric {
+  background: linear-gradient(135deg, #4D7CFF 0%, #7B5CFF 100%);
+  color: #FFFFFF;
+  padding: 18px 28px;
+  font-size: 16px;
+  font-weight: 600;
+  overflow: hidden;
+  box-shadow:
+    inset 0 0 0 1px rgba(255, 255, 255, 0.10),
+    0 8px 32px rgba(77, 124, 255, 0.48),
+    0 16px 64px rgba(123, 92, 255, 0.32);
+  transition:
+    transform 200ms var(--ease-spring),
+    box-shadow 280ms var(--ease-out);
+}
+.cta-primary--electric:hover {
+  transform: translateY(-2px) scale(1.02);
+  box-shadow:
+    inset 0 0 0 1px rgba(255, 255, 255, 0.14),
+    0 12px 40px rgba(77, 124, 255, 0.64),
+    0 24px 80px rgba(123, 92, 255, 0.40);
+}
+.cta-primary--electric:active {
+  transform: translateY(0) scale(1);
 }
 
 /* Dark pill — used on light sections */
@@ -879,22 +951,12 @@ body { font-variant-numeric: tabular-nums; }
 .section-bridge,
 .section-rail,
 .glass-card,
-.card-onyx,
-.display-electric-gradient {
+.card-onyx {
   background: transparent;
 }
-.display-electric-gradient,
-.display-electric-gradient .halo {
-  background: none !important;
-  -webkit-background-clip: border-box !important;
-  background-clip: border-box !important;
-  color: inherit !important;
-  filter: none !important;
-  animation: none !important;
-}
-.display-electric-gradient .halo {
-  display: none !important;
-}
+/* NOTE: legacy v3/v4 "no gradient text" kill-switch on
+   .display-electric-gradient removed in v13 — owner explicitly
+   unlocked electric gradient + halo on the hero headline. */
 
 /* ──────────────────────────────────────────────────────────
    Reduced motion fallback

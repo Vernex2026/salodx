@@ -1,20 +1,11 @@
-import { lazy, Suspense, useEffect, useLayoutEffect, useRef, useState } from "react";
+import { useEffect, useLayoutEffect, useRef, useState } from "react";
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { useMagnetic } from "../hooks/useMagnetic";
-import HeroCardFallback from "./HeroCardFallback";
 import HeroSpotlight from "./HeroSpotlight";
 import BackgroundBeams from "./BackgroundBeams";
-import ErrorBoundary from "./ErrorBoundary";
-
-const HeroCardScene = lazy(() => import("./HeroCardScene"));
-
-const isLightweightClient = () => {
-  if (typeof window === "undefined") return true;
-  if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return true;
-  if (window.matchMedia("(max-width: 1024px)").matches) return true;
-  return false;
-};
+import FlowingLightBackground from "./decorative/FlowingLightBackground";
+import HeroStarfield from "./decorative/HeroStarfield";
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -22,21 +13,18 @@ const prefersReducedMotion = () =>
   typeof window !== "undefined" &&
   window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
+const COSMIC_BG =
+  "radial-gradient(ellipse 60% 50% at 25% 30%, rgba(77, 124, 255, 0.18) 0%, transparent 60%)," +
+  "radial-gradient(ellipse 50% 40% at 75% 70%, rgba(123, 92, 255, 0.20) 0%, transparent 55%)," +
+  "radial-gradient(ellipse 80% 60% at 50% 100%, rgba(0, 229, 255, 0.10) 0%, transparent 65%)," +
+  "linear-gradient(180deg, #050811 0%, #0A0F1E 50%, #050811 100%)";
+
 export default function Hero() {
   const sectionRef = useRef(null);
   const primaryCtaRef = useRef(null);
   const headlineRef = useRef(null);
 
   const [gsapActive] = useState(() => !prefersReducedMotion());
-  const [useScene, setUseScene] = useState(false);
-
-  useEffect(() => {
-    if (isLightweightClient()) return;
-    // Defer scene mount one frame so the typography reveal animation
-    // has the main thread to itself for the first paint.
-    const id = window.requestAnimationFrame(() => setUseScene(true));
-    return () => window.cancelAnimationFrame(id);
-  }, []);
 
   useMagnetic(primaryCtaRef, { strength: 0.18, radius: 110, max: 5 });
 
@@ -72,11 +60,6 @@ export default function Hero() {
           ".hero-rise[data-rise='trust']",
           { y: 14, opacity: 0, duration: 0.55 },
           "-=0.40"
-        )
-        .from(
-          ".hero-rise[data-rise='stack']",
-          { y: 24, opacity: 0, scale: 0.96, duration: 1.0, ease: "power2.out" },
-          0.35
         );
 
       gsap.to(headlineRef.current, {
@@ -108,16 +91,24 @@ export default function Hero() {
       id="top"
       aria-labelledby="hero-heading"
       data-gsap-active={gsapActive ? "true" : "false"}
-      className="relative isolate overflow-hidden"
-      style={{ background: "var(--color-black)" }}
+      className="relative isolate min-h-screen overflow-hidden"
+      style={{ background: COSMIC_BG }}
     >
-      {/* Behind content: animated sharp beams + cursor spotlight */}
+      {/* Layer order (back→front): video → starfield → beams → spotlight → content */}
+      <FlowingLightBackground
+        opacity={0.65}
+        blendMode="screen"
+        scale={1.6}
+        speed={0.7}
+        preload="auto"
+      />
+      <HeroStarfield count={150} />
       <BackgroundBeams />
       <HeroSpotlight sectionRef={sectionRef} />
 
-      <div className="relative z-10 mx-auto grid w-full max-w-[1280px] gap-10 px-6 pb-24 pt-28 sm:px-8 md:pb-32 md:pt-32 lg:grid-cols-12 lg:gap-12 lg:px-12 lg:pb-40 lg:pt-36">
-        {/* ── LEFT COLUMN — Typography + CTA ─────────────────── */}
-        <div className="lg:col-span-8 lg:pr-4 flex flex-col justify-center">
+      <div className="relative z-10 mx-auto grid w-full max-w-[1280px] grid-cols-12 gap-6 px-6 pb-24 pt-28 sm:px-8 md:pb-32 md:pt-32 lg:gap-8 lg:px-12 lg:pb-40 lg:pt-36">
+        {/* LEFT COLUMN — col-span-7 content */}
+        <div className="col-span-12 flex flex-col justify-center lg:col-span-7">
           {/* Pill — insider signal (minimal) */}
           <a
             href="#promocje"
@@ -143,25 +134,26 @@ export default function Hero() {
             </svg>
           </a>
 
-          {/* Hero headline — solid white Geist Bold, no gradient, no halo */}
+          {/* Hero headline — Instrument Serif italic + electric gradient second line */}
           <h1
             id="hero-heading"
             ref={headlineRef}
-            className="font-display mt-8 text-center text-white lg:text-left"
+            className="mt-8 text-center lg:text-left"
             style={{
-              fontSize: "clamp(3.5rem, 11vw, 10rem)",
-              lineHeight: "0.88",
-              letterSpacing: "-0.06em",
-              fontWeight: 700,
+              fontFamily: "'Instrument Serif', 'Geist', serif",
+              fontSize: "clamp(3rem, 10vw, 9rem)",
+              lineHeight: "0.95",
+              letterSpacing: "-0.03em",
+              fontWeight: 400,
               transformOrigin: "left center",
               willChange: "transform",
             }}
           >
-            <HeroLine text="Twój bonus" baseDelay={120} />
+            <HeroLine text="Twój bonus" baseDelay={120} italic color="#F5F7FA" />
             <span
               data-rise="headline-2"
-              className="hero-rise block text-shimmer"
-              style={{ "--rise-delay": "650ms" }}
+              className="hero-rise block display-electric-gradient"
+              style={{ "--rise-delay": "650ms", fontStyle: "normal" }}
             >
               już czeka.
             </span>
@@ -170,7 +162,7 @@ export default function Hero() {
           {/* Subhead */}
           <p
             data-rise="subhead"
-            className="hero-rise mx-auto mt-7 max-w-[460px] text-center text-[17px] leading-[1.5] text-white/60 sm:text-[19px] lg:mx-0 lg:text-left"
+            className="hero-rise mx-auto mt-7 max-w-[460px] text-center text-[17px] leading-[1.5] text-white/65 sm:text-[19px] lg:mx-0 lg:text-left"
             style={{ "--rise-delay": "900ms" }}
           >
             Codziennie skanujemy 24 banki. Pokazujemy tylko oferty warte Twojego czasu.
@@ -185,7 +177,7 @@ export default function Hero() {
             <a
               ref={primaryCtaRef}
               href="#promocje"
-              className="cta-primary cta-primary--light"
+              className="cta-primary cta-primary--electric"
             >
               Zobacz dzisiejsze oferty
               <svg
@@ -246,23 +238,8 @@ export default function Hero() {
           </div>
         </div>
 
-        {/* ── RIGHT COLUMN — 3D bank-card scene ──────────────── */}
-        <div className="relative lg:col-span-4">
-          <div
-            data-rise="stack"
-            className="hero-rise relative mx-auto w-full max-w-md lg:max-w-[560px]"
-          >
-            {useScene ? (
-              <ErrorBoundary fallback={<HeroCardFallback />}>
-                <Suspense fallback={<HeroCardFallback />}>
-                  <HeroCardScene />
-                </Suspense>
-              </ErrorBoundary>
-            ) : (
-              <HeroCardFallback />
-            )}
-          </div>
-        </div>
+        {/* RIGHT COLUMN — intentionally empty per v13 spec (breathing room) */}
+        <div className="hidden lg:col-span-5 lg:block" aria-hidden="true" />
       </div>
 
       {/* Bottom hairline — sharp section divider, Revolut style */}
@@ -276,11 +253,15 @@ export default function Hero() {
 }
 
 /* ── Headline line — char-by-char reveal ─────────────────────── */
-function HeroLine({ text, baseDelay }) {
+function HeroLine({ text, baseDelay, italic = false, color = "#FFFFFF" }) {
   const words = text.split(" ");
   let charIdx = 0;
   return (
-    <span className="block" aria-label={text}>
+    <span
+      className="block"
+      aria-label={text}
+      style={{ fontStyle: italic ? "italic" : "normal", color }}
+    >
       {words.map((word, wi) => {
         const wordNode = (
           <span key={wi} className="inline-block whitespace-nowrap">

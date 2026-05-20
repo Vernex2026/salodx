@@ -56,7 +56,7 @@ export default function TopPromos() {
       className="section-atmosphere-promos relative isolate overflow-hidden"
       style={{ background: "var(--color-black)" }}
     >
-      <FlowingLightBackground opacity={0.85} blendMode="screen" />
+      <FlowingLightBackground opacity={0.85} blendMode="screen" preload="none" />
 
       <div className="relative z-10 mx-auto max-w-[1280px] px-6 py-24 sm:px-8 md:py-32 lg:px-12 lg:py-40">
         {/* Header */}
