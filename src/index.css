@@ -286,32 +286,49 @@ body { font-variant-numeric: tabular-nums; }
   }
 }
 
-/* v16 — full hero content card. Owner spec: pill + headline + subhead
-   + CTAs + trust all wrapped in one optical-separation glass plate
-   so brutalist Geist 800 typo reads over the QuantumCore bloom. */
+/* v16+ — full hero content card. VisionOS-tier glass per owner spec:
+   soczewka (blur 48 + saturate 180) podbija plazmę pod spodem,
+   asymetryczny gradient daje "masę szkła", warstwowe inset shadows
+   symulują światło na zaokrąglonym rancie polerowanego krzyształu,
+   asymetryczna ramka (jaśniejsza góra / ciemniejszy dół) bo światło
+   pada z góry. */
 .hero-content-card {
   position: relative;
   max-width: 680px;
   width: 100%;
   padding: 48px;
-  border-radius: 24px;
-  background: rgba(9, 9, 11, 0.40);
-  -webkit-backdrop-filter: blur(32px);
-          backdrop-filter: blur(32px);
-  border: 1px solid rgba(255, 255, 255, 0.08);
-  box-shadow: 0 24px 48px rgba(0, 0, 0, 0.40);
+  border-radius: 32px;
+  background: linear-gradient(
+    135deg,
+    rgba(255, 255, 255, 0.08) 0%,
+    rgba(255, 255, 255, 0.01) 100%
+  );
+  -webkit-backdrop-filter: blur(48px) saturate(180%);
+          backdrop-filter: blur(48px) saturate(180%);
+  border: 1px solid rgba(255, 255, 255, 0.10);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.03);
+  box-shadow:
+    /* A) lewitacja — zewnętrzny głęboki cień */
+    0 32px 64px -16px rgba(0, 0, 0, 0.60),
+    /* B) górna faza szkła — ostry highlight na rancie */
+    inset 0 1px 1px rgba(255, 255, 255, 0.25),
+    /* C) boczne załamania */
+    inset 1px 0 2px rgba(255, 255, 255, 0.05),
+    inset -1px 0 2px rgba(255, 255, 255, 0.02),
+    /* D) dolna faza — minimalny kiss */
+    inset 0 -1px 1px rgba(255, 255, 255, 0.03);
   text-align: left;
 }
 @media (max-width: 640px) {
   .hero-content-card {
     padding: 28px;
-    border-radius: 20px;
+    border-radius: 24px;
   }
 }
 @media (prefers-reduced-motion: reduce) {
   .hero-content-card {
-    -webkit-backdrop-filter: blur(16px);
-            backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(24px) saturate(140%);
+            backdrop-filter: blur(24px) saturate(140%);
   }
 }
 
