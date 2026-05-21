@@ -4,7 +4,7 @@ import { createPortal } from "react-dom";
 const LINKS = [
   { label: "Proces",        href: "#pipeline" },
   { label: "Panel AI",      href: "#panel" },
-  { label: "Case studies",  href: "#cases" },
+  { label: "Case studies",  href: "#proof" },
   { label: "Kontakt",       href: "mailto:biuro@vernex.pl" },
 ];
 

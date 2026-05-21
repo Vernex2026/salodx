@@ -2,7 +2,9 @@ import Nav from "./components/Nav";
 import Hero from "./components/Hero";
 import Pipeline from "./components/Pipeline";
 import AIPanel from "./components/AIPanel";
-import CaseStudies from "./components/CaseStudies";
+import Proof from "./components/Proof";
+import Manifesto from "./components/Manifesto";
+import Terminal from "./components/Terminal";
 import Footer from "./components/Footer";
 import CommandPalette from "./components/CommandPalette";
 import { ParticleCloud } from "./components/decorative/ParticleCloud";
@@ -32,7 +34,9 @@ export default function App() {
         <Hero />
         <Pipeline />
         <AIPanel />
-        <CaseStudies />
+        <Proof />
+        <Manifesto />
+        <Terminal />
       </main>
 
       <Footer />
