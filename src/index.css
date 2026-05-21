@@ -709,21 +709,35 @@ body { font-variant-numeric: tabular-nums; }
   flex: 0 0 100vw;
   width: 100vw;
   height: 100vh;
-  padding: 6vh 6vw;
+  padding: 6vh 4vw;
+  display: flex;
+  align-items: stretch;
+  cursor: pointer;
+}
+.proof-panel:focus-visible {
+  outline: none;
+}
+.proof-panel:focus-visible .proof-panel-inner {
+  outline: 2px solid #00E5A0;
+  outline-offset: 4px;
+}
+.proof-panel-inner {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  border-radius: 28px;
   background: rgba(15, 15, 22, 0.78);
   -webkit-backdrop-filter: blur(20px) saturate(110%);
           backdrop-filter: blur(20px) saturate(110%);
-  border-top: 1px solid rgba(255, 255, 255, 0.06);
-  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
-  cursor: pointer;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  box-shadow:
+    0 32px 80px -20px rgba(0, 0, 0, 0.75),
+    inset 0 1px 0 rgba(255, 255, 255, 0.05);
+  padding: 36px 40px;
   display: grid;
-  grid-template-columns: minmax(320px, 28vw) 1fr;
-  gap: 4vw;
-  align-items: stretch;
-}
-.proof-panel:focus-visible {
-  outline: 2px solid #00E5A0;
-  outline-offset: -8px;
+  grid-template-columns: minmax(280px, 360px) 1fr;
+  gap: 36px;
+  overflow: hidden;
 }
 @media (max-width: 1023px) {
   .proof-panel {
@@ -731,11 +745,13 @@ body { font-variant-numeric: tabular-nums; }
     width: 100%;
     height: auto;
     min-height: 80vh;
+    padding: 0;
+  }
+  .proof-panel-inner {
     grid-template-columns: 1fr;
-    gap: 28px;
-    padding: 32px 24px;
+    padding: 28px 24px;
+    gap: 24px;
     border-radius: 22px;
-    border: 1px solid rgba(255, 255, 255, 0.08);
   }
 }
 
@@ -778,7 +794,8 @@ body { font-variant-numeric: tabular-nums; }
   overflow: hidden;
   background: #0A0B11;
   border: 1px solid rgba(255, 255, 255, 0.06);
-  min-height: 460px;
+  min-height: 0;
+  align-self: stretch;
 }
 @media (max-width: 1023px) {
   .proof-panel-stage {
@@ -1262,9 +1279,9 @@ body { font-variant-numeric: tabular-nums; }
   gap: 4px;
 }
 
-/* ── Manifesto section — anty-agency split ───────────────── */
+/* ── Manifesto section — anty-agency split (WHITE inversion v7) ─── */
 .manifesto-section {
-  background: #06070B;
+  background: #FAFAFA;
 }
 .manifesto-grid {
   position: relative;
@@ -1284,7 +1301,7 @@ body { font-variant-numeric: tabular-nums; }
     left: 50%;
     transform: translateX(-50%);
     width: 1px;
-    background: rgba(255, 255, 255, 0.10);
+    background: rgba(9, 9, 11, 0.10);
   }
 }
 .manifesto-row {
@@ -1310,7 +1327,7 @@ body { font-variant-numeric: tabular-nums; }
     font-family: 'Geist', sans-serif;
     font-size: 24px;
     font-weight: 300;
-    color: rgba(255, 255, 255, 0.30);
+    color: rgba(9, 9, 11, 0.30);
   }
 }
 .manifesto-old,
@@ -1344,10 +1361,10 @@ body { font-variant-numeric: tabular-nums; }
   letter-spacing: 0.08em;
 }
 .manifesto-eyebrow--old {
-  color: rgba(255, 255, 255, 0.30);
+  color: rgba(9, 9, 11, 0.35);
 }
 .manifesto-eyebrow--new {
-  color: #00E5A0;
+  color: #00B580;
 }
 .manifesto-title {
   margin: 14px 0 0 0;
@@ -1358,14 +1375,14 @@ body { font-variant-numeric: tabular-nums; }
   letter-spacing: -0.03em;
 }
 .manifesto-title--old {
-  color: rgba(255, 255, 255, 0.30);
+  color: rgba(9, 9, 11, 0.30);
   font-weight: 400;
   text-decoration: line-through;
-  text-decoration-color: rgba(255, 255, 255, 0.20);
+  text-decoration-color: rgba(9, 9, 11, 0.25);
   text-decoration-thickness: 1px;
 }
 .manifesto-title--new {
-  color: #FFFFFF;
+  color: #09090B;
 }
 .manifesto-body {
   margin: 14px 0 0 0;
@@ -1373,10 +1390,10 @@ body { font-variant-numeric: tabular-nums; }
   line-height: 1.55;
 }
 .manifesto-body--old {
-  color: rgba(255, 255, 255, 0.30);
+  color: rgba(9, 9, 11, 0.45);
 }
 .manifesto-body--new {
-  color: #D4D4D8;
+  color: #52525B;
 }
 @media (prefers-reduced-motion: reduce) {
   .manifesto-old,

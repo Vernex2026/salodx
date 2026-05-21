@@ -188,27 +188,29 @@ function ProofPanel({
       }}
       aria-label={`${title} — kliknij aby zobaczyć architekturę`}
     >
-      <header className="proof-panel-head">
-        <div className="proof-panel-tag">
-          [ {caseNo} // {industry} ]
-        </div>
-        <h3 className="proof-panel-title">{title}</h3>
-        <div className="proof-panel-badges">
-          {badges.map((b) => (
-            <span key={b} className="case-badge">
-              {b}
-            </span>
-          ))}
-        </div>
-        <p className="proof-panel-gain">{gain}</p>
-      </header>
+      <div className="proof-panel-inner">
+        <header className="proof-panel-head">
+          <div className="proof-panel-tag">
+            [ {caseNo} // {industry} ]
+          </div>
+          <h3 className="proof-panel-title">{title}</h3>
+          <div className="proof-panel-badges">
+            {badges.map((b) => (
+              <span key={b} className="case-badge">
+                {b}
+              </span>
+            ))}
+          </div>
+          <p className="proof-panel-gain">{gain}</p>
+        </header>
 
-      <div className="proof-panel-stage">
-        <div className="proof-xray-fg">{children}</div>
-        <div className="proof-xray-bg">{xRayContent}</div>
-        <div className="proof-xray-caption">
-          <span className="live-dot" aria-hidden="true" />
-          <span>X-RAY · ARCHITEKTURA</span>
+        <div className="proof-panel-stage">
+          <div className="proof-xray-fg">{children}</div>
+          <div className="proof-xray-bg">{xRayContent}</div>
+          <div className="proof-xray-caption">
+            <span className="live-dot" aria-hidden="true" />
+            <span>X-RAY · ARCHITEKTURA</span>
+          </div>
         </div>
       </div>
     </article>
