@@ -1279,6 +1279,319 @@ body { font-variant-numeric: tabular-nums; }
   gap: 4px;
 }
 
+/* ── Bento Matrix section — asymetryczna siatka portfolio v8 ─── */
+.bento-section {
+  background: transparent;
+}
+.bento-matrix-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  grid-auto-rows: minmax(220px, auto);
+  gap: 16px;
+}
+@media (max-width: 1023px) {
+  .bento-matrix-grid {
+    grid-template-columns: 1fr;
+    grid-auto-rows: auto;
+    gap: 14px;
+  }
+}
+
+.bento-tile {
+  position: relative;
+  padding: 24px;
+  border-radius: 24px;
+  background: rgba(15, 15, 22, 0.62);
+  -webkit-backdrop-filter: blur(16px) saturate(110%);
+          backdrop-filter: blur(16px) saturate(110%);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  box-shadow:
+    0 16px 40px -12px rgba(0, 0, 0, 0.55),
+    inset 0 1px 0 rgba(255, 255, 255, 0.04);
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  overflow: hidden;
+  transition:
+    border-color 320ms ease,
+    box-shadow 320ms ease;
+  will-change: transform;
+}
+.bento-tile:hover {
+  border-color: rgba(255, 255, 255, 0.14);
+  box-shadow:
+    0 24px 56px -16px rgba(0, 0, 0, 0.65),
+    inset 0 1px 0 rgba(255, 255, 255, 0.06);
+}
+
+[data-tile-variant="big"] {
+  grid-column: span 2;
+  grid-row: span 2;
+}
+[data-tile-variant="vertical"] {
+  grid-column: span 1;
+  grid-row: span 2;
+}
+[data-tile-variant="horizontal"] {
+  grid-column: span 2;
+  grid-row: span 1;
+}
+[data-tile-variant="star"] {
+  grid-column: span 1;
+  grid-row: span 1;
+}
+@media (max-width: 1023px) {
+  [data-tile-variant] {
+    grid-column: span 1;
+    grid-row: auto;
+    min-height: 280px;
+  }
+}
+
+.bento-tile-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+}
+.bento-tile-tag {
+  font-family: 'Geist Mono', ui-monospace, monospace;
+  font-size: 10.5px;
+  letter-spacing: 0.08em;
+  color: #00E5A0;
+  text-transform: uppercase;
+}
+.bento-tile-live {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-family: 'Geist Mono', ui-monospace, monospace;
+  font-size: 10px;
+  letter-spacing: 0.08em;
+  color: rgba(255, 255, 255, 0.55);
+  text-transform: uppercase;
+}
+.bento-tile-title {
+  margin: 6px 0 0 0;
+  font-family: 'Geist', sans-serif;
+  font-size: clamp(1.375rem, 1.8vw, 1.875rem);
+  font-weight: 800;
+  line-height: 1.05;
+  letter-spacing: -0.035em;
+  color: #FFFFFF;
+}
+.bento-tile-sub {
+  margin: 0;
+  font-size: 13.5px;
+  line-height: 1.45;
+  color: #A1A1AA;
+}
+.bento-tile-stage {
+  position: relative;
+  flex: 1;
+  min-height: 0;
+  margin-top: 6px;
+  border-radius: 14px;
+  background: rgba(0, 0, 0, 0.30);
+  border: 1px solid rgba(255, 255, 255, 0.04);
+  overflow: hidden;
+}
+
+/* ── Tile 1: QTrader (big) ───────────────────────────────── */
+.bento-qtrader {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  padding: 16px;
+  gap: 12px;
+}
+.bento-qtrader-stats {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  gap: 12px;
+  padding-bottom: 10px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+}
+.bento-qtrader-stat {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+.bento-qtrader-stat-label {
+  font-family: 'Geist Mono', ui-monospace, monospace;
+  font-size: 9.5px;
+  letter-spacing: 0.12em;
+  color: rgba(255, 255, 255, 0.40);
+}
+.bento-qtrader-stat-value {
+  font-family: 'Geist Mono', ui-monospace, monospace;
+  font-size: 16px;
+  font-weight: 700;
+  color: #FFFFFF;
+  letter-spacing: -0.01em;
+}
+.bento-qtrader-chart {
+  width: 100%;
+  flex: 1;
+  min-height: 0;
+  display: block;
+}
+.bento-qtrader-book {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  font-family: 'Geist Mono', ui-monospace, monospace;
+  font-size: 10.5px;
+  padding-top: 8px;
+  border-top: 1px solid rgba(255, 255, 255, 0.06);
+}
+.bento-qtrader-book-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr 1fr;
+  gap: 8px;
+}
+
+/* ── Tile 2: AI Agents (vertical) ────────────────────────── */
+.bento-ai-log {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding: 16px;
+  height: 100%;
+  font-family: 'Geist Mono', ui-monospace, monospace;
+  font-size: 12px;
+  line-height: 1.5;
+  overflow: hidden;
+}
+.bento-ai-log-line {
+  opacity: 0;
+  animation: bento-log-line-in 480ms var(--ease-soft) forwards;
+}
+@keyframes bento-log-line-in {
+  from { opacity: 0; transform: translateX(-4px); }
+  to   { opacity: 1; transform: translateX(0); }
+}
+@media (prefers-reduced-motion: reduce) {
+  .bento-ai-log-line {
+    opacity: 1;
+    animation: none;
+  }
+}
+
+/* ── Tile 3: CRM Leasing (horizontal) ────────────────────── */
+.bento-crm {
+  display: grid;
+  grid-template-columns: 1fr 1.4fr;
+  gap: 18px;
+  padding: 16px;
+  height: 100%;
+}
+@media (max-width: 600px) {
+  .bento-crm {
+    grid-template-columns: 1fr;
+  }
+}
+.bento-crm-stats {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+.bento-crm-stat {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+.bento-crm-stat-label {
+  font-family: 'Geist Mono', ui-monospace, monospace;
+  font-size: 9.5px;
+  letter-spacing: 0.12em;
+  color: rgba(255, 255, 255, 0.40);
+}
+.bento-crm-stat-value {
+  font-family: 'Geist', sans-serif;
+  font-size: 22px;
+  font-weight: 800;
+  color: #FFFFFF;
+  letter-spacing: -0.02em;
+  line-height: 1.05;
+}
+.bento-crm-bars {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 10px;
+  align-items: end;
+  padding-top: 10px;
+  border-top: 1px solid rgba(255, 255, 255, 0.06);
+}
+.bento-crm-bar {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  height: 100%;
+}
+.bento-crm-bar-stack {
+  display: flex;
+  flex-direction: column-reverse;
+  width: 100%;
+  height: 100px;
+  border-radius: 3px;
+  overflow: hidden;
+  background: rgba(255, 255, 255, 0.04);
+}
+.bento-crm-bar-seg {
+  width: 100%;
+}
+.bento-crm-bar-label {
+  font-family: 'Geist Mono', ui-monospace, monospace;
+  font-size: 10px;
+  color: rgba(255, 255, 255, 0.55);
+}
+
+/* ── Tile 4: Kancelaria REDACTED (star) ──────────────────── */
+.bento-kancelaria {
+  position: relative;
+  height: 100%;
+  padding: 16px;
+  overflow: hidden;
+}
+.bento-kancelaria-redacted {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  font-family: 'Geist Mono', ui-monospace, monospace;
+  font-size: 11px;
+  filter: blur(2.5px);
+  user-select: none;
+}
+.bento-kancelaria-row {
+  display: grid;
+  grid-template-columns: 60px 1fr 60px 70px;
+  gap: 8px;
+  padding: 5px 0;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.04);
+}
+.bento-classified-stamp {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%) rotate(-4deg);
+  padding: 10px 16px;
+  border: 2px solid #FF5A7C;
+  border-radius: 6px;
+  font-family: 'Geist Mono', ui-monospace, monospace;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.16em;
+  color: #FF5A7C;
+  background: rgba(255, 90, 124, 0.08);
+  -webkit-backdrop-filter: blur(8px);
+          backdrop-filter: blur(8px);
+  white-space: nowrap;
+  box-shadow: 0 8px 24px -8px rgba(255, 90, 124, 0.40);
+  text-shadow: 0 0 12px rgba(255, 90, 124, 0.30);
+}
+
 /* ── Manifesto section — anty-agency split (WHITE inversion v7) ─── */
 .manifesto-section {
   background: #FAFAFA;
