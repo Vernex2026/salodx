@@ -1313,317 +1313,388 @@ body { font-variant-numeric: tabular-nums; }
   gap: 4px;
 }
 
-/* ── Bento Matrix section — asymetryczna siatka portfolio v8 ─── */
-.bento-section {
+/* ── Infinite Cloud — Apple Watch Honeycomb (50 squircles drag) v9 ─── */
+.cloud-section {
+  position: relative;
+  padding: 140px 0 120px;
   background: transparent;
 }
-.bento-matrix-grid {
-  display: grid;
-  grid-template-columns: 1fr 1fr 1fr;
-  grid-auto-rows: minmax(220px, auto);
-  gap: 16px;
-}
 @media (max-width: 1023px) {
-  .bento-matrix-grid {
-    grid-template-columns: 1fr;
-    grid-auto-rows: auto;
-    gap: 14px;
-  }
+  .cloud-section { padding: 100px 0 80px; }
 }
-
-.bento-tile {
+.cloud-section-title {
+  font-family: 'Geist', ui-sans-serif, system-ui, sans-serif;
+  font-size: clamp(2.5rem, 5vw, 4.5rem);
+  font-weight: 700;
+  letter-spacing: -0.03em;
+  line-height: 1.04;
+  color: #FAFAFA;
+  margin-top: 18px;
+  max-width: 880px;
+}
+.cloud-section-title-mute {
+  color: #A1A1AA;
+}
+.cloud-section-lead {
+  max-width: 620px;
+  margin-top: 22px;
+  font-size: 16px;
+  line-height: 1.6;
+  color: rgba(228, 228, 231, 0.78);
+}
+.cloud-viewport-wrap {
+  margin-top: 64px;
+}
+.cloud-viewport {
   position: relative;
-  padding: 24px;
-  border-radius: 24px;
-  background: rgba(15, 15, 22, 0.62);
-  -webkit-backdrop-filter: blur(16px) saturate(110%);
-          backdrop-filter: blur(16px) saturate(110%);
+  width: 100%;
+  height: 720px;
+  overflow: hidden;
+  border-radius: 32px;
+  background:
+    radial-gradient(
+      ellipse at center,
+      rgba(15, 15, 22, 0.35) 0%,
+      rgba(0, 3, 10, 0.85) 65%,
+      rgba(0, 3, 10, 1) 100%
+    );
   border: 1px solid rgba(255, 255, 255, 0.06);
   box-shadow:
-    0 16px 40px -12px rgba(0, 0, 0, 0.55),
+    0 40px 100px -30px rgba(0, 0, 0, 0.8),
     inset 0 1px 0 rgba(255, 255, 255, 0.04);
-  display: flex;
-  flex-direction: column;
-  gap: 12px;
-  overflow: hidden;
-  transition:
-    border-color 320ms ease,
-    box-shadow 320ms ease;
-  will-change: transform;
-}
-.bento-tile:hover {
-  border-color: rgba(255, 255, 255, 0.14);
-  box-shadow:
-    0 24px 56px -16px rgba(0, 0, 0, 0.65),
-    inset 0 1px 0 rgba(255, 255, 255, 0.06);
-}
-
-[data-tile-variant="big"] {
-  grid-column: span 2;
-  grid-row: span 2;
-}
-[data-tile-variant="vertical"] {
-  grid-column: span 1;
-  grid-row: span 2;
-}
-[data-tile-variant="horizontal"] {
-  grid-column: span 2;
-  grid-row: span 1;
-}
-[data-tile-variant="star"] {
-  grid-column: span 1;
-  grid-row: span 1;
+  cursor: grab;
+  touch-action: none;
 }
 @media (max-width: 1023px) {
-  [data-tile-variant] {
-    grid-column: span 1;
-    grid-row: auto;
-    min-height: 280px;
-  }
+  .cloud-viewport { height: 520px; border-radius: 24px; }
 }
-
-.bento-tile-head {
+@media (max-width: 640px) {
+  .cloud-viewport { height: 440px; }
+}
+.cloud-canvas {
+  position: absolute;
+  width: 3200px;
+  height: 3200px;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+}
+.cloud-squircle {
+  position: absolute;
+  width: 160px;
+  height: 160px;
+  border-radius: 40px;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  background: #0A0B11;
+  box-shadow:
+    0 10px 30px -10px rgba(0, 0, 0, 0.6),
+    inset 0 1px 0 rgba(255, 255, 255, 0.05);
+  overflow: hidden;
+  cursor: pointer;
+  will-change: transform;
+}
+.cloud-squircle--featured {
+  border-color: rgba(0, 229, 160, 0.30);
+  box-shadow:
+    0 14px 32px -10px rgba(0, 0, 0, 0.7),
+    0 0 0 1px rgba(0, 229, 160, 0.15),
+    inset 0 1px 0 rgba(255, 255, 255, 0.07);
+}
+.cloud-squircle-bg {
+  position: absolute;
+  inset: 0;
+}
+.cloud-squircle--fintech .cloud-squircle-bg,
+.cloud-squircle--ai .cloud-squircle-bg,
+.cloud-squircle--crm .cloud-squircle-bg,
+.cloud-squircle--logistics .cloud-squircle-bg,
+.cloud-squircle--webgl .cloud-squircle-bg {
+  background: radial-gradient(
+    circle at center,
+    rgba(0, 229, 160, 0.10) 0%,
+    transparent 65%
+  );
+}
+.cloud-squircle--legal .cloud-squircle-bg {
+  background: radial-gradient(
+    circle at center,
+    rgba(255, 90, 124, 0.10) 0%,
+    transparent 65%
+  );
+}
+.cloud-squircle--ecom .cloud-squircle-bg {
+  background: radial-gradient(
+    circle at center,
+    rgba(212, 165, 116, 0.10) 0%,
+    transparent 65%
+  );
+}
+.cloud-squircle-glyph {
+  position: absolute;
+  inset: 0;
   display: flex;
   align-items: center;
-  justify-content: space-between;
-  gap: 10px;
+  justify-content: center;
 }
-.bento-tile-tag {
+.cloud-squircle-overlay {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: flex-end;
+  padding: 12px;
+  background: linear-gradient(
+    to bottom,
+    transparent 55%,
+    rgba(0, 0, 0, 0.7) 100%
+  );
+  pointer-events: none;
+}
+.cloud-squircle-tag {
   font-family: 'Geist Mono', ui-monospace, monospace;
-  font-size: 10.5px;
+  font-size: 9px;
+  font-weight: 700;
   letter-spacing: 0.08em;
   color: #00E5A0;
   text-transform: uppercase;
 }
-.bento-tile-live {
-  display: inline-flex;
-  align-items: center;
-  gap: 6px;
+.cloud-squircle--legal .cloud-squircle-tag { color: #FF5A7C; }
+.cloud-squircle--ecom .cloud-squircle-tag { color: #D4A574; }
+
+/* Featured tile inline mocks */
+.cloud-mock {
+  position: absolute;
+  inset: 12px;
+  border-radius: 24px;
+  background: rgba(0, 0, 0, 0.4);
+  overflow: hidden;
+  padding: 14px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 8px;
+}
+.cloud-mock--qtrader {
+  background: linear-gradient(180deg, rgba(0, 229, 160, 0.06) 0%, transparent 100%);
+  justify-content: flex-end;
+  padding-bottom: 18px;
+}
+.cloud-mock-chart {
+  position: absolute;
+  inset: 14px;
+  height: 60%;
+}
+.cloud-mock-pill {
+  align-self: flex-start;
+  font-family: 'Geist Mono', ui-monospace, monospace;
+  font-size: 11px;
+  font-weight: 700;
+  padding: 3px 8px;
+  border-radius: 999px;
+  background: rgba(0, 229, 160, 0.18);
+  color: #00E5A0;
+  position: relative;
+  z-index: 2;
+}
+.cloud-mock--ai {
   font-family: 'Geist Mono', ui-monospace, monospace;
   font-size: 10px;
-  letter-spacing: 0.08em;
-  color: rgba(255, 255, 255, 0.55);
-  text-transform: uppercase;
+  color: #00E5A0;
 }
-.bento-tile-title {
-  margin: 6px 0 0 0;
-  font-family: 'Geist', sans-serif;
-  font-size: clamp(1.375rem, 1.8vw, 1.875rem);
-  font-weight: 800;
-  line-height: 1.05;
-  letter-spacing: -0.035em;
-  color: #FFFFFF;
-}
-.bento-tile-sub {
-  margin: 0;
-  font-size: 13.5px;
-  line-height: 1.45;
-  color: #A1A1AA;
-}
-.bento-tile-stage {
-  position: relative;
-  flex: 1;
-  min-height: 0;
-  margin-top: 6px;
-  border-radius: 14px;
-  background: rgba(0, 0, 0, 0.30);
-  border: 1px solid rgba(255, 255, 255, 0.04);
+.cloud-mock-line {
+  white-space: nowrap;
   overflow: hidden;
+  text-overflow: ellipsis;
 }
-
-/* ── Tile 1: QTrader (big) ───────────────────────────────── */
-.bento-qtrader {
-  display: flex;
-  flex-direction: column;
-  height: 100%;
-  padding: 16px;
-  gap: 12px;
+.cloud-mock-line--dim {
+  color: rgba(0, 229, 160, 0.4);
 }
-.bento-qtrader-stats {
-  display: grid;
-  grid-template-columns: 1fr 1fr 1fr;
-  gap: 12px;
-  padding-bottom: 10px;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+.cloud-mock-cursor {
+  width: 6px;
+  height: 10px;
+  background: #00E5A0;
+  animation: cloudCursorBlink 1.1s steps(2) infinite;
 }
-.bento-qtrader-stat {
-  display: flex;
-  flex-direction: column;
-  gap: 2px;
+@keyframes cloudCursorBlink {
+  0%, 50% { opacity: 1; }
+  51%, 100% { opacity: 0; }
 }
-.bento-qtrader-stat-label {
-  font-family: 'Geist Mono', ui-monospace, monospace;
-  font-size: 9.5px;
-  letter-spacing: 0.12em;
-  color: rgba(255, 255, 255, 0.40);
+.cloud-mock--crm {
+  justify-content: center;
+  gap: 6px;
 }
-.bento-qtrader-stat-value {
-  font-family: 'Geist Mono', ui-monospace, monospace;
-  font-size: 16px;
-  font-weight: 700;
-  color: #FFFFFF;
-  letter-spacing: -0.01em;
+.cloud-mock-bar {
+  height: 8px;
+  border-radius: 999px;
+  background: linear-gradient(90deg, #00E5A0 0%, rgba(0, 229, 160, 0.25) 100%);
 }
-.bento-qtrader-chart {
-  width: 100%;
-  flex: 1;
-  min-height: 0;
-  display: block;
+.cloud-mock--legal {
+  justify-content: center;
+  position: relative;
 }
-.bento-qtrader-book {
-  display: flex;
-  flex-direction: column;
-  gap: 3px;
-  font-family: 'Geist Mono', ui-monospace, monospace;
-  font-size: 10.5px;
-  padding-top: 8px;
-  border-top: 1px solid rgba(255, 255, 255, 0.06);
+.cloud-mock-line--redacted {
+  height: 10px;
+  border-radius: 2px;
+  background: repeating-linear-gradient(
+    90deg,
+    rgba(255, 90, 124, 0.45) 0,
+    rgba(255, 90, 124, 0.45) 8px,
+    rgba(255, 90, 124, 0.15) 8px,
+    rgba(255, 90, 124, 0.15) 12px
+  );
 }
-.bento-qtrader-book-row {
-  display: grid;
-  grid-template-columns: 1fr 1fr 1fr 1fr;
-  gap: 8px;
-}
-
-/* ── Tile 2: AI Agents (vertical) ────────────────────────── */
-.bento-ai-log {
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
-  padding: 16px;
-  height: 100%;
+.cloud-mock-stamp {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%) rotate(-8deg);
+  padding: 4px 8px;
+  border: 1.5px solid #FF5A7C;
+  border-radius: 4px;
   font-family: 'Geist Mono', ui-monospace, monospace;
   font-size: 12px;
-  line-height: 1.5;
-  overflow: hidden;
-}
-.bento-ai-log-line {
-  opacity: 0;
-  animation: bento-log-line-in 480ms var(--ease-soft) forwards;
-}
-@keyframes bento-log-line-in {
-  from { opacity: 0; transform: translateX(-4px); }
-  to   { opacity: 1; transform: translateX(0); }
-}
-@media (prefers-reduced-motion: reduce) {
-  .bento-ai-log-line {
-    opacity: 1;
-    animation: none;
-  }
+  font-weight: 700;
+  letter-spacing: 0.18em;
+  color: #FF5A7C;
+  background: rgba(255, 90, 124, 0.08);
+  text-shadow: 0 0 8px rgba(255, 90, 124, 0.3);
 }
 
-/* ── Tile 3: CRM Leasing (horizontal) ────────────────────── */
-.bento-crm {
-  display: grid;
-  grid-template-columns: 1fr 1.4fr;
-  gap: 18px;
-  padding: 16px;
-  height: 100%;
+/* Drag hint */
+.cloud-drag-hint {
+  position: absolute;
+  right: 20px;
+  bottom: 20px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 14px;
+  border-radius: 999px;
+  background: rgba(0, 0, 0, 0.55);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  -webkit-backdrop-filter: blur(8px);
+          backdrop-filter: blur(8px);
+  font-family: 'Geist Mono', ui-monospace, monospace;
+  font-size: 11px;
+  letter-spacing: 0.08em;
+  color: rgba(255, 255, 255, 0.6);
+  pointer-events: none;
+  z-index: 4;
 }
-@media (max-width: 600px) {
-  .bento-crm {
-    grid-template-columns: 1fr;
-  }
+.cloud-drag-arrows {
+  color: #00E5A0;
+  font-weight: 700;
 }
-.bento-crm-stats {
+
+/* Focus modal */
+.cloud-focus-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 100;
+  background: rgba(0, 0, 0, 0.78);
+  -webkit-backdrop-filter: blur(20px);
+          backdrop-filter: blur(20px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+}
+.cloud-focus-card {
+  width: 100%;
+  max-width: 720px;
+  max-height: 85vh;
+  border-radius: 32px;
+  border: 1px solid rgba(255, 255, 255, 0.10);
+  background: #09090b;
+  box-shadow: 0 32px 100px rgba(0, 0, 0, 0.85);
+  overflow: hidden auto;
+  display: flex;
+  flex-direction: column;
+}
+.cloud-focus-card--featured {
+  border-color: rgba(0, 229, 160, 0.25);
+}
+.cloud-focus-stage {
+  position: relative;
+  width: 100%;
+  height: 320px;
+  background: radial-gradient(
+    circle at center,
+    rgba(0, 229, 160, 0.12) 0%,
+    transparent 70%
+  );
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+}
+.cloud-focus-card--legal .cloud-focus-stage {
+  background: radial-gradient(circle at center, rgba(255, 90, 124, 0.10) 0%, transparent 70%);
+}
+.cloud-focus-card--ecom .cloud-focus-stage {
+  background: radial-gradient(circle at center, rgba(212, 165, 116, 0.10) 0%, transparent 70%);
+}
+.cloud-focus-stage .cloud-mock {
+  inset: 32px;
+  border-radius: 20px;
+}
+.cloud-focus-glyph {
+  transform: scale(2.4);
+}
+.cloud-focus-body {
+  padding: 36px 40px 40px;
   display: flex;
   flex-direction: column;
   gap: 14px;
 }
-.bento-crm-stat {
-  display: flex;
-  flex-direction: column;
-  gap: 2px;
+@media (max-width: 640px) {
+  .cloud-focus-body { padding: 28px 24px 32px; }
+  .cloud-focus-stage { height: 240px; }
 }
-.bento-crm-stat-label {
-  font-family: 'Geist Mono', ui-monospace, monospace;
-  font-size: 9.5px;
-  letter-spacing: 0.12em;
-  color: rgba(255, 255, 255, 0.40);
-}
-.bento-crm-stat-value {
-  font-family: 'Geist', sans-serif;
-  font-size: 22px;
-  font-weight: 800;
-  color: #FFFFFF;
-  letter-spacing: -0.02em;
-  line-height: 1.05;
-}
-.bento-crm-bars {
-  display: grid;
-  grid-template-columns: repeat(7, 1fr);
-  gap: 10px;
-  align-items: end;
-  padding-top: 10px;
-  border-top: 1px solid rgba(255, 255, 255, 0.06);
-}
-.bento-crm-bar {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 6px;
-  height: 100%;
-}
-.bento-crm-bar-stack {
-  display: flex;
-  flex-direction: column-reverse;
-  width: 100%;
-  height: 100px;
-  border-radius: 3px;
-  overflow: hidden;
-  background: rgba(255, 255, 255, 0.04);
-}
-.bento-crm-bar-seg {
-  width: 100%;
-}
-.bento-crm-bar-label {
-  font-family: 'Geist Mono', ui-monospace, monospace;
-  font-size: 10px;
-  color: rgba(255, 255, 255, 0.55);
-}
-
-/* ── Tile 4: Kancelaria REDACTED (star) ──────────────────── */
-.bento-kancelaria {
-  position: relative;
-  height: 100%;
-  padding: 16px;
-  overflow: hidden;
-}
-.bento-kancelaria-redacted {
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
-  font-family: 'Geist Mono', ui-monospace, monospace;
-  font-size: 11px;
-  filter: blur(2.5px);
-  user-select: none;
-}
-.bento-kancelaria-row {
-  display: grid;
-  grid-template-columns: 60px 1fr 60px 70px;
-  gap: 8px;
-  padding: 5px 0;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.04);
-}
-.bento-classified-stamp {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%) rotate(-4deg);
-  padding: 10px 16px;
-  border: 2px solid #FF5A7C;
-  border-radius: 6px;
+.cloud-focus-tag {
   font-family: 'Geist Mono', ui-monospace, monospace;
   font-size: 11px;
   font-weight: 700;
-  letter-spacing: 0.16em;
-  color: #FF5A7C;
-  background: rgba(255, 90, 124, 0.08);
-  -webkit-backdrop-filter: blur(8px);
-          backdrop-filter: blur(8px);
-  white-space: nowrap;
-  box-shadow: 0 8px 24px -8px rgba(255, 90, 124, 0.40);
-  text-shadow: 0 0 12px rgba(255, 90, 124, 0.30);
+  letter-spacing: 0.12em;
+  color: #00E5A0;
+}
+.cloud-focus-card--legal .cloud-focus-tag { color: #FF5A7C; }
+.cloud-focus-card--ecom .cloud-focus-tag { color: #D4A574; }
+.cloud-focus-title {
+  font-family: 'Geist', ui-sans-serif, system-ui, sans-serif;
+  font-size: clamp(1.8rem, 3.5vw, 2.6rem);
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  line-height: 1.05;
+  color: #FAFAFA;
+}
+.cloud-focus-desc {
+  font-size: 15px;
+  line-height: 1.7;
+  color: rgba(228, 228, 231, 0.78);
+}
+.cloud-focus-close {
+  align-self: flex-start;
+  margin-top: 12px;
+  padding: 11px 22px;
+  border-radius: 999px;
+  background: #FAFAFA;
+  color: #09090b;
+  border: none;
+  font-family: 'Geist', ui-sans-serif, system-ui, sans-serif;
+  font-size: 13px;
+  font-weight: 600;
+  letter-spacing: 0.01em;
+  cursor: pointer;
+  transition: transform 220ms var(--ease-out), background 220ms var(--ease-out);
+}
+.cloud-focus-close:hover {
+  transform: translateY(-1px);
+  background: #FFFFFF;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .cloud-mock-cursor { animation: none; opacity: 1; }
+  .cloud-squircle { transition: none !important; }
 }
 
 /* ── Manifesto section — anty-agency split (WHITE inversion v7) ─── */
