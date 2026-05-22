@@ -232,7 +232,7 @@ export default function InfiniteCloud() {
 
   return (
     <section id="cloud" className="cloud-section" aria-labelledby="cloud-heading">
-      <div ref={headerRef} className="mx-auto max-w-6xl px-6 lg:px-10">
+      <div ref={headerRef} className="cloud-header mx-auto max-w-6xl px-6 lg:px-10">
         <div className={`pipeline-reveal ${headerVisible ? "is-visible" : ""}`}>
           <span className="proof-eyebrow">[ ARSENAŁ // 50_WDROŻEŃ ]</span>
         </div>
@@ -253,8 +253,7 @@ export default function InfiniteCloud() {
         </p>
       </div>
 
-      <div className="cloud-viewport-wrap mx-auto max-w-7xl px-6 lg:px-10">
-        <div className="cloud-viewport" ref={constraintsRef}>
+      <div className="cloud-viewport" ref={constraintsRef}>
           <motion.div
             className="cloud-canvas"
             drag
@@ -294,10 +293,9 @@ export default function InfiniteCloud() {
               );
             })}
           </motion.div>
-          <div className="cloud-drag-hint" aria-hidden="true">
-            <span className="cloud-drag-arrows">↕ ↔</span>
-            <span>Przeciągnij · kliknij</span>
-          </div>
+        <div className="cloud-drag-hint" aria-hidden="true">
+          <span className="cloud-drag-arrows">↕ ↔</span>
+          <span>Przeciągnij · kliknij</span>
         </div>
       </div>
 
