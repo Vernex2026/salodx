@@ -5,6 +5,13 @@ import { useReveal } from "../hooks/useReveal";
 const ITEM_SIZE = 160;
 const GAP = 24;
 const COLUMNS = 10;
+const CANVAS_SIZE = 3200;
+
+const ROWS = Math.ceil(50 / COLUMNS);
+const GRID_WIDTH = (COLUMNS - 1) * (ITEM_SIZE + GAP) + ITEM_SIZE + (ITEM_SIZE + GAP) / 2;
+const GRID_HEIGHT = (ROWS - 1) * (ITEM_SIZE * 0.85 + GAP) + ITEM_SIZE;
+const CENTER_X = CANVAS_SIZE / 2 - GRID_WIDTH / 2;
+const CENTER_Y = CANVAS_SIZE / 2 - GRID_HEIGHT / 2;
 
 // Category glyphs — inline SVG, mint accent
 const Glyph = ({ type }) => {
@@ -211,8 +218,8 @@ const PROJECTS = [...FEATURED, ...GENERATED];
 function getPosition(index) {
   const row = Math.floor(index / COLUMNS);
   const col = index % COLUMNS;
-  const x = col * (ITEM_SIZE + GAP) + (row % 2 === 1 ? (ITEM_SIZE + GAP) / 2 : 0);
-  const y = row * (ITEM_SIZE * 0.85 + GAP);
+  const x = CENTER_X + col * (ITEM_SIZE + GAP) + (row % 2 === 1 ? (ITEM_SIZE + GAP) / 2 : 0);
+  const y = CENTER_Y + row * (ITEM_SIZE * 0.85 + GAP);
   return { x, y };
 }
 

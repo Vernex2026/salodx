@@ -1351,12 +1351,12 @@ body { font-variant-numeric: tabular-nums; }
   height: 720px;
   overflow: hidden;
   border-radius: 32px;
-  background:
+  background-color: #00030a;
+  background-image:
     radial-gradient(
       ellipse at center,
-      rgba(15, 15, 22, 0.35) 0%,
-      rgba(0, 3, 10, 0.85) 65%,
-      rgba(0, 3, 10, 1) 100%
+      rgba(0, 229, 160, 0.06) 0%,
+      transparent 60%
     );
   border: 1px solid rgba(255, 255, 255, 0.06);
   box-shadow:
