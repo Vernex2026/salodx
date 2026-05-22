@@ -1326,6 +1326,25 @@ body { font-variant-numeric: tabular-nums; }
   position: relative;
   z-index: 2;
 }
+.cloud-header::before {
+  content: "";
+  position: absolute;
+  z-index: -1;
+  left: 50%;
+  top: -40px;
+  transform: translateX(-50%);
+  width: 140vw;
+  max-width: 1600px;
+  height: calc(100% + 80px);
+  background: radial-gradient(
+    ellipse 65% 80% at center,
+    rgba(0, 0, 0, 0.95) 0%,
+    rgba(0, 0, 0, 0.85) 30%,
+    rgba(0, 0, 0, 0.4) 65%,
+    rgba(0, 0, 0, 0) 100%
+  );
+  pointer-events: none;
+}
 .cloud-section-title {
   font-family: 'Geist', ui-sans-serif, system-ui, sans-serif;
   font-size: clamp(2.5rem, 5vw, 4.5rem);
