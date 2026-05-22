@@ -23,8 +23,9 @@ const useDesktop = () => {
   return isDesktop;
 };
 
-const QTRADER_BADGES = ["Real-Time Data", "WebSockets", "AI Analysis"];
 const CRM_BADGES = ["Supabase", "V12 Migration", "Custom Dashboard"];
+const SAAS_BADGES = ["QR Automation", "Realtime Postgres", "Hardware Integration"];
+const QTRADER_BADGES = ["Real-Time Data", "WebSockets", "AI Analysis"];
 
 export default function Proof() {
   const sectionRef = useRef(null);
@@ -41,13 +42,13 @@ export default function Proof() {
 
     const ctx = gsap.context(() => {
       const tween = gsap.to(track, {
-        x: () => -(track.scrollWidth - window.innerWidth + 48),
+        x: () => -(track.scrollWidth - window.innerWidth),
         ease: "none",
         scrollTrigger: {
           trigger: pinWrap,
           pin: true,
           start: "top top",
-          end: () => `+=${track.scrollWidth - window.innerWidth + 48}`,
+          end: () => `+=${track.scrollWidth - window.innerWidth}`,
           scrub: 1,
           invalidateOnRefresh: true,
           anticipatePin: 1,
@@ -70,8 +71,9 @@ export default function Proof() {
 
       <div ref={pinWrapRef} className="proof-pin-wrap">
         <div ref={trackRef} className="proof-track">
-          <QTraderPanel />
           <CRMPanel />
+          <SaaSPanel />
+          <QTraderPanel />
         </div>
       </div>
     </section>
@@ -160,13 +162,40 @@ function ProofPanel({
   xRayContent,
 }) {
   const [xRay, setXRay] = useState(false);
-  const panelRef = useRef(null);
+  const [panelRef, visible] = useReveal({ threshold: 0.5 });
+  const innerRef = useRef(null);
+
+  // Cursor-follow border glow — radial gradient masked do border-only
+  useEffect(() => {
+    const el = innerRef.current;
+    if (!el) return;
+    let frame = 0;
+    let nextX = 0;
+    let nextY = 0;
+    const flush = () => {
+      el.style.setProperty("--mouse-x", `${nextX}px`);
+      el.style.setProperty("--mouse-y", `${nextY}px`);
+      frame = 0;
+    };
+    const onMove = (e) => {
+      const rect = el.getBoundingClientRect();
+      nextX = e.clientX - rect.left;
+      nextY = e.clientY - rect.top;
+      if (!frame) frame = requestAnimationFrame(flush);
+    };
+    el.addEventListener("mousemove", onMove);
+    return () => {
+      el.removeEventListener("mousemove", onMove);
+      if (frame) cancelAnimationFrame(frame);
+    };
+  }, []);
 
   return (
     <article
       ref={panelRef}
       className="proof-panel"
       data-xray={xRay ? "true" : "false"}
+      data-revealed={visible ? "true" : "false"}
       onMouseEnter={() => setXRay(true)}
       onMouseLeave={() => setXRay(false)}
       onClick={() => setXRay((v) => !v)}
@@ -180,27 +209,45 @@ function ProofPanel({
       }}
       aria-label={`${title} — kliknij aby zobaczyć architekturę`}
     >
-      <header className="proof-panel-head">
-        <div className="proof-panel-tag">
-          [ {caseNo} // {industry} ]
-        </div>
-        <h3 className="proof-panel-title">{title}</h3>
-        <div className="proof-panel-badges">
-          {badges.map((b) => (
-            <span key={b} className="case-badge">
-              {b}
-            </span>
-          ))}
-        </div>
-        <p className="proof-panel-gain">{gain}</p>
-      </header>
+      <div ref={innerRef} className="proof-panel-inner">
+        <header className="proof-panel-head">
+          <div
+            className={`proof-panel-tag pipeline-reveal ${visible ? "is-visible" : ""}`}
+            style={{ "--pipeline-reveal-delay": "0ms" }}
+          >
+            [ {caseNo} // {industry} ]
+          </div>
+          <h3
+            className={`proof-panel-title pipeline-reveal ${visible ? "is-visible" : ""}`}
+            style={{ "--pipeline-reveal-delay": "140ms" }}
+          >
+            {title}
+          </h3>
+          <div
+            className={`proof-panel-badges pipeline-reveal ${visible ? "is-visible" : ""}`}
+            style={{ "--pipeline-reveal-delay": "280ms" }}
+          >
+            {badges.map((b) => (
+              <span key={b} className="case-badge">
+                {b}
+              </span>
+            ))}
+          </div>
+          <p
+            className={`proof-panel-gain pipeline-reveal ${visible ? "is-visible" : ""}`}
+            style={{ "--pipeline-reveal-delay": "420ms" }}
+          >
+            {gain}
+          </p>
+        </header>
 
-      <div className="proof-panel-stage">
-        <div className="proof-xray-fg">{children}</div>
-        <div className="proof-xray-bg">{xRayContent}</div>
-        <div className="proof-xray-caption">
-          <span className="live-dot" aria-hidden="true" />
-          <span>X-RAY · ARCHITEKTURA</span>
+        <div className="proof-panel-stage">
+          <div className="proof-xray-fg">{children}</div>
+          <div className="proof-xray-bg">{xRayContent}</div>
+          <div className="proof-xray-caption">
+            <span className="live-dot" aria-hidden="true" />
+            <span>X-RAY · ARCHITEKTURA</span>
+          </div>
         </div>
       </div>
     </article>
@@ -210,11 +257,11 @@ function ProofPanel({
 function QTraderPanel() {
   return (
     <ProofPanel
-      caseNo="CASE_01"
+      caseNo="CASE_03"
       industry="FINTECH"
       title="QTrader — platforma tradingowa"
       badges={QTRADER_BADGES}
-      gain="Niskie opóźnienia i natychmiastowy dostęp do wykresów na żywo. System udźwignie strumień danych rynkowych bez zająknięcia interfejsu."
+      gain="60fps przy 1247 tick/s. Klient widzi cenę zanim konkurencja wciśnie OK."
       xRayContent={<QTraderXRay />}
     >
       <QTraderMock />
@@ -394,11 +441,11 @@ function QTraderXRay() {
 function CRMPanel() {
   return (
     <ProofPanel
-      caseNo="CASE_02"
+      caseNo="CASE_01"
       industry="ENTERPRISE_CRM"
       title="System CRM (Kancelaria Prawna)"
       badges={CRM_BADGES}
-      gain="Skalowalne bezpieczeństwo. Płynna migracja tysięcy krytycznych rekordów do nowoczesnej, relacyjnej bazy danych. Koniec z chaosem starych systemów."
+      gain="Migracja 47 238 rekordów. Audit trail każdej zmiany. RLS na każdym wierszu."
       xRayContent={<CRMXRay />}
     >
       <CRMMock />
@@ -660,6 +707,216 @@ function CRMXRay() {
           </span>
         </div>
       </div>
+    </div>
+  );
+}
+
+function SaaSPanel() {
+  return (
+    <ProofPanel
+      caseNo="CASE_02"
+      industry="LOGISTICS_SAAS"
+      title="System zarządzania dla serwisów"
+      badges={SAAS_BADGES}
+      gain="QR scan → status → SMS klient w 47ms. Hardware × Postgres realtime."
+      xRayContent={<SaaSXRay />}
+    >
+      <SaaSMock />
+    </ProofPanel>
+  );
+}
+
+function SaaSMock() {
+  const items = [
+    {
+      serial: "GSM-2024-001432",
+      model: "iPhone 13 Pro 128GB Graphite",
+      status: "ready_for_pickup",
+      time: "15:42:18",
+    },
+    {
+      serial: "GSM-2024-001431",
+      model: "Samsung S23 Ultra 256GB",
+      status: "in_repair",
+      time: "15:40:12",
+    },
+    {
+      serial: "GSM-2024-001430",
+      model: "iPhone 14 128GB Midnight",
+      status: "repair_pending",
+      time: "15:38:55",
+    },
+    {
+      serial: "GSM-2024-001428",
+      model: "Xiaomi Mi 11 256GB",
+      status: "released",
+      time: "15:41:55",
+    },
+    {
+      serial: "GSM-2024-001427",
+      model: "Pixel 7 Pro 128GB",
+      status: "in_repair",
+      time: "15:35:02",
+    },
+  ];
+
+  const statusColor = (s) =>
+    s === "ready_for_pickup"
+      ? "#00E5A0"
+      : s === "released"
+      ? "#71717A"
+      : s === "repair_pending"
+      ? "#D4A574"
+      : "#5C7CFA";
+
+  return (
+    <div className="saas-mock">
+      <header className="saas-mock-header">
+        <div>
+          <span style={{ color: "#FFFFFF", fontWeight: 700, fontSize: "13px" }}>
+            MAGAZYN · GSM-FIX
+          </span>
+          <span style={{ color: "#A1A1AA", marginLeft: "12px", fontFamily: "'Geist Mono', monospace", fontSize: "11px" }}>
+            47 urządzeń aktywnych
+          </span>
+        </div>
+        <div className="saas-mock-live">
+          <span className="live-dot" aria-hidden="true" />
+          <span>KIOSK_03 · ONLINE</span>
+        </div>
+      </header>
+
+      <div className="saas-mock-body">
+        <div className="saas-mock-inventory">
+          <div className="saas-mock-inventory-head">
+            <span>SERIAL</span>
+            <span>MODEL</span>
+            <span>STATUS</span>
+            <span>TIME</span>
+          </div>
+          {items.map((it, i) => (
+            <div key={it.serial} className="saas-mock-inventory-row">
+              <span style={{ color: "#FFFFFF" }}>{it.serial}</span>
+              <span style={{ color: "#A1A1AA", overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>
+                {it.model}
+              </span>
+              <span style={{ color: statusColor(it.status) }}>{it.status}</span>
+              <span style={{ color: "#71717A" }}>{it.time}</span>
+            </div>
+          ))}
+        </div>
+
+        <div className="saas-mock-scanner">
+          <div className="saas-mock-scanner-head">
+            <span style={{ color: "#FFFFFF", fontWeight: 700, fontSize: "12px" }}>
+              SKANER QR
+            </span>
+            <span className="saas-mock-live">
+              <span className="live-dot" aria-hidden="true" />
+              <span>ACTIVE</span>
+            </span>
+          </div>
+
+          <div className="saas-mock-scanner-frame" aria-hidden="true">
+            <svg viewBox="0 0 100 100" preserveAspectRatio="xMidYMid meet" className="saas-mock-qr">
+              {/* QR placeholder grid */}
+              {Array.from({ length: 21 }).map((_, ry) =>
+                Array.from({ length: 21 }).map((__, rx) => {
+                  const isCorner =
+                    (rx < 7 && ry < 7) ||
+                    (rx > 13 && ry < 7) ||
+                    (rx < 7 && ry > 13);
+                  const seed = (rx * 31 + ry * 17) % 7;
+                  const filled = isCorner
+                    ? (rx === 0 || rx === 6 || ry === 0 || ry === 6 ||
+                       (rx >= 2 && rx <= 4 && ry >= 2 && ry <= 4))
+                    : seed < 3;
+                  if (!filled) return null;
+                  return (
+                    <rect
+                      key={`${rx}-${ry}`}
+                      x={rx * 4.5 + 2}
+                      y={ry * 4.5 + 2}
+                      width="4"
+                      height="4"
+                      fill="#FFFFFF"
+                    />
+                  );
+                })
+              )}
+            </svg>
+            <div className="saas-mock-scanner-corner saas-mock-scanner-corner--tl" />
+            <div className="saas-mock-scanner-corner saas-mock-scanner-corner--tr" />
+            <div className="saas-mock-scanner-corner saas-mock-scanner-corner--bl" />
+            <div className="saas-mock-scanner-corner saas-mock-scanner-corner--br" />
+            <div className="saas-mock-scanner-line" />
+          </div>
+
+          <div className="saas-mock-scanner-recent">
+            <div style={{ color: "rgba(255,255,255,0.45)", fontSize: "9px", letterSpacing: "0.12em" }}>
+              OSTATNIE
+            </div>
+            {[
+              { time: "15:42:18", serial: "001432", action: "ready_for_pickup" },
+              { time: "15:41:55", serial: "001428", action: "released" },
+              { time: "15:40:12", serial: "001431", action: "in_repair" },
+            ].map((r) => (
+              <div key={r.time} className="saas-mock-scanner-recent-row">
+                <span style={{ color: "#71717A" }}>{r.time}</span>
+                <span style={{ color: "#FFFFFF" }}>{r.serial}</span>
+                <span style={{ color: statusColor(r.action) }}>{r.action}</span>
+                <span style={{ color: "#00E5A0" }}>✓</span>
+              </div>
+            ))}
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+function SaaSXRay() {
+  const lines = [
+    '< INSERT inventory_items { serial: "GSM-2024-001432", model: "iPhone 13 Pro" }',
+    "> UPDATE inventory_items SET status='ready_for_pickup' WHERE serial=$1",
+    "> AUDIT log:write { actor: scanner_kiosk_03, qr_decoded: 47ms }",
+    "> WEBHOOK notify customer (sms) → +48 600 *** 432",
+    "> JOIN customers ON repair_tickets.customer_id ⇒ Nowak J.",
+    "> RLS check: firm_id match auth.jwt() ✓",
+    "> COMMIT transaction in 12ms",
+    "> REALTIME broadcast inventory_change → 4 subscribers",
+    "> SCAN_FRAME consumed @ 60fps · qr_engine=zxing-cpp v1.4.0",
+    "> THROUGHPUT 247 scans/h · err_rate=0.001%",
+  ];
+  return (
+    <div className="proof-xray-log">
+      <div className="proof-xray-log-head">
+        <span style={{ color: "#00E5A0" }}>●</span>
+        <span>postgres://supabase · inventory_items · realtime</span>
+        <span style={{ marginLeft: "auto", color: "rgba(255,255,255,0.4)" }}>
+          eu-central-1
+        </span>
+      </div>
+      {lines.map((line, i) => (
+        <div
+          key={i}
+          className="proof-xray-log-line"
+          style={{ animationDelay: `${i * 80}ms` }}
+        >
+          <span
+            style={{
+              color: "rgba(255,255,255,0.30)",
+              marginRight: "10px",
+              width: "32px",
+              display: "inline-block",
+              fontSize: "10px",
+            }}
+          >
+            {String(i + 1).padStart(3, "0")}
+          </span>
+          <span>{line}</span>
+        </div>
+      ))}
     </div>
   );
 }

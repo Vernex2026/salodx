@@ -1,6 +1,7 @@
 import Nav from "./components/Nav";
 import Hero from "./components/Hero";
 import Pipeline from "./components/Pipeline";
+import InfiniteCloud from "./components/InfiniteCloud";
 import AIPanel from "./components/AIPanel";
 import Proof from "./components/Proof";
 import Manifesto from "./components/Manifesto";
@@ -33,6 +34,7 @@ export default function App() {
       <main className="relative z-10">
         <Hero />
         <Pipeline />
+        <InfiniteCloud />
         <AIPanel />
         <Proof />
         <Manifesto />

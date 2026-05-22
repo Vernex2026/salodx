@@ -41,7 +41,7 @@ export default function Manifesto() {
     <section
       id="manifesto"
       aria-labelledby="manifesto-heading"
-      className="manifesto-section relative isolate overflow-hidden"
+      className="manifesto-section section-light relative isolate overflow-hidden"
     >
       <div className="relative z-10 mx-auto w-full max-w-[1400px] px-6 py-32 sm:px-8 md:py-40 lg:px-12 lg:py-48">
         <div ref={headerRef} className="max-w-3xl">
@@ -53,7 +53,7 @@ export default function Manifesto() {
               fontSize: "12px",
               fontWeight: 500,
               letterSpacing: "0.08em",
-              color: "rgba(255,255,255,0.55)",
+              color: "rgba(9,9,11,0.55)",
               "--pipeline-reveal-delay": "0ms",
             }}
           >
@@ -62,7 +62,7 @@ export default function Manifesto() {
 
           <h2
             id="manifesto-heading"
-            className={`pipeline-reveal ${headerVisible ? "is-visible" : ""} m-0 mt-6 text-white`}
+            className={`pipeline-reveal ${headerVisible ? "is-visible" : ""} m-0 mt-6`}
             style={{
               fontFamily:
                 "'Geist', -apple-system, BlinkMacSystemFont, 'Inter', sans-serif",
@@ -70,11 +70,12 @@ export default function Manifesto() {
               fontWeight: 800,
               lineHeight: 1.02,
               letterSpacing: "-0.045em",
+              color: "#09090B",
               "--pipeline-reveal-delay": "120ms",
             }}
           >
             Kod jest Twój.{" "}
-            <span style={{ color: "#A1A1AA" }}>Od pierwszego dnia.</span>
+            <span style={{ color: "#52525B" }}>Od pierwszego dnia.</span>
           </h2>
 
           <p
@@ -82,7 +83,7 @@ export default function Manifesto() {
             style={{
               fontSize: "18px",
               lineHeight: 1.55,
-              color: "#D4D4D8",
+              color: "#52525B",
               "--pipeline-reveal-delay": "260ms",
             }}
           >
@@ -112,13 +113,13 @@ export default function Manifesto() {
               fontWeight: 500,
               lineHeight: 1.4,
               letterSpacing: "-0.025em",
-              color: "#A1A1AA",
+              color: "#52525B",
             }}
           >
             Twój zysk: Inwestujesz w technologię, która staje się{" "}
             <strong
               style={{
-                color: "#FFFFFF",
+                color: "#09090B",
                 fontWeight: 800,
               }}
             >
