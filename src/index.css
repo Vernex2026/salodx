@@ -323,7 +323,7 @@ body { font-variant-numeric: tabular-nums; }
 .pipeline-section {
   --pipeline-blur: 0px;
   --pipeline-darken: 0;
-  background: #000;
+  background: transparent;
 }
 .pipeline-container {
   position: relative;
@@ -1279,7 +1279,7 @@ body { font-variant-numeric: tabular-nums; }
 /* ── Infinite Cloud — Apple Watch Honeycomb (50 squircles drag) v9 ─── */
 .cloud-section {
   position: relative;
-  background: #000;
+  background: transparent;
   min-height: 100vh;
   min-height: 100dvh;
   display: flex;
@@ -1310,7 +1310,7 @@ body { font-variant-numeric: tabular-nums; }
   overflow: hidden;
   cursor: grab;
   touch-action: none;
-  background: #000;
+  background: transparent;
 }
 @media (max-width: 1023px) {
   .cloud-stage { min-height: 60vh; }

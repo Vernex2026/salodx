@@ -23,11 +23,14 @@ import * as THREE from "three";
 
 const VERTEX = /* glsl */ `
   uniform float uTime;
+  uniform float uScroll;
   attribute float size;
   attribute vec3 customColor;
+  attribute vec3 aTargetPos;
 
   varying vec3  vColor;
   varying float vPulse;
+  varying float vCoalesce;
 
   void main() {
     vColor = customColor;
@@ -38,9 +41,30 @@ const VERTEX = /* glsl */ `
     pos.x += wave * 0.6;
     pos.z -= wave * 0.6;
 
-    vPulse = 0.6 + 0.4 * sin(uTime * 4.0 + pos.y * 5.0);
+    // v15 Big Bang phase compute
+    float phase = clamp(uScroll, 0.0, 4.0);
+    float implodeAmt = smoothstep(0.0, 1.0, phase);
+    float explodeAmt = smoothstep(1.0, 2.0, phase);
+    float riverAmt = smoothstep(2.0, 3.0, phase);
+    float coalesceAmt = smoothstep(3.0, 4.0, phase);
+    vCoalesce = coalesceAmt;
 
-    vec4 mvPosition = modelViewMatrix * vec4(pos, 1.0);
+    // Phase 1: implosion toward (0,0,0)
+    vec3 imploded = mix(pos, vec3(0.0), implodeAmt);
+    // Phase 2: explosion shockwave outward
+    vec3 outDir = normalize(pos + vec3(0.001));
+    vec3 exploded = mix(imploded, pos + outDir * 8.0, explodeAmt);
+    // Phase 3: river drift downward
+    vec3 river = exploded + vec3(0.0, -4.0 * riverAmt, 0.0);
+    // Phase 4: coalesce toward V logo target
+    vec3 finalPos = mix(river, aTargetPos, coalesceAmt);
+
+    vPulse = 0.6 + 0.4 * sin(uTime * 4.0 + finalPos.y * 5.0);
+    // Brightness boost na implosion peak
+    float brightBoost = 1.0 + implodeAmt * (1.0 - explodeAmt) * 1.5;
+    vPulse *= brightBoost;
+
+    vec4 mvPosition = modelViewMatrix * vec4(finalPos, 1.0);
     gl_PointSize = size * (50.0 / -mvPosition.z) * (1.0 + wave * 0.3);
     gl_Position = projectionMatrix * mvPosition;
   }
@@ -49,27 +73,41 @@ const VERTEX = /* glsl */ `
 const FRAGMENT = /* glsl */ `
   varying vec3  vColor;
   varying float vPulse;
+  varying float vCoalesce;
 
   void main() {
     float d = distance(gl_PointCoord, vec2(0.5));
     if (d > 0.5) discard;
     float core = smoothstep(0.5, 0.42, d);
-    gl_FragColor = vec4(vColor, core * vPulse);
+    // Mint accent na coalescence
+    vec3 mintAccent = vec3(0.0, 0.9, 0.6);
+    vec3 finalColor = mix(vColor, mintAccent, vCoalesce * 0.85);
+    gl_FragColor = vec4(finalColor, core * vPulse);
   }
 `;
 
 function QuantumCore({ count, reduceMotion }) {
   const materialRef = useRef(null);
   const groupRef = useRef(null);
+  const scrollRef = useRef(0);
 
-  const [positions, colors, sizes] = useMemo(() => {
+  const [positions, colors, sizes, targets] = useMemo(() => {
     const pos = new Float32Array(count * 3);
     const col = new Float32Array(count * 3);
     const siz = new Float32Array(count);
+    const tgt = new Float32Array(count * 3);
 
     const colorCore = new THREE.Color(3.0, 3.0, 3.0);
     const colorBlue = new THREE.Color(0.1, 0.4, 2.5);
     const colorCyan = new THREE.Color(0.0, 1.8, 2.5);
+
+    // V logo target positions — 2 strokes diagonally meeting w lewym
+    // górnym rogu viewport (world coord ~(-5, 4, 0)).
+    const stroke1Start = [-6.5, 5.0, 0];
+    const stroke1End   = [-5.0, 2.5, 0];
+    const stroke2Start = [-3.5, 5.0, 0];
+    const stroke2End   = [-5.0, 2.5, 0];
+    const half = Math.floor(count / 2);
 
     for (let i = 0; i < count; i += 1) {
       const y = (Math.random() - 0.5) * 16;
@@ -90,17 +128,52 @@ function QuantumCore({ count, reduceMotion }) {
       col[i * 3 + 2] = finalColor.b;
 
       siz[i] = Math.random() * 2.0;
+
+      // V logo target — per particle linear interpolation on stroke
+      const isS1 = i < half;
+      const t = (i % half) / half;
+      const s = isS1 ? stroke1Start : stroke2Start;
+      const e = isS1 ? stroke1End : stroke2End;
+      const jitter = 0.10;
+      tgt[i * 3]     = s[0] + (e[0] - s[0]) * t + (Math.random() - 0.5) * jitter;
+      tgt[i * 3 + 1] = s[1] + (e[1] - s[1]) * t + (Math.random() - 0.5) * jitter;
+      tgt[i * 3 + 2] = s[2] + (e[2] - s[2]) * t + (Math.random() - 0.5) * jitter;
     }
-    return [pos, col, siz];
+    return [pos, col, siz, tgt];
   }, [count]);
 
-  const uniforms = useMemo(() => ({ uTime: { value: 0 } }), []);
+  const uniforms = useMemo(
+    () => ({ uTime: { value: 0 }, uScroll: { value: 0 } }),
+    []
+  );
+
+  // Big Bang scroll listener — map scrollY do uScroll phase (0..4)
+  useEffect(() => {
+    const onScroll = () => {
+      const y = window.scrollY;
+      const vh = window.innerHeight;
+      let phase;
+      if (y < vh * 0.5) phase = (y / (vh * 0.5)) * 1.0;
+      else if (y < vh) phase = 1.0 + ((y - vh * 0.5) / (vh * 0.5));
+      else if (y < vh * 2) phase = 2.0 + ((y - vh) / vh);
+      else if (y < vh * 3) phase = 3.0 + ((y - vh * 2) / vh);
+      else phase = 4.0;
+      scrollRef.current = phase;
+    };
+    window.addEventListener("scroll", onScroll, { passive: true });
+    onScroll();
+    return () => window.removeEventListener("scroll", onScroll);
+  }, []);
 
   useFrame((state) => {
     if (reduceMotion) return;
     const time = state.clock.elapsedTime;
     if (materialRef.current) {
       materialRef.current.uniforms.uTime.value = time;
+      // Lerp uScroll uniform toward scrollRef target (smooth catch-up)
+      const cur = materialRef.current.uniforms.uScroll.value;
+      const target = scrollRef.current;
+      materialRef.current.uniforms.uScroll.value = cur + (target - cur) * 0.08;
     }
     if (groupRef.current) {
       const targetX = (state.pointer.x * Math.PI) / 8;
@@ -139,6 +212,12 @@ function QuantumCore({ count, reduceMotion }) {
             count={count}
             array={sizes}
             itemSize={1}
+          />
+          <bufferAttribute
+            attach="attributes-aTargetPos"
+            count={count}
+            array={targets}
+            itemSize={3}
           />
         </bufferGeometry>
         <shaderMaterial

@@ -2,7 +2,6 @@ import { useEffect, useLayoutEffect, useRef, useState } from "react";
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { useMagnetic } from "../hooks/useMagnetic";
-import { ParticleCloud } from "./decorative/ParticleCloud";
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -79,17 +78,8 @@ export default function Hero() {
       data-gsap-active={gsapActive ? "true" : "false"}
       className="relative isolate overflow-hidden"
     >
-      {/* v14 — ParticleCloud (z-0, BEZ Bloom) + Eclipse Mask left-pos
-          (z-1) + content z-10. Owner spec: ostre kropki, lewostronny
-          layout, orange engineering tag. */}
-      <div
-        aria-hidden="true"
-        className="pointer-events-none absolute inset-0 z-0"
-        style={{ background: "#00030a" }}
-      >
-        <ParticleCloud className="absolute inset-0" />
-      </div>
-
+      {/* v15 — ParticleCloud lives global w App.jsx (Big Bang
+          scroll-aware). Eclipse mask stays scoped do Hero section. */}
       <div className="hero-eclipse-mask" aria-hidden="true" />
 
       {/* Layer 1 — Hero (left-aligned per Zdj 3) */}

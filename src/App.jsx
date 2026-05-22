@@ -8,6 +8,8 @@ import Manifesto from "./components/Manifesto";
 import Terminal from "./components/Terminal";
 import Footer from "./components/Footer";
 import CommandPalette from "./components/CommandPalette";
+import { ParticleCloud } from "./components/decorative/ParticleCloud";
+
 export default function App() {
   return (
     <>
@@ -17,6 +19,16 @@ export default function App() {
       >
         Przejdź do treści
       </a>
+
+      {/* v15 — Global Big Bang ParticleCloud: scroll-aware narrator.
+          Implosion → explosion → river → coalescence into V logo. */}
+      <div
+        aria-hidden="true"
+        className="pointer-events-none fixed inset-0 z-0"
+        style={{ background: "#00030a" }}
+      >
+        <ParticleCloud className="absolute inset-0" />
+      </div>
 
       <Nav />
 
