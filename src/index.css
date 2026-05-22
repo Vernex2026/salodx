@@ -250,13 +250,32 @@ body { font-variant-numeric: tabular-nums; }
    tak agresywnie, że "zjadała" tekst. VisionOS-style szkło na
    agresywnym tle nie wzmacnia, tylko TŁUMI — głęboki tint węglowy
    działa jak tarcza dla typografii. */
-/* v12 — Hero content card DROPPED. Text direct na particles bg.
-   Owner spec: "Sam napis. Czyste cząsteczki WebGL z tyłu. Zero smug." */
+/* v13.2 — Restored glass card per owner (zdj 2 reference).
+   Dark material za tekstem żeby particles nie tworzyły "łuny". */
 .hero-content-card {
   position: relative;
-  max-width: 760px;
+  max-width: 680px;
   width: 100%;
+  padding: 48px;
+  border-radius: 32px;
+  background: linear-gradient(
+    135deg,
+    rgba(20, 20, 25, 0.60) 0%,
+    rgba(10, 10, 15, 0.80) 100%
+  );
+  -webkit-backdrop-filter: blur(48px) saturate(100%);
+          backdrop-filter: blur(48px) saturate(100%);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.01);
+  box-shadow:
+    0 40px 80px -16px rgba(0, 0, 0, 0.80),
+    inset 0 1px 1px rgba(255, 255, 255, 0.15),
+    inset 1px 0 2px rgba(255, 255, 255, 0.05),
+    inset -1px 0 2px rgba(255, 255, 255, 0.02);
   text-align: left;
+}
+@media (max-width: 640px) {
+  .hero-content-card { padding: 28px; border-radius: 24px; }
 }
 
 /* ──────────────────────────────────────────────────────────
@@ -265,25 +284,16 @@ body { font-variant-numeric: tabular-nums; }
    fixed bg; sekcje są glass nad nim.
    ────────────────────────────────────────────────────────── */
 
-/* v12 — Hero dimmer DROPPED. Particles ostre na pełnej widzialności. */
-.hero-dimmer { display: none; }
-
-/* v13 — Eclipse Mask: czarna tarcza między WebGL bloom a typografią.
-   Owner spec: particles żyją na corners + edges, mrok pod tekstem. */
-.hero-eclipse-mask {
-  position: absolute;
-  inset: 0;
-  z-index: 1;
-  pointer-events: none;
-  background: radial-gradient(
-    ellipse 60% 50% at center,
-    rgba(3, 3, 5, 0.95) 0%,
-    rgba(3, 3, 5, 0.85) 25%,
-    rgba(3, 3, 5, 0.55) 45%,
-    rgba(3, 3, 5, 0.20) 65%,
-    rgba(3, 3, 5, 0) 80%
+/* v13.2 — Restored dimmer per owner (zdj 2 reference). */
+.hero-dimmer {
+  background: linear-gradient(
+    180deg,
+    rgba(0, 3, 10, 0.40) 0%,
+    rgba(0, 3, 10, 0.55) 100%
   );
 }
+/* v13.2 — Eclipse mask DROPPED (powodował łunę przez kontrast). */
+.hero-eclipse-mask { display: none; }
 
 /* Universal blur-reveal — staggerowany via --pipeline-reveal-delay
    CSS var. Apple ease-soft. Używany w Pipeline / AIPanel / CaseStudies. */
