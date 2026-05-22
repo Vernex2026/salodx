@@ -269,7 +269,6 @@ export default function InfiniteCloud() {
             return (
               <motion.div
                 key={project.id}
-                layoutId={`cloud-${project.id}`}
                 onClick={() => setSelectedId(project.id)}
                 className={`cloud-squircle ${
                   project.featured
@@ -316,7 +315,10 @@ export default function InfiniteCloud() {
             aria-labelledby="cloud-focus-title"
           >
             <motion.div
-              layoutId={`cloud-${selected.id}`}
+              initial={{ opacity: 0, scale: 0.9 }}
+              animate={{ opacity: 1, scale: 1 }}
+              exit={{ opacity: 0, scale: 0.92 }}
+              transition={{ type: "spring", stiffness: 320, damping: 28 }}
               className={`cloud-focus-card ${selected.featured ? "cloud-focus-card--featured" : `cloud-focus-card--${selected.type}`}`}
               onClick={(e) => e.stopPropagation()}
             >
