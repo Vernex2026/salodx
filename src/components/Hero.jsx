@@ -2,6 +2,7 @@ import { useEffect, useLayoutEffect, useRef, useState } from "react";
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { useMagnetic } from "../hooks/useMagnetic";
+import { ParticleCloud } from "./decorative/ParticleCloud";
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -78,12 +79,15 @@ export default function Hero() {
       data-gsap-active={gsapActive ? "true" : "false"}
       className="relative isolate overflow-hidden"
     >
-      {/* Dimmer overlay over the global ParticleCloud — gasi cząsteczki
-          do ~55% widzialności tak żeby Hero card był czytelny */}
+      {/* v12 — ParticleCloud lives INSIDE Hero only. Po Hero scroll →
+          particles znikają, sterylna czerń na reszcie sekcji. */}
       <div
         aria-hidden="true"
-        className="hero-dimmer pointer-events-none absolute inset-0 z-[1]"
-      />
+        className="pointer-events-none absolute inset-0 z-0"
+        style={{ background: "#00030a" }}
+      >
+        <ParticleCloud className="absolute inset-0" />
+      </div>
 
       {/* Layer 1 — Hero (clean obietnica) */}
       <div className="relative z-10 mx-auto flex min-h-screen w-full items-center justify-center px-6 py-24 sm:px-8 md:py-32 lg:px-12 lg:py-40">

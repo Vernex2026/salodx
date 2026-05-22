@@ -97,14 +97,14 @@ export default function Pipeline() {
     >
       <div className="pipeline-blur-overlay" aria-hidden="true" />
 
-      <div className="relative z-10 mx-auto w-full max-w-[1400px] px-6 py-32 sm:px-8 md:py-40 lg:px-12 lg:py-48">
-        <div className="grid grid-cols-1 gap-16 lg:grid-cols-12 lg:gap-12">
+      <div className="pipeline-container">
+        <div className="grid grid-cols-1 gap-[6vh] lg:grid-cols-12 lg:gap-12">
           <div className="lg:col-span-5">
             <PipelineSticky activeIdx={activeIdx} total={STEPS.length} />
           </div>
 
           <div className="lg:col-span-7">
-            <ol role="list" className="flex flex-col gap-8 lg:gap-16">
+            <ol role="list" className="flex flex-col gap-8 lg:gap-[6vh]">
               {STEPS.map((step) => (
                 <PipelineCard key={step.n} step={step} />
               ))}
@@ -119,7 +119,7 @@ export default function Pipeline() {
 function PipelineSticky({ activeIdx, total }) {
   const [ref, visible] = useReveal({ threshold: 0.3 });
   return (
-    <div className="lg:sticky lg:top-32">
+    <div className="lg:sticky lg:top-[12vh]">
       <div
         ref={ref}
         className={`pipeline-reveal ${visible ? "is-visible" : ""}`}

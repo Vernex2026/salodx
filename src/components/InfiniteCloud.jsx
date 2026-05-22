@@ -1,5 +1,10 @@
-import { useRef, useState } from "react";
-import { motion, AnimatePresence } from "framer-motion";
+import { useEffect, useRef, useState } from "react";
+import {
+  motion,
+  AnimatePresence,
+  useMotionValue,
+  useTransform,
+} from "framer-motion";
 import { useReveal } from "../hooks/useReveal";
 
 const ITEM_SIZE = 160;
@@ -223,10 +228,77 @@ function getPosition(index) {
   return { x, y };
 }
 
+function Squircle({ project, index, dragX, dragY, viewportRef, onSelect }) {
+  const { x: tileX, y: tileY } = getPosition(index);
+  const tileCenterCanvasX = tileX + ITEM_SIZE / 2;
+  const tileCenterCanvasY = tileY + ITEM_SIZE / 2;
+
+  // Distance od viewport center w motion-value computation.
+  // Canvas pozycjonowane via translate(-50%, -50%) — canvas center
+  // pokrywa się z viewport center przy dragX=0, dragY=0.
+  // Tile na canvas: offset (tileCenterCanvasX - CANVAS_SIZE/2,
+  //                         tileCenterCanvasY - CANVAS_SIZE/2).
+  // Po drag: tile viewport offset = canvas-offset + drag.
+  const offsetX = tileCenterCanvasX - CANVAS_SIZE / 2;
+  const offsetY = tileCenterCanvasY - CANVAS_SIZE / 2;
+
+  const distance = useTransform([dragX, dragY], ([dx, dy]) => {
+    const px = offsetX + dx;
+    const py = offsetY + dy;
+    return Math.sqrt(px * px + py * py);
+  });
+
+  // Apple Watch fisheye — owner spec zones:
+  //   0-200px: scale 1.05, opacity 1 (focus)
+  //   200-400px: scale 0.7, opacity 0.85
+  //   400-600px: scale 0.45, opacity 0.55
+  //   600+: scale 0.3, opacity 0.25 (krawędziowa)
+  const scale = useTransform(
+    distance,
+    [0, 200, 400, 600, 900],
+    [1.05, 1, 0.7, 0.45, 0.3]
+  );
+  const opacity = useTransform(
+    distance,
+    [0, 200, 400, 600, 900],
+    [1, 1, 0.85, 0.55, 0.25]
+  );
+
+  return (
+    <motion.div
+      layoutId={`cloud-${project.id}`}
+      onClick={() => onSelect(project.id)}
+      className={`cloud-squircle ${
+        project.featured
+          ? "cloud-squircle--featured"
+          : `cloud-squircle--${project.type}`
+      }`}
+      style={{ left: tileX, top: tileY, scale, opacity }}
+      whileHover={{ zIndex: 10 }}
+      transition={{ type: "spring", stiffness: 400, damping: 30 }}
+    >
+      <div className="cloud-squircle-bg">
+        {project.featured ? (
+          <FeaturedMock kind={project.mock} />
+        ) : (
+          <div className="cloud-squircle-glyph">
+            <Glyph type={project.type} />
+          </div>
+        )}
+      </div>
+      <div className="cloud-squircle-overlay">
+        <span className="cloud-squircle-tag">{project.tag}</span>
+      </div>
+    </motion.div>
+  );
+}
+
 export default function InfiniteCloud() {
   const constraintsRef = useRef(null);
   const [selectedId, setSelectedId] = useState(null);
   const [headerRef, headerVisible] = useReveal({ threshold: 0.3 });
+  const dragX = useMotionValue(0);
+  const dragY = useMotionValue(0);
 
   const selected = selectedId !== null ? PROJECTS.find((p) => p.id === selectedId) : null;
 
@@ -254,45 +326,27 @@ export default function InfiniteCloud() {
       </div>
 
       <div className="cloud-viewport" ref={constraintsRef}>
-          <motion.div
-            className="cloud-canvas"
-            drag
-            dragConstraints={constraintsRef}
-            dragElastic={0.1}
-            dragTransition={{ bounceStiffness: 600, bounceDamping: 20 }}
-            whileTap={{ cursor: "grabbing" }}
-          >
-            {PROJECTS.map((project, index) => {
-              const { x, y } = getPosition(index);
-              return (
-                <motion.div
-                  key={project.id}
-                  layoutId={`cloud-${project.id}`}
-                  onClick={() => setSelectedId(project.id)}
-                  className={`cloud-squircle ${project.featured ? "cloud-squircle--featured" : `cloud-squircle--${project.type}`}`}
-                  style={{ left: x, top: y }}
-                  whileHover={{
-                    scale: 1.08,
-                    zIndex: 10,
-                  }}
-                  transition={{ type: "spring", stiffness: 400, damping: 30 }}
-                >
-                  <div className="cloud-squircle-bg">
-                    {project.featured ? (
-                      <FeaturedMock kind={project.mock} />
-                    ) : (
-                      <div className="cloud-squircle-glyph">
-                        <Glyph type={project.type} />
-                      </div>
-                    )}
-                  </div>
-                  <div className="cloud-squircle-overlay">
-                    <span className="cloud-squircle-tag">{project.tag}</span>
-                  </div>
-                </motion.div>
-              );
-            })}
-          </motion.div>
+        <motion.div
+          className="cloud-canvas"
+          drag
+          dragConstraints={constraintsRef}
+          dragElastic={0.1}
+          dragTransition={{ bounceStiffness: 600, bounceDamping: 20 }}
+          whileTap={{ cursor: "grabbing" }}
+          style={{ x: dragX, y: dragY }}
+        >
+          {PROJECTS.map((project, index) => (
+            <Squircle
+              key={project.id}
+              project={project}
+              index={index}
+              dragX={dragX}
+              dragY={dragY}
+              viewportRef={constraintsRef}
+              onSelect={setSelectedId}
+            />
+          ))}
+        </motion.div>
         <div className="cloud-drag-hint" aria-hidden="true">
           <span className="cloud-drag-arrows">↕ ↔</span>
           <span>Przeciągnij · kliknij</span>
