@@ -79,8 +79,8 @@ export default function Hero() {
       data-gsap-active={gsapActive ? "true" : "false"}
       className="relative isolate overflow-hidden"
     >
-      {/* v12 — ParticleCloud lives INSIDE Hero only. Po Hero scroll →
-          particles znikają, sterylna czerń na reszcie sekcji. */}
+      {/* v12 — ParticleCloud lives INSIDE Hero only (z-0).
+          v13 — Eclipse mask (z-1) absorbuje bloom pod tekstem. */}
       <div
         aria-hidden="true"
         className="pointer-events-none absolute inset-0 z-0"
@@ -89,8 +89,10 @@ export default function Hero() {
         <ParticleCloud className="absolute inset-0" />
       </div>
 
-      {/* Layer 1 — Hero (clean obietnica) */}
-      <div className="relative z-10 mx-auto flex min-h-screen w-full items-center justify-center px-6 py-24 sm:px-8 md:py-32 lg:px-12 lg:py-40">
+      <div className="hero-eclipse-mask" aria-hidden="true" />
+
+      {/* Layer 1 — Hero (clean obietnica) — z-20 nad eclipse */}
+      <div className="relative z-20 mx-auto flex min-h-screen w-full items-center justify-center px-6 py-24 sm:px-8 md:py-32 lg:px-12 lg:py-40">
         <div className="hero-content-card">
           <div
             data-rise="pill"

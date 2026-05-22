@@ -268,6 +268,23 @@ body { font-variant-numeric: tabular-nums; }
 /* v12 — Hero dimmer DROPPED. Particles ostre na pełnej widzialności. */
 .hero-dimmer { display: none; }
 
+/* v13 — Eclipse Mask: czarna tarcza między WebGL bloom a typografią.
+   Owner spec: particles żyją na corners + edges, mrok pod tekstem. */
+.hero-eclipse-mask {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  pointer-events: none;
+  background: radial-gradient(
+    ellipse 60% 50% at center,
+    rgba(3, 3, 5, 0.95) 0%,
+    rgba(3, 3, 5, 0.85) 25%,
+    rgba(3, 3, 5, 0.55) 45%,
+    rgba(3, 3, 5, 0.20) 65%,
+    rgba(3, 3, 5, 0) 80%
+  );
+}
+
 /* Universal blur-reveal — staggerowany via --pipeline-reveal-delay
    CSS var. Apple ease-soft. Używany w Pipeline / AIPanel / CaseStudies. */
 .pipeline-reveal {
@@ -1254,19 +1271,48 @@ body { font-variant-numeric: tabular-nums; }
 /* ── Infinite Cloud — Apple Watch Honeycomb (50 squircles drag) v9 ─── */
 .cloud-section {
   position: relative;
-  padding: 140px 0 0;
   background: #000;
   min-height: 100vh;
   min-height: 100dvh;
   display: flex;
   flex-direction: column;
+  overflow: visible;
 }
+.cloud-header-zone {
+  position: relative;
+  z-index: 50;
+  padding: 140px 0 32px;
+  pointer-events: none;
+}
+.cloud-header-zone > * { pointer-events: auto; }
 @media (max-width: 1023px) {
-  .cloud-section { padding-top: 100px; }
+  .cloud-header-zone { padding: 100px 0 24px; }
 }
 .cloud-header {
   position: relative;
   z-index: 2;
+}
+.cloud-stage {
+  position: relative;
+  z-index: 10;
+  flex: 1 1 auto;
+  min-height: 70vh;
+  width: 100vw;
+  margin-left: calc(-50vw + 50%);
+  overflow: hidden;
+  cursor: grab;
+  touch-action: none;
+  background: #000;
+}
+@media (max-width: 1023px) {
+  .cloud-stage { min-height: 60vh; }
+}
+.cloud-edge-fade {
+  position: absolute;
+  inset: 0;
+  z-index: 40;
+  pointer-events: none;
+  box-shadow: inset 0 0 150px 100px #000;
 }
 .cloud-section-title {
   font-family: 'Geist', ui-sans-serif, system-ui, sans-serif;
@@ -1288,21 +1334,7 @@ body { font-variant-numeric: tabular-nums; }
   line-height: 1.6;
   color: rgba(228, 228, 231, 0.78);
 }
-.cloud-viewport {
-  position: relative;
-  width: 100vw;
-  margin-left: calc(-50vw + 50%);
-  flex: 1 1 auto;
-  min-height: 70vh;
-  margin-top: 48px;
-  overflow: hidden;
-  cursor: grab;
-  touch-action: none;
-  background: #000;
-}
-@media (max-width: 1023px) {
-  .cloud-viewport { margin-top: 32px; min-height: 60vh; }
-}
+/* .cloud-viewport replaced by .cloud-stage w v13 */
 .cloud-canvas {
   position: absolute;
   width: 3200px;
