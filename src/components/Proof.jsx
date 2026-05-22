@@ -24,13 +24,7 @@ const useDesktop = () => {
 };
 
 const CRM_BADGES = ["Supabase", "V12 Migration", "Custom Dashboard"];
-const SAAS_BADGES = [
-  "QR Automation",
-  "Supabase",
-  "Inventory API",
-  "Real-time DB",
-  "Hardware Integration",
-];
+const SAAS_BADGES = ["QR Automation", "Realtime Postgres", "Hardware Integration"];
 const QTRADER_BADGES = ["Real-Time Data", "WebSockets", "AI Analysis"];
 
 export default function Proof() {
@@ -168,13 +162,40 @@ function ProofPanel({
   xRayContent,
 }) {
   const [xRay, setXRay] = useState(false);
-  const panelRef = useRef(null);
+  const [panelRef, visible] = useReveal({ threshold: 0.5 });
+  const innerRef = useRef(null);
+
+  // Cursor-follow border glow — radial gradient masked do border-only
+  useEffect(() => {
+    const el = innerRef.current;
+    if (!el) return;
+    let frame = 0;
+    let nextX = 0;
+    let nextY = 0;
+    const flush = () => {
+      el.style.setProperty("--mouse-x", `${nextX}px`);
+      el.style.setProperty("--mouse-y", `${nextY}px`);
+      frame = 0;
+    };
+    const onMove = (e) => {
+      const rect = el.getBoundingClientRect();
+      nextX = e.clientX - rect.left;
+      nextY = e.clientY - rect.top;
+      if (!frame) frame = requestAnimationFrame(flush);
+    };
+    el.addEventListener("mousemove", onMove);
+    return () => {
+      el.removeEventListener("mousemove", onMove);
+      if (frame) cancelAnimationFrame(frame);
+    };
+  }, []);
 
   return (
     <article
       ref={panelRef}
       className="proof-panel"
       data-xray={xRay ? "true" : "false"}
+      data-revealed={visible ? "true" : "false"}
       onMouseEnter={() => setXRay(true)}
       onMouseLeave={() => setXRay(false)}
       onClick={() => setXRay((v) => !v)}
@@ -188,20 +209,36 @@ function ProofPanel({
       }}
       aria-label={`${title} — kliknij aby zobaczyć architekturę`}
     >
-      <div className="proof-panel-inner">
+      <div ref={innerRef} className="proof-panel-inner">
         <header className="proof-panel-head">
-          <div className="proof-panel-tag">
+          <div
+            className={`proof-panel-tag pipeline-reveal ${visible ? "is-visible" : ""}`}
+            style={{ "--pipeline-reveal-delay": "0ms" }}
+          >
             [ {caseNo} // {industry} ]
           </div>
-          <h3 className="proof-panel-title">{title}</h3>
-          <div className="proof-panel-badges">
+          <h3
+            className={`proof-panel-title pipeline-reveal ${visible ? "is-visible" : ""}`}
+            style={{ "--pipeline-reveal-delay": "140ms" }}
+          >
+            {title}
+          </h3>
+          <div
+            className={`proof-panel-badges pipeline-reveal ${visible ? "is-visible" : ""}`}
+            style={{ "--pipeline-reveal-delay": "280ms" }}
+          >
             {badges.map((b) => (
               <span key={b} className="case-badge">
                 {b}
               </span>
             ))}
           </div>
-          <p className="proof-panel-gain">{gain}</p>
+          <p
+            className={`proof-panel-gain pipeline-reveal ${visible ? "is-visible" : ""}`}
+            style={{ "--pipeline-reveal-delay": "420ms" }}
+          >
+            {gain}
+          </p>
         </header>
 
         <div className="proof-panel-stage">
@@ -224,7 +261,7 @@ function QTraderPanel() {
       industry="FINTECH"
       title="QTrader — platforma tradingowa"
       badges={QTRADER_BADGES}
-      gain="Niskie opóźnienia i natychmiastowy dostęp do wykresów na żywo. System udźwignie strumień danych rynkowych bez zająknięcia interfejsu."
+      gain="60fps przy 1247 tick/s. Klient widzi cenę zanim konkurencja wciśnie OK."
       xRayContent={<QTraderXRay />}
     >
       <QTraderMock />
@@ -408,7 +445,7 @@ function CRMPanel() {
       industry="ENTERPRISE_CRM"
       title="System CRM (Kancelaria Prawna)"
       badges={CRM_BADGES}
-      gain="Skalowalne bezpieczeństwo. Płynna migracja tysięcy krytycznych rekordów do nowoczesnej, relacyjnej bazy danych. Koniec z chaosem starych systemów."
+      gain="Migracja 47 238 rekordów. Audit trail każdej zmiany. RLS na każdym wierszu."
       xRayContent={<CRMXRay />}
     >
       <CRMMock />
@@ -681,7 +718,7 @@ function SaaSPanel() {
       industry="LOGISTICS_SAAS"
       title="System zarządzania dla serwisów"
       badges={SAAS_BADGES}
-      gain="Wydanie sprzętu w ułamku sekundy. Skalowalny SaaS logistyczny — od małych punktów GSM po duże magazyny. Natywna integracja ze skanerami QR pozwala na błyskawiczną identyfikację, zmianę statusu naprawy i wydanie sprzętu klientowi. Kod, który optymalizuje fizyczną pracę."
+      gain="QR scan → status → SMS klient w 47ms. Hardware × Postgres realtime."
       xRayContent={<SaaSXRay />}
     >
       <SaaSMock />
