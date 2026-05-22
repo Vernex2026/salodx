@@ -1,6 +1,5 @@
 import { useEffect, useMemo, useRef, useState } from "react";
 import { Canvas, useFrame } from "@react-three/fiber";
-import { EffectComposer, Bloom } from "@react-three/postprocessing";
 import * as THREE from "three";
 
 /**
@@ -54,7 +53,7 @@ const FRAGMENT = /* glsl */ `
   void main() {
     float d = distance(gl_PointCoord, vec2(0.5));
     if (d > 0.5) discard;
-    float core = smoothstep(0.5, 0.0, d);
+    float core = smoothstep(0.5, 0.42, d);
     gl_FragColor = vec4(vColor, core * vPulse);
   }
 `;
@@ -187,20 +186,6 @@ export function ParticleCloud({ className = "", count = 75000 }) {
         }}
       >
         <QuantumCore count={finalCount} reduceMotion={reduceMotion} />
-        <EffectComposer disableNormalPass>
-          <Bloom
-            luminanceThreshold={0.1}
-            mipmapBlur
-            intensity={1.2}
-            radius={0.6}
-          />
-          <Bloom
-            luminanceThreshold={0.8}
-            mipmapBlur
-            intensity={0.8}
-            radius={0.2}
-          />
-        </EffectComposer>
       </Canvas>
     </div>
   );

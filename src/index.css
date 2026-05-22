@@ -250,32 +250,13 @@ body { font-variant-numeric: tabular-nums; }
    tak agresywnie, że "zjadała" tekst. VisionOS-style szkło na
    agresywnym tle nie wzmacnia, tylko TŁUMI — głęboki tint węglowy
    działa jak tarcza dla typografii. */
-/* v13.2 — Restored glass card per owner (zdj 2 reference).
-   Dark material za tekstem żeby particles nie tworzyły "łuny". */
+/* v14 — Glass card DROPPED (znowu, owner brutal). Eclipse Mask
+   left-positioned obsługuje czytelność. */
 .hero-content-card {
   position: relative;
-  max-width: 680px;
+  max-width: 800px;
   width: 100%;
-  padding: 48px;
-  border-radius: 32px;
-  background: linear-gradient(
-    135deg,
-    rgba(20, 20, 25, 0.60) 0%,
-    rgba(10, 10, 15, 0.80) 100%
-  );
-  -webkit-backdrop-filter: blur(48px) saturate(100%);
-          backdrop-filter: blur(48px) saturate(100%);
-  border: 1px solid rgba(255, 255, 255, 0.08);
-  border-bottom: 1px solid rgba(255, 255, 255, 0.01);
-  box-shadow:
-    0 40px 80px -16px rgba(0, 0, 0, 0.80),
-    inset 0 1px 1px rgba(255, 255, 255, 0.15),
-    inset 1px 0 2px rgba(255, 255, 255, 0.05),
-    inset -1px 0 2px rgba(255, 255, 255, 0.02);
   text-align: left;
-}
-@media (max-width: 640px) {
-  .hero-content-card { padding: 28px; border-radius: 24px; }
 }
 
 /* ──────────────────────────────────────────────────────────
@@ -284,16 +265,33 @@ body { font-variant-numeric: tabular-nums; }
    fixed bg; sekcje są glass nad nim.
    ────────────────────────────────────────────────────────── */
 
-/* v13.2 — Restored dimmer per owner (zdj 2 reference). */
-.hero-dimmer {
-  background: linear-gradient(
-    180deg,
-    rgba(0, 3, 10, 0.40) 0%,
-    rgba(0, 3, 10, 0.55) 100%
+/* v14 — Dimmer DROPPED (czysty ParticleCloud bez Bloom = no smog). */
+.hero-dimmer { display: none; }
+
+/* v14 — Eclipse Mask LEFT-positioned per owner Zdj 3 spec.
+   Skupia mrok nad lewostronnym tekstem, particles żyją po prawej. */
+.hero-eclipse-mask {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  pointer-events: none;
+  background: radial-gradient(
+    circle at 10% 40%,
+    rgba(3, 3, 5, 0.98) 0%,
+    rgba(3, 3, 5, 0.60) 20%,
+    transparent 60%
   );
 }
-/* v13.2 — Eclipse mask DROPPED (powodował łunę przez kontrast). */
-.hero-eclipse-mask { display: none; }
+@media (max-width: 1023px) {
+  .hero-eclipse-mask {
+    background: radial-gradient(
+      circle at 50% 40%,
+      rgba(3, 3, 5, 0.95) 0%,
+      rgba(3, 3, 5, 0.60) 30%,
+      transparent 75%
+    );
+  }
+}
 
 /* Universal blur-reveal — staggerowany via --pipeline-reveal-delay
    CSS var. Apple ease-soft. Używany w Pipeline / AIPanel / CaseStudies. */

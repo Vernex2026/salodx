@@ -79,8 +79,9 @@ export default function Hero() {
       data-gsap-active={gsapActive ? "true" : "false"}
       className="relative isolate overflow-hidden"
     >
-      {/* v13.2 — ParticleCloud INSIDE Hero (z-0) + dimmer (z-1) +
-          glass content card. Eclipse mask dropped (powodował łunę). */}
+      {/* v14 — ParticleCloud (z-0, BEZ Bloom) + Eclipse Mask left-pos
+          (z-1) + content z-10. Owner spec: ostre kropki, lewostronny
+          layout, orange engineering tag. */}
       <div
         aria-hidden="true"
         className="pointer-events-none absolute inset-0 z-0"
@@ -89,13 +90,10 @@ export default function Hero() {
         <ParticleCloud className="absolute inset-0" />
       </div>
 
-      <div
-        aria-hidden="true"
-        className="hero-dimmer pointer-events-none absolute inset-0 z-[1]"
-      />
+      <div className="hero-eclipse-mask" aria-hidden="true" />
 
-      {/* Layer 1 — Hero (clean obietnica) */}
-      <div className="relative z-10 mx-auto flex min-h-screen w-full items-center justify-center px-6 py-24 sm:px-8 md:py-32 lg:px-12 lg:py-40">
+      {/* Layer 1 — Hero (left-aligned per Zdj 3) */}
+      <div className="relative z-10 mx-auto flex min-h-screen w-full max-w-[1400px] flex-col items-start justify-center px-6 py-24 sm:px-10 md:px-16 md:py-32 lg:px-20 lg:py-40">
         <div className="hero-content-card">
           <div
             data-rise="pill"
@@ -104,11 +102,12 @@ export default function Hero() {
               fontFamily: "'Geist Mono', ui-monospace, SFMono-Regular, monospace",
               fontSize: "12px",
               fontWeight: 500,
-              letterSpacing: "0.08em",
-              color: "rgba(255,255,255,0.55)",
+              letterSpacing: "0.18em",
+              color: "#F18D48",
+              textTransform: "uppercase",
             }}
           >
-            [ VERNEX ENGINEERING ]
+            [ INŻYNIERIA OPROGRAMOWANIA // VERNEX ]
           </div>
 
           <h1
