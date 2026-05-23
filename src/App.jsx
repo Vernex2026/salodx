@@ -1,6 +1,5 @@
 import Nav from "./components/Nav";
 import Hero from "./components/Hero";
-import QuantumCore from "./components/QuantumCore";
 import InfiniteCloud from "./components/InfiniteCloud";
 import AIPanel from "./components/AIPanel";
 import Proof from "./components/Proof";
@@ -34,7 +33,6 @@ export default function App() {
 
       <main className="relative z-10">
         <Hero />
-        <QuantumCore />
         <InfiniteCloud />
         <AIPanel />
         <Proof />

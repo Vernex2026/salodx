@@ -319,169 +319,7 @@ body { font-variant-numeric: tabular-nums; }
   }
 }
 
-/* ── Quantum Core section (v16 — 3D R3F scene replacing Pipeline) ── */
-.quantum-section {
-  position: relative;
-  width: 100%;
-  min-height: 280vh;
-  background: #00030a;
-  isolation: isolate;
-}
-.quantum-section--fallback {
-  min-height: auto;
-  padding: 12vh 6vw;
-}
-.quantum-canvas-wrap {
-  position: sticky;
-  top: 0;
-  width: 100%;
-  height: 100vh;
-  height: 100dvh;
-  overflow: hidden;
-}
-.quantum-canvas {
-  position: absolute !important;
-  inset: 0;
-  width: 100% !important;
-  height: 100% !important;
-  display: block;
-}
-.quantum-overlay {
-  position: absolute;
-  left: 6vw;
-  bottom: 8vh;
-  z-index: 2;
-  max-width: 520px;
-  pointer-events: none;
-  font-family: var(--font-mono);
-  color: rgba(255, 255, 255, 0.95);
-}
-.quantum-overlay-badge {
-  display: inline-block;
-  font-size: 11px;
-  letter-spacing: 0.18em;
-  color: #00E5A0;
-  text-transform: uppercase;
-  margin-bottom: 12px;
-}
-.quantum-overlay-title {
-  font-family: var(--font-sans);
-  font-size: clamp(28px, 4.4vw, 52px);
-  line-height: 1.05;
-  letter-spacing: -0.02em;
-  font-weight: 500;
-  margin: 0 0 12px;
-}
-.quantum-overlay-sub {
-  font-size: 13px;
-  line-height: 1.55;
-  color: rgba(255, 255, 255, 0.65);
-  margin: 0;
-  max-width: 440px;
-}
-
-/* R3F <Html> content per block */
-.core-block-content {
-  font-family: var(--font-mono);
-  color: rgba(255, 255, 255, 0.94);
-  text-align: center;
-  pointer-events: none;
-  user-select: none;
-  text-shadow: 0 1px 6px rgba(0, 0, 0, 0.65);
-}
-.core-block-badge {
-  font-size: 9px;
-  letter-spacing: 0.18em;
-  text-transform: uppercase;
-  margin-bottom: 6px;
-  font-weight: 500;
-}
-.core-block-title {
-  font-family: var(--font-sans);
-  font-size: 18px;
-  font-weight: 500;
-  letter-spacing: -0.01em;
-  line-height: 1.15;
-}
-.core-block-detail {
-  font-size: 10px;
-  color: rgba(255, 255, 255, 0.7);
-  margin-top: 10px;
-  line-height: 1.45;
-}
-
-/* Fallback grid (mobile / reduce-motion) */
-.quantum-fallback-grid {
-  max-width: 1200px;
-  margin: 0 auto;
-  color: rgba(255, 255, 255, 0.92);
-  font-family: var(--font-sans);
-}
-.quantum-fallback-header {
-  text-align: left;
-  margin-bottom: 36px;
-}
-.quantum-fallback-badge {
-  display: inline-block;
-  font-family: var(--font-mono);
-  font-size: 11px;
-  letter-spacing: 0.18em;
-  color: #00E5A0;
-  text-transform: uppercase;
-  margin-bottom: 12px;
-}
-.quantum-fallback-header h2 {
-  font-size: clamp(28px, 6vw, 44px);
-  letter-spacing: -0.02em;
-  font-weight: 500;
-  margin: 0 0 8px;
-}
-.quantum-fallback-header p {
-  color: rgba(255, 255, 255, 0.65);
-  margin: 0;
-  font-size: 14px;
-}
-.quantum-fallback-blocks {
-  display: grid;
-  grid-template-columns: 1fr;
-  gap: 14px;
-}
-@media (min-width: 600px) {
-  .quantum-fallback-blocks { grid-template-columns: 1fr 1fr; }
-}
-.quantum-fallback-card {
-  padding: 22px;
-  border-radius: 14px;
-  background: rgba(10, 10, 15, 0.6);
-  border: 1px solid rgba(255, 255, 255, 0.08);
-  -webkit-backdrop-filter: blur(18px);
-          backdrop-filter: blur(18px);
-}
-.quantum-fallback-card-badge {
-  font-family: var(--font-mono);
-  font-size: 10px;
-  letter-spacing: 0.16em;
-  text-transform: uppercase;
-  margin-bottom: 10px;
-}
-.quantum-fallback-card h3 {
-  font-size: 18px;
-  font-weight: 500;
-  letter-spacing: -0.01em;
-  margin: 0 0 6px;
-}
-.quantum-fallback-card p {
-  font-size: 12px;
-  color: rgba(255, 255, 255, 0.65);
-  line-height: 1.5;
-  margin: 0;
-}
-
-@media (max-width: 767px), (prefers-reduced-motion: reduce) {
-  .quantum-section {
-    min-height: auto;
-  }
-}
+/* v17: Quantum Core (v16) usunięte — vrócono do Apple Watch fisheye w InfiniteCloud */
 
 /* ── AIPanel — mock browser + prompt panel ───────────────── */
 .aipanel-stage {
@@ -1399,23 +1237,33 @@ body { font-variant-numeric: tabular-nums; }
   position: relative;
   z-index: 10;
   flex: 1 1 auto;
-  min-height: 70vh;
+  min-height: 78vh;
   width: 100vw;
   margin-left: calc(-50vw + 50%);
   overflow: hidden;
   cursor: grab;
   touch-action: none;
-  background: transparent;
+  /* Sterile center, particles vignette only on edges */
+  background: radial-gradient(
+    ellipse at 50% 50%,
+    #00030a 0%,
+    #00030a 45%,
+    rgba(0, 3, 10, 0.92) 65%,
+    rgba(0, 3, 10, 0.45) 85%,
+    transparent 100%
+  );
+  isolation: isolate;
 }
+.cloud-stage:active { cursor: grabbing; }
 @media (max-width: 1023px) {
-  .cloud-stage { min-height: 60vh; }
+  .cloud-stage { min-height: 70vh; }
 }
-.cloud-edge-fade {
+.cloud-vignette {
   position: absolute;
   inset: 0;
-  z-index: 40;
+  z-index: 5;
   pointer-events: none;
-  box-shadow: inset 0 0 150px 100px #000;
+  box-shadow: inset 0 0 220px 100px rgba(0, 0, 0, 0.55);
 }
 .cloud-section-title {
   font-family: 'Geist', ui-sans-serif, system-ui, sans-serif;
@@ -1437,204 +1285,118 @@ body { font-variant-numeric: tabular-nums; }
   line-height: 1.6;
   color: rgba(228, 228, 231, 0.78);
 }
-/* .cloud-viewport replaced by .cloud-stage w v13 */
+/* v17 — Fisheye Apple Watch canvas */
 .cloud-canvas {
   position: absolute;
-  width: 3200px;
-  height: 3200px;
-  left: 50%;
-  top: 50%;
-  transform: translate(-50%, -50%);
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 2;
 }
-.cloud-squircle {
+
+.fisheye-tile {
   position: absolute;
-  width: 160px;
-  height: 160px;
-  border-radius: 40px;
+  top: 0;
+  left: 0;
+  width: 200px;
+  height: 200px;
+  padding: 22px 20px;
+  border-radius: 36px;
+  background: rgba(10, 12, 18, 0.72);
+  -webkit-backdrop-filter: blur(28px) saturate(130%);
+          backdrop-filter: blur(28px) saturate(130%);
   border: 1px solid rgba(255, 255, 255, 0.08);
-  background: #0A0B11;
   box-shadow:
-    0 10px 30px -10px rgba(0, 0, 0, 0.6),
-    inset 0 1px 0 rgba(255, 255, 255, 0.05);
-  overflow: hidden;
-  cursor: pointer;
-  will-change: transform;
-}
-.cloud-squircle--featured {
-  border-color: rgba(0, 229, 160, 0.30);
-  box-shadow:
-    0 14px 32px -10px rgba(0, 0, 0, 0.7),
-    0 0 0 1px rgba(0, 229, 160, 0.15),
+    0 24px 56px -16px rgba(0, 0, 0, 0.6),
     inset 0 1px 0 rgba(255, 255, 255, 0.07);
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  text-align: left;
+  cursor: pointer;
+  will-change: transform, opacity, filter;
+  transform-origin: center center;
+  color: inherit;
+  outline: none;
 }
-.cloud-squircle-bg {
-  position: absolute;
-  inset: 0;
+.fisheye-tile:focus-visible {
+  outline: 2px solid var(--tile-accent, #00E5A0);
+  outline-offset: 3px;
 }
-.cloud-squircle--fintech .cloud-squircle-bg,
-.cloud-squircle--ai .cloud-squircle-bg,
-.cloud-squircle--crm .cloud-squircle-bg,
-.cloud-squircle--logistics .cloud-squircle-bg,
-.cloud-squircle--webgl .cloud-squircle-bg {
-  background: radial-gradient(
-    circle at center,
-    rgba(0, 229, 160, 0.10) 0%,
-    transparent 65%
-  );
-}
-.cloud-squircle--legal .cloud-squircle-bg {
-  background: radial-gradient(
-    circle at center,
-    rgba(255, 90, 124, 0.10) 0%,
-    transparent 65%
-  );
-}
-.cloud-squircle--ecom .cloud-squircle-bg {
-  background: radial-gradient(
-    circle at center,
-    rgba(212, 165, 116, 0.10) 0%,
-    transparent 65%
-  );
-}
-.cloud-squircle-glyph {
-  position: absolute;
-  inset: 0;
+.fisheye-tile-glyph {
   display: flex;
   align-items: center;
-  justify-content: center;
+  justify-content: flex-start;
+  color: var(--tile-accent, #00E5A0);
 }
-.cloud-squircle-overlay {
-  position: absolute;
-  inset: 0;
+.fisheye-tile-meta {
   display: flex;
-  align-items: flex-end;
-  padding: 12px;
-  background: linear-gradient(
-    to bottom,
-    transparent 55%,
-    rgba(0, 0, 0, 0.7) 100%
-  );
-  pointer-events: none;
+  flex-direction: column;
+  gap: 4px;
 }
-.cloud-squircle-tag {
+.fisheye-tile-badge {
   font-family: 'Geist Mono', ui-monospace, monospace;
   font-size: 9px;
   font-weight: 700;
-  letter-spacing: 0.08em;
-  color: #00E5A0;
+  letter-spacing: 0.16em;
   text-transform: uppercase;
+  color: var(--tile-accent, #00E5A0);
 }
-.cloud-squircle--legal .cloud-squircle-tag { color: #FF5A7C; }
-.cloud-squircle--ecom .cloud-squircle-tag { color: #D4A574; }
-
-/* Featured tile inline mocks */
-.cloud-mock {
-  position: absolute;
-  inset: 12px;
-  border-radius: 24px;
-  background: rgba(0, 0, 0, 0.4);
-  overflow: hidden;
-  padding: 14px;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  gap: 8px;
+.fisheye-tile-title {
+  font-family: 'Geist', ui-sans-serif, system-ui, sans-serif;
+  font-size: 18px;
+  font-weight: 600;
+  letter-spacing: -0.015em;
+  line-height: 1.15;
+  color: rgba(255, 255, 255, 0.96);
+  margin: 0;
 }
-.cloud-mock--qtrader {
-  background: linear-gradient(180deg, rgba(0, 229, 160, 0.06) 0%, transparent 100%);
-  justify-content: flex-end;
-  padding-bottom: 18px;
-}
-.cloud-mock-chart {
-  position: absolute;
-  inset: 14px;
-  height: 60%;
-}
-.cloud-mock-pill {
-  align-self: flex-start;
+.fisheye-tile-metric {
   font-family: 'Geist Mono', ui-monospace, monospace;
   font-size: 11px;
-  font-weight: 700;
-  padding: 3px 8px;
-  border-radius: 999px;
-  background: rgba(0, 229, 160, 0.18);
-  color: #00E5A0;
+  line-height: 1.4;
+  color: rgba(255, 255, 255, 0.62);
+  margin: 0;
+}
+
+/* Mobile static fallback (no drag, no fisheye math) */
+.cloud-fallback-grid {
   position: relative;
   z-index: 2;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 14px;
+  padding: 24px;
+  width: 100%;
 }
-.cloud-mock--ai {
-  font-family: 'Geist Mono', ui-monospace, monospace;
-  font-size: 10px;
-  color: #00E5A0;
+.cloud-fallback-tile {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding: 18px;
+  border-radius: 22px;
+  background: rgba(10, 12, 18, 0.72);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  -webkit-backdrop-filter: blur(20px);
+          backdrop-filter: blur(20px);
+  cursor: pointer;
+  text-align: left;
+  color: inherit;
 }
-.cloud-mock-line {
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-}
-.cloud-mock-line--dim {
-  color: rgba(0, 229, 160, 0.4);
-}
-.cloud-mock-cursor {
-  width: 6px;
-  height: 10px;
-  background: #00E5A0;
-  animation: cloudCursorBlink 1.1s steps(2) infinite;
-}
-@keyframes cloudCursorBlink {
-  0%, 50% { opacity: 1; }
-  51%, 100% { opacity: 0; }
-}
-.cloud-mock--crm {
-  justify-content: center;
-  gap: 6px;
-}
-.cloud-mock-bar {
-  height: 8px;
-  border-radius: 999px;
-  background: linear-gradient(90deg, #00E5A0 0%, rgba(0, 229, 160, 0.25) 100%);
-}
-.cloud-mock--legal {
-  justify-content: center;
-  position: relative;
-}
-.cloud-mock-line--redacted {
-  height: 10px;
-  border-radius: 2px;
-  background: repeating-linear-gradient(
-    90deg,
-    rgba(255, 90, 124, 0.45) 0,
-    rgba(255, 90, 124, 0.45) 8px,
-    rgba(255, 90, 124, 0.15) 8px,
-    rgba(255, 90, 124, 0.15) 12px
-  );
-}
-.cloud-mock-stamp {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%) rotate(-8deg);
-  padding: 4px 8px;
-  border: 1.5px solid #FF5A7C;
-  border-radius: 4px;
-  font-family: 'Geist Mono', ui-monospace, monospace;
-  font-size: 12px;
-  font-weight: 700;
-  letter-spacing: 0.18em;
-  color: #FF5A7C;
-  background: rgba(255, 90, 124, 0.08);
-  text-shadow: 0 0 8px rgba(255, 90, 124, 0.3);
+.cloud-fallback-glyph {
+  color: var(--tile-accent, #00E5A0);
 }
 
 /* Drag hint */
 .cloud-drag-hint {
   position: absolute;
-  right: 40px;
-  bottom: 40px;
+  left: 50%;
+  bottom: 32px;
+  transform: translateX(-50%);
   display: flex;
   align-items: center;
   gap: 10px;
-  padding: 10px 14px;
+  padding: 10px 16px;
   border-radius: 999px;
   background: rgba(0, 0, 0, 0.55);
   border: 1px solid rgba(255, 255, 255, 0.08);
@@ -1643,12 +1405,12 @@ body { font-variant-numeric: tabular-nums; }
   font-family: 'Geist Mono', ui-monospace, monospace;
   font-size: 11px;
   letter-spacing: 0.08em;
-  color: rgba(255, 255, 255, 0.6);
+  color: rgba(255, 255, 255, 0.5);
   pointer-events: none;
-  z-index: 4;
+  z-index: 6;
 }
 .cloud-drag-arrows {
-  color: #00E5A0;
+  color: var(--mint, #00E5A0);
   font-weight: 700;
 }
 
@@ -1667,26 +1429,25 @@ body { font-variant-numeric: tabular-nums; }
 }
 .cloud-focus-card {
   width: 100%;
-  max-width: 720px;
+  max-width: 640px;
   max-height: 85vh;
   border-radius: 32px;
   border: 1px solid rgba(255, 255, 255, 0.10);
   background: #09090b;
-  box-shadow: 0 32px 100px rgba(0, 0, 0, 0.85);
+  box-shadow:
+    0 32px 100px rgba(0, 0, 0, 0.85),
+    0 0 0 1px var(--tile-accent, #00E5A0) inset;
   overflow: hidden auto;
   display: flex;
   flex-direction: column;
 }
-.cloud-focus-card--featured {
-  border-color: rgba(0, 229, 160, 0.25);
-}
 .cloud-focus-stage {
   position: relative;
   width: 100%;
-  height: 320px;
+  height: 240px;
   background: radial-gradient(
     circle at center,
-    rgba(0, 229, 160, 0.12) 0%,
+    color-mix(in srgb, var(--tile-accent, #00E5A0) 14%, transparent) 0%,
     transparent 70%
   );
   display: flex;
@@ -1694,50 +1455,48 @@ body { font-variant-numeric: tabular-nums; }
   justify-content: center;
   border-bottom: 1px solid rgba(255, 255, 255, 0.06);
 }
-.cloud-focus-card--legal .cloud-focus-stage {
-  background: radial-gradient(circle at center, rgba(255, 90, 124, 0.10) 0%, transparent 70%);
-}
-.cloud-focus-card--ecom .cloud-focus-stage {
-  background: radial-gradient(circle at center, rgba(212, 165, 116, 0.10) 0%, transparent 70%);
-}
-.cloud-focus-stage .cloud-mock {
-  inset: 32px;
-  border-radius: 20px;
-}
-.cloud-focus-glyph {
-  transform: scale(2.4);
+.cloud-focus-stage svg {
+  width: 96px;
+  height: 96px;
 }
 .cloud-focus-body {
-  padding: 36px 40px 40px;
+  padding: 32px 36px 36px;
   display: flex;
   flex-direction: column;
-  gap: 14px;
+  gap: 12px;
 }
 @media (max-width: 640px) {
-  .cloud-focus-body { padding: 28px 24px 32px; }
-  .cloud-focus-stage { height: 240px; }
+  .cloud-focus-body { padding: 24px 22px 28px; }
+  .cloud-focus-stage { height: 180px; }
 }
 .cloud-focus-tag {
   font-family: 'Geist Mono', ui-monospace, monospace;
   font-size: 11px;
   font-weight: 700;
-  letter-spacing: 0.12em;
-  color: #00E5A0;
+  letter-spacing: 0.14em;
+  color: var(--tile-accent, #00E5A0);
 }
-.cloud-focus-card--legal .cloud-focus-tag { color: #FF5A7C; }
-.cloud-focus-card--ecom .cloud-focus-tag { color: #D4A574; }
 .cloud-focus-title {
   font-family: 'Geist', ui-sans-serif, system-ui, sans-serif;
-  font-size: clamp(1.8rem, 3.5vw, 2.6rem);
+  font-size: clamp(1.6rem, 3.5vw, 2.2rem);
   font-weight: 700;
   letter-spacing: -0.02em;
-  line-height: 1.05;
+  line-height: 1.08;
   color: #FAFAFA;
+  margin: 0;
+}
+.cloud-focus-metric {
+  font-family: 'Geist Mono', ui-monospace, monospace;
+  font-size: 13px;
+  color: var(--tile-accent, #00E5A0);
+  margin: -2px 0 8px;
+  letter-spacing: 0.02em;
 }
 .cloud-focus-desc {
   font-size: 15px;
   line-height: 1.7;
   color: rgba(228, 228, 231, 0.78);
+  margin: 0;
 }
 .cloud-focus-close {
   align-self: flex-start;
@@ -1760,8 +1519,12 @@ body { font-variant-numeric: tabular-nums; }
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .cloud-mock-cursor { animation: none; opacity: 1; }
-  .cloud-squircle { transition: none !important; }
+  .fisheye-tile {
+    transform: scale(0.85) !important;
+    opacity: 0.9 !important;
+    filter: none !important;
+    transition: none !important;
+  }
 }
 
 /* ── Manifesto section — anty-agency split (WHITE inversion v7) ─── */
