@@ -6,6 +6,9 @@ import {
   useTransform,
 } from "framer-motion";
 import { useReveal } from "../hooks/useReveal";
+import { QTraderMockup } from "./cloud/mockups/QTraderMockup";
+import { CRMOmegaMockup } from "./cloud/mockups/CRMOmegaMockup";
+import { GSMFixMockup } from "./cloud/mockups/GSMFixMockup";
 
 const TILE_SIZE = 200;
 const TILE_GAP = 32;
@@ -161,9 +164,9 @@ const Glyph = ({ type, accent }) => {
 
 const TILES = [
   { id: "ai-terminal", glyph: "ai", accent: "#00E5A0", title: "AI Terminal", tag: "[ SELF-SERVICE // LLM ]", metric: "Prompt → live deploy", desc: "Edytuj produkt rozmawiając z panelem. Zmiana koloru, dodanie pola, nowy widok — bez agencji, bez tickets, bez czekania." },
-  { id: "qtrader", glyph: "fintech", accent: "#00E5FF", title: "QTrader", tag: "[ FINTECH // WS ]", metric: "1247 ticks/s · 0.4ms", desc: "Real-time order book + AI signals na WebSocket. React 19 z frame budget <10ms na każdym ticku rynkowym." },
-  { id: "crm-omega", glyph: "crm", accent: "#FF8A4C", title: "CRM Omega", tag: "[ LEGAL // RLS ]", metric: "47k records · audit", desc: "Kancelaria z 47k rekordami klientów. Row-level security na każdym wierszu, audit trail PII, secured Postgres." },
-  { id: "gsm-fix", glyph: "logistics", accent: "#7C5CFF", title: "GSM-FIX", tag: "[ LOGISTICS // SAAS ]", metric: "QR → SMS w 47ms", desc: "Skanowanie QR serwisu → SMS do klienta w 47ms. Postgres realtime channels, multi-tenant SaaS dla 60+ punktów." },
+  { id: "qtrader", glyph: "fintech", accent: "#00E5FF", title: "QTrader", tag: "[ FINTECH // WS ]", metric: "1247 ticks/s · 0.4ms", desc: "Real-time order book + AI signals na WebSocket. React 19 z frame budget <10ms na każdym ticku rynkowym.", mockup: "qtrader" },
+  { id: "crm-omega", glyph: "crm", accent: "#FF8A4C", title: "CRM Omega", tag: "[ LEGAL // RLS ]", metric: "47k records · audit", desc: "Kancelaria z 47k rekordami klientów. Row-level security na każdym wierszu, audit trail PII, secured Postgres.", mockup: "crm-omega" },
+  { id: "gsm-fix", glyph: "logistics", accent: "#7C5CFF", title: "GSM-FIX", tag: "[ LOGISTICS // SAAS ]", metric: "QR → SMS w 47ms", desc: "Skanowanie QR serwisu → SMS do klienta w 47ms. Postgres realtime channels, multi-tenant SaaS dla 60+ punktów.", mockup: "gsm-fix" },
   { id: "supabase", glyph: "cloud", accent: "#00E5FF", title: "Supabase Migration", tag: "[ CLOUD // INFRA ]", metric: "Zero downtime", desc: "Migracja produkcyjnej bazy bez okna serwisowego. RLS policies apply on-the-fly, edge replication." },
   { id: "lovable", glyph: "ai", accent: "#00E5A0", title: "Lovable Bootstrap", tag: "[ AI // PROTOTYPE ]", metric: "72h klikalny prototyp", desc: "Działający, klikalny prototyp w 72 godziny. Nie statyczne makiety po trzech miesiącach — żywy produkt." },
   { id: "edge", glyph: "edge", accent: "#00E5FF", title: "Edge Functions", tag: "[ VERCEL // EDGE ]", metric: "<100ms global", desc: "Vercel Edge Runtime — sub-100ms latency w 18 regionach. Bez zimnego startu, geografia bez kompromisów." },
@@ -173,6 +176,12 @@ const TILES = [
   { id: "ecom", glyph: "ecom", accent: "#D4A574", title: "E-com Storefront", tag: "[ E-COM // STRIPE ]", metric: "2.1s LCP · PWA", desc: "Next.js storefront z Stripe Checkout. PWA mobile-first, LCP 2.1s, offline cart sync, real-time stock." },
   { id: "bank", glyph: "fintech", accent: "#00E5FF", title: "Bank Aggregator", tag: "[ FINTECH // OPEN BANKING ]", metric: "18 banków · PSD2", desc: "Agregator rachunków przez PSD2. 18 banków polskich, real-time sync, transaction categorization AI." },
 ];
+
+const MOCKUP_MAP = {
+  "qtrader": QTraderMockup,
+  "crm-omega": CRMOmegaMockup,
+  "gsm-fix": GSMFixMockup,
+};
 
 function FisheyeTile({ tile, baseX, baseY, dragX, dragY, vc, onClick }) {
   const tileX = useTransform(dragX, (dx) => baseX + dx);
@@ -361,33 +370,42 @@ export default function InfiniteCloud() {
             aria-labelledby="cloud-focus-title"
           >
             <motion.div
-              initial={{ opacity: 0, scale: 0.92 }}
-              animate={{ opacity: 1, scale: 1 }}
-              exit={{ opacity: 0, scale: 0.94 }}
-              transition={{ type: "spring", stiffness: 320, damping: 28 }}
-              className="cloud-focus-card"
+              initial={{ opacity: 0, scale: 0.95, y: 12 }}
+              animate={{ opacity: 1, scale: 1, y: 0 }}
+              exit={{ opacity: 0, scale: 0.97, y: 6 }}
+              transition={{ type: "spring", stiffness: 320, damping: 30 }}
+              className={`cloud-focus-card ${selected.mockup ? "cloud-focus-card--mockup" : ""}`}
               style={{ ["--tile-accent"]: selected.accent }}
               onClick={(e) => e.stopPropagation()}
             >
-              <div className="cloud-focus-stage">
-                <Glyph type={selected.glyph} accent={selected.accent} />
-              </div>
-              <div className="cloud-focus-body">
-                <span className="cloud-focus-tag">{selected.tag}</span>
-                <h3 id="cloud-focus-title" className="cloud-focus-title">
-                  {selected.title}
-                </h3>
-                <p className="cloud-focus-metric">{selected.metric}</p>
-                <p className="cloud-focus-desc">{selected.desc}</p>
-                <button
-                  type="button"
-                  className="cloud-focus-close"
-                  onClick={() => setSelectedId(null)}
-                  aria-label="Zamknij szczegóły projektu"
-                >
-                  Zamknij
-                </button>
-              </div>
+              <button
+                type="button"
+                className="cloud-focus-close-x"
+                onClick={() => setSelectedId(null)}
+                aria-label="Zamknij szczegóły projektu"
+              >
+                ×
+              </button>
+              {selected.mockup && MOCKUP_MAP[selected.mockup] ? (
+                (() => {
+                  const Mockup = MOCKUP_MAP[selected.mockup];
+                  return <Mockup />;
+                })()
+              ) : (
+                <>
+                  <div className="cloud-focus-stage">
+                    <Glyph type={selected.glyph} accent={selected.accent} />
+                  </div>
+                  <div className="cloud-focus-body">
+                    <span className="cloud-focus-tag">{selected.tag}</span>
+                    <h3 id="cloud-focus-title" className="cloud-focus-title">
+                      {selected.title}
+                    </h3>
+                    <p className="cloud-focus-metric">{selected.metric}</p>
+                    <p className="cloud-focus-desc">{selected.desc}</p>
+                  </div>
+                </>
+              )}
             </motion.div>
           </motion.div>
         )}
