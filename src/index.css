@@ -319,73 +319,168 @@ body { font-variant-numeric: tabular-nums; }
   }
 }
 
-/* ── Pipeline section ────────────────────────────────────── */
-.pipeline-section {
-  --pipeline-blur: 0px;
-  --pipeline-darken: 0;
-  background: transparent;
-}
-.pipeline-container {
+/* ── Quantum Core section (v16 — 3D R3F scene replacing Pipeline) ── */
+.quantum-section {
   position: relative;
-  z-index: 10;
-  min-height: 100vh;
-  min-height: 100dvh;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  padding: 12vh 6vw;
-  max-width: 1400px;
-  margin: 0 auto;
   width: 100%;
+  min-height: 280vh;
+  background: #00030a;
+  isolation: isolate;
 }
-@media (max-width: 1023px) {
-  .pipeline-container {
-    padding: 10vh 6vw;
-  }
+.quantum-section--fallback {
+  min-height: auto;
+  padding: 12vh 6vw;
 }
-.pipeline-blur-overlay {
-  position: absolute;
-  inset: 0;
-  z-index: 0;
-  pointer-events: none;
-  -webkit-backdrop-filter: blur(var(--pipeline-blur));
-          backdrop-filter: blur(var(--pipeline-blur));
-  background: rgba(0, 3, 10, calc(0.55 + var(--pipeline-darken) * 0.30));
-  transition: background 200ms linear;
-}
-
-.pipeline-card {
-  position: relative;
-  padding: 40px;
-  border-radius: 28px;
-  background: rgba(10, 10, 15, 0.62);
-  -webkit-backdrop-filter: blur(24px) saturate(110%);
-          backdrop-filter: blur(24px) saturate(110%);
-  border: 1px solid rgba(255, 255, 255, 0.08);
-  box-shadow:
-    0 24px 48px -12px rgba(0, 0, 0, 0.55),
-    inset 0 1px 0 rgba(255, 255, 255, 0.06);
-}
-@media (max-width: 640px) {
-  .pipeline-card {
-    padding: 28px 24px;
-    border-radius: 22px;
-  }
-}
-
-.pipeline-progress {
-  flex: 1;
-  height: 2px;
-  background: rgba(255, 255, 255, 0.08);
-  border-radius: 1px;
+.quantum-canvas-wrap {
+  position: sticky;
+  top: 0;
+  width: 100%;
+  height: 100vh;
+  height: 100dvh;
   overflow: hidden;
-  max-width: 240px;
 }
-.pipeline-progress-fill {
-  height: 100%;
-  background: #FFFFFF;
-  border-radius: 1px;
-  transition: width 480ms var(--ease-soft);
+.quantum-canvas {
+  position: absolute !important;
+  inset: 0;
+  width: 100% !important;
+  height: 100% !important;
+  display: block;
+}
+.quantum-overlay {
+  position: absolute;
+  left: 6vw;
+  bottom: 8vh;
+  z-index: 2;
+  max-width: 520px;
+  pointer-events: none;
+  font-family: var(--font-mono);
+  color: rgba(255, 255, 255, 0.95);
+}
+.quantum-overlay-badge {
+  display: inline-block;
+  font-size: 11px;
+  letter-spacing: 0.18em;
+  color: #00E5A0;
+  text-transform: uppercase;
+  margin-bottom: 12px;
+}
+.quantum-overlay-title {
+  font-family: var(--font-sans);
+  font-size: clamp(28px, 4.4vw, 52px);
+  line-height: 1.05;
+  letter-spacing: -0.02em;
+  font-weight: 500;
+  margin: 0 0 12px;
+}
+.quantum-overlay-sub {
+  font-size: 13px;
+  line-height: 1.55;
+  color: rgba(255, 255, 255, 0.65);
+  margin: 0;
+  max-width: 440px;
+}
+
+/* R3F <Html> content per block */
+.core-block-content {
+  font-family: var(--font-mono);
+  color: rgba(255, 255, 255, 0.94);
+  text-align: center;
+  pointer-events: none;
+  user-select: none;
+  text-shadow: 0 1px 6px rgba(0, 0, 0, 0.65);
+}
+.core-block-badge {
+  font-size: 9px;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  margin-bottom: 6px;
+  font-weight: 500;
+}
+.core-block-title {
+  font-family: var(--font-sans);
+  font-size: 18px;
+  font-weight: 500;
+  letter-spacing: -0.01em;
+  line-height: 1.15;
+}
+.core-block-detail {
+  font-size: 10px;
+  color: rgba(255, 255, 255, 0.7);
+  margin-top: 10px;
+  line-height: 1.45;
+}
+
+/* Fallback grid (mobile / reduce-motion) */
+.quantum-fallback-grid {
+  max-width: 1200px;
+  margin: 0 auto;
+  color: rgba(255, 255, 255, 0.92);
+  font-family: var(--font-sans);
+}
+.quantum-fallback-header {
+  text-align: left;
+  margin-bottom: 36px;
+}
+.quantum-fallback-badge {
+  display: inline-block;
+  font-family: var(--font-mono);
+  font-size: 11px;
+  letter-spacing: 0.18em;
+  color: #00E5A0;
+  text-transform: uppercase;
+  margin-bottom: 12px;
+}
+.quantum-fallback-header h2 {
+  font-size: clamp(28px, 6vw, 44px);
+  letter-spacing: -0.02em;
+  font-weight: 500;
+  margin: 0 0 8px;
+}
+.quantum-fallback-header p {
+  color: rgba(255, 255, 255, 0.65);
+  margin: 0;
+  font-size: 14px;
+}
+.quantum-fallback-blocks {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 14px;
+}
+@media (min-width: 600px) {
+  .quantum-fallback-blocks { grid-template-columns: 1fr 1fr; }
+}
+.quantum-fallback-card {
+  padding: 22px;
+  border-radius: 14px;
+  background: rgba(10, 10, 15, 0.6);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  -webkit-backdrop-filter: blur(18px);
+          backdrop-filter: blur(18px);
+}
+.quantum-fallback-card-badge {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  margin-bottom: 10px;
+}
+.quantum-fallback-card h3 {
+  font-size: 18px;
+  font-weight: 500;
+  letter-spacing: -0.01em;
+  margin: 0 0 6px;
+}
+.quantum-fallback-card p {
+  font-size: 12px;
+  color: rgba(255, 255, 255, 0.65);
+  line-height: 1.5;
+  margin: 0;
+}
+
+@media (max-width: 767px), (prefers-reduced-motion: reduce) {
+  .quantum-section {
+    min-height: auto;
+  }
 }
 
 /* ── AIPanel — mock browser + prompt panel ───────────────── */
