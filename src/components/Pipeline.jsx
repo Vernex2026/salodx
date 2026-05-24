@@ -40,7 +40,7 @@ export default function Pipeline() {
     <section
       id="pipeline"
       aria-labelledby="pipeline-heading"
-      className="pipeline-section h-screen w-screen snap-start relative isolate bg-black flex items-center justify-center p-6 md:p-10 overflow-hidden"
+      className="pipeline-section h-screen w-screen relative isolate bg-black flex items-center justify-center p-6 md:p-10 overflow-hidden"
     >
       <div className="w-full max-w-[1400px] h-full max-h-[850px] flex flex-col">
         <PipelineHeader />

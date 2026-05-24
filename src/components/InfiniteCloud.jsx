@@ -293,7 +293,7 @@ export default function InfiniteCloud() {
   return (
     <section
       id="cloud"
-      className="cloud-section h-screen w-screen snap-start bg-black flex items-center justify-center relative p-6 md:p-10 overflow-hidden"
+      className="cloud-section h-screen w-screen bg-black flex items-center justify-center relative p-6 md:p-10 overflow-hidden"
       aria-labelledby="cloud-heading"
     >
       <div className="cloud-pulpit-wrap w-full max-w-[1400px] h-full flex flex-col">
