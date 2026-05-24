@@ -137,9 +137,11 @@ html {
   scroll-padding-top: 96px;
   background: var(--color-black);
   color-scheme: dark;
+  scroll-snap-type: y mandatory;
+  scroll-behavior: smooth;
 }
 @media (prefers-reduced-motion: reduce) {
-  html { scroll-behavior: auto; }
+  html { scroll-behavior: auto; scroll-snap-type: none; }
 }
 
 body {
