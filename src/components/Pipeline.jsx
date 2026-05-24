@@ -1,8 +1,7 @@
-import { useEffect, useLayoutEffect, useRef, useState } from "react";
+import { useLayoutEffect, useRef, useState } from "react";
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { useReveal } from "../hooks/useReveal";
-import { useMagnetic } from "../hooks/useMagnetic";
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -13,36 +12,35 @@ const prefersReducedMotion = () =>
 const STEPS = [
   {
     n: "01",
-    badge: "[ STACK // AI_PROTOTYPING ]",
-    title: "Prototypowanie",
+    badge: "[ STACK // PROTOTYPE ]",
+    title: "Prototyp",
     tool: "Lovable",
-    gain: "Czas.",
-    body: "Działający, klikalny prototyp w 72 godziny — nie statyczne makiety po trzech miesiącach. Widzisz produkt na żywo zanim agencja przyśle Ci pierwszy invoice.",
+    gain: "72 godziny.",
+    body: "Działający, klikalny prototyp w 72h — nie statyczne makiety po trzech miesiącach. Widzisz produkt na żywo zanim agencja przyśle pierwszy invoice.",
   },
   {
     n: "02",
     badge: "[ STACK // PRODUCTION_CODE ]",
-    title: "Inżynieria",
+    title: "Kod",
     tool: "Claude Code",
     gain: "Własność.",
-    body: "Generujemy czysty, skalowalny kod prosto do Twojego repo GitHub. Bez uwiązania w platformach No-Code, które znikną za rok. To Twój kapitał.",
+    body: "Czysty, skalowalny kod prosto do Twojego repo GitHub. Bez uwiązania w No-Code, które zniknie za rok. Twoje IP, nie nasze.",
   },
   {
     n: "03",
-    badge: "[ STACK // INFRASTRUCTURE ]",
-    title: "Infrastruktura",
-    tool: "Supabase + Vercel",
-    gain: "Skala i bezpieczeństwo.",
-    body: "Edge runtime, cloud DB, RLS. Architektura gotowa na globalny ruch od dnia pierwszego. Bazy danych i backend, które nie zawiodą gdy biznes zacznie rosnąć.",
+    badge: "[ STACK // BACKEND ]",
+    title: "Backend",
+    tool: "Supabase",
+    gain: "Zero chaosu.",
+    body: "Relacyjny Postgres z Row-Level Security na każdym wierszu. Audit trail, edge replication, migracje przez MCP. Bazy, które nie zawiodą gdy biznes rośnie.",
   },
   {
     n: "04",
-    badge: "[ STACK // SELF_SERVICE_AI ]",
-    title: "Przekazanie",
-    tool: "Self-Service AI",
-    gain: "Wolność.",
-    body: "Koniec faktur za zmianę nagłówka. Zmieniasz produkt rozmawiając z wbudowanym panelem AI — jak z ChatGPT.",
-    cta: { label: "Zobacz panel w akcji", href: "#panel" },
+    badge: "[ STACK // HOSTING ]",
+    title: "Hosting",
+    tool: "Vercel Edge",
+    gain: "Globalna wydajność.",
+    body: "Sub-100ms latency w 18 regionach. Zero cold start, automatyczny deploy z każdego pusha. Architektura gotowa na ruch od dnia pierwszego.",
   },
 ];
 
@@ -135,7 +133,7 @@ function PipelineSticky({ activeIdx, total }) {
             color: "rgba(255,255,255,0.55)",
           }}
         >
-          [ PIPELINE // FAKTY_NIE_OBIETNICE ]
+          [ STOS // WARSZTAT ]
         </div>
       </div>
 
@@ -152,8 +150,8 @@ function PipelineSticky({ activeIdx, total }) {
           "--pipeline-reveal-delay": "120ms",
         }}
       >
-        Jak niszczymy{" "}
-        <span style={{ color: "#A1A1AA" }}>status quo.</span>
+        Twój stos.{" "}
+        <span style={{ color: "#A1A1AA" }}>Jeden warsztat.</span>
       </h2>
 
       <p
@@ -165,8 +163,8 @@ function PipelineSticky({ activeIdx, total }) {
           "--pipeline-reveal-delay": "260ms",
         }}
       >
-        Cztery technologie. Cztery konkretne zyski. Bez magii — twarda
-        inżynieria, którą widzisz na żywo.
+        Cztery narzędzia. Jedna ręka. Bez agencji, bez podwykonawców, bez
+        tickets. Stack, który skaluje od prototypu do produkcji w 72 godziny.
       </p>
 
       <div
@@ -202,8 +200,6 @@ function PipelineSticky({ activeIdx, total }) {
 
 function PipelineCard({ step }) {
   const [ref, visible] = useReveal({ threshold: 0.3 });
-  const ctaRef = useRef(null);
-  useMagnetic(ctaRef, { strength: 0.18, radius: 110, max: 5 });
 
   return (
     <li className="pipeline-card" style={{ listStyle: "none" }}>
@@ -272,37 +268,6 @@ function PipelineCard({ step }) {
       >
         {step.body}
       </p>
-
-      {step.cta && (
-        <div
-          className={`pipeline-reveal ${visible ? "is-visible" : ""} mt-7`}
-          style={{ "--pipeline-reveal-delay": "480ms" }}
-        >
-          <a
-            ref={ctaRef}
-            href={step.cta.href}
-            className="cta-primary cta-primary--light"
-          >
-            {step.cta.label}
-            <svg
-              aria-hidden="true"
-              className="arrow"
-              width="16"
-              height="16"
-              viewBox="0 0 16 16"
-              fill="none"
-            >
-              <path
-                d="M3 8h10M9 4l4 4-4 4"
-                stroke="currentColor"
-                strokeWidth="1.7"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-              />
-            </svg>
-          </a>
-        </div>
-      )}
     </li>
   );
 }
