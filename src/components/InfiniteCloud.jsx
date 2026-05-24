@@ -349,12 +349,6 @@ export default function InfiniteCloud() {
           </motion.div>
         )}
         <div className="cloud-vignette" aria-hidden="true" />
-        {!isMobile && (
-          <div className="cloud-drag-hint" aria-hidden="true">
-            <span className="cloud-drag-arrows">↕ ↔</span>
-            <span>Przeciągnij · soczewka powiększa centrum</span>
-          </div>
-        )}
       </div>
 
       <AnimatePresence>

@@ -79,6 +79,24 @@ export default function Footer() {
           </div>
         </div>
       </div>
+
+      <div
+        className="relative mx-auto hidden max-w-[1280px] px-6 pb-6 sm:px-8 lg:flex lg:px-12"
+        aria-hidden="true"
+      >
+        <div
+          className="flex items-center gap-2 text-white/25"
+          style={{
+            fontFamily: "'Geist Mono', ui-monospace, SFMono-Regular, monospace",
+            fontSize: "10px",
+            letterSpacing: "0.14em",
+            textTransform: "uppercase",
+          }}
+        >
+          <span>↕ ↔</span>
+          <span>Przeciągnij · soczewka powiększa centrum</span>
+        </div>
+      </div>
     </footer>
   );
 }
