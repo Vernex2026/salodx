@@ -30,15 +30,14 @@ export default function App() {
 
       <Nav />
 
-      <main className="relative z-10">
+      <main className="relative z-10 h-screen overflow-y-scroll snap-y snap-mandatory scroll-smooth">
         <Hero />
         <Pipeline />
         <InfiniteCloud />
         <Manifesto />
         <Terminal />
+        <Footer />
       </main>
-
-      <Footer />
 
       <CommandPalette />
     </>

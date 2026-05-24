@@ -79,9 +79,9 @@ export default function Terminal() {
     <section
       id="kontakt"
       aria-labelledby="terminal-heading"
-      className="terminal-section relative isolate overflow-hidden"
+      className="terminal-section h-screen w-screen snap-start relative isolate overflow-hidden flex items-center justify-center p-6 md:p-10"
     >
-      <div className="relative z-10 mx-auto flex w-full max-w-[1100px] flex-col items-center px-6 py-32 text-center sm:px-8 md:py-40 lg:px-12 lg:py-48">
+      <div className="relative z-10 mx-auto flex w-full max-w-[1100px] h-full max-h-[850px] flex-col items-center justify-center px-6 text-center sm:px-8 lg:px-12">
         <div ref={headerRef} className="max-w-3xl">
           <div
             className={`pipeline-reveal ${headerVisible ? "is-visible" : ""}`}

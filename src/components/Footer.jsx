@@ -5,7 +5,7 @@
 export default function Footer() {
   return (
     <footer
-      className="relative isolate overflow-hidden"
+      className="relative isolate overflow-hidden snap-start"
       style={{ background: "var(--color-black)" }}
     >
       <div className="relative mx-auto max-w-[1280px] border-t border-white/10 px-6 py-12 sm:px-8 lg:px-12">

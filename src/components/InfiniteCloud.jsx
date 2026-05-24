@@ -291,31 +291,34 @@ export default function InfiniteCloud() {
   const totalGridH = ROWS * TILE_SIZE + (ROWS - 1) * TILE_GAP;
 
   return (
-    <section id="cloud" className="cloud-section" aria-labelledby="cloud-heading">
-      <div className="cloud-header-zone">
-        <div ref={headerRef} className="cloud-header mx-auto max-w-6xl px-6 lg:px-10">
+    <section
+      id="cloud"
+      className="cloud-section h-screen w-screen snap-start bg-black flex items-center justify-center relative p-6 md:p-10 overflow-hidden"
+      aria-labelledby="cloud-heading"
+    >
+      <div className="cloud-pulpit-wrap w-full max-w-[1400px] h-full max-h-[850px] flex flex-col">
+        <div ref={headerRef} className="cloud-header shrink-0 pb-4 md:pb-6">
           <div className={`pipeline-reveal ${headerVisible ? "is-visible" : ""}`}>
             <span className="proof-eyebrow">[ ARSENAŁ // WDROŻENIA ]</span>
           </div>
           <h2
             id="cloud-heading"
-            className={`pipeline-reveal ${headerVisible ? "is-visible" : ""} cloud-section-title`}
+            className={`pipeline-reveal ${headerVisible ? "is-visible" : ""} cloud-section-title m-0 mt-3`}
             style={{ "--pipeline-reveal-delay": "120ms" }}
           >
             Dwanaście systemów.{" "}
             <span className="cloud-section-title-mute">Jeden warsztat.</span>
           </h2>
           <p
-            className={`pipeline-reveal ${headerVisible ? "is-visible" : ""} cloud-section-lead`}
+            className={`pipeline-reveal ${headerVisible ? "is-visible" : ""} cloud-section-lead m-0 mt-3`}
             style={{ "--pipeline-reveal-delay": "240ms" }}
           >
             Soczewka powiększa to, co w centrum. Przeciągnij — przesuwasz lupę
             po portfolio. Kliknij — wchodzisz w detal.
           </p>
         </div>
-      </div>
 
-      <div className="cloud-stage" ref={stageRef}>
+        <div className="cloud-stage flex-1 min-h-0" ref={stageRef}>
         {isMobile ? (
           <FallbackGrid onSelect={setSelectedId} />
         ) : (
@@ -349,6 +352,7 @@ export default function InfiniteCloud() {
           </motion.div>
         )}
         <div className="cloud-vignette" aria-hidden="true" />
+      </div>
       </div>
 
       <AnimatePresence>

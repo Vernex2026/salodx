@@ -41,9 +41,9 @@ export default function Manifesto() {
     <section
       id="manifesto"
       aria-labelledby="manifesto-heading"
-      className="manifesto-section section-light relative isolate overflow-hidden"
+      className="manifesto-section section-light h-screen w-screen snap-start relative isolate overflow-hidden flex items-center justify-center p-6 md:p-10"
     >
-      <div className="relative z-10 mx-auto w-full max-w-[1400px] px-6 py-32 sm:px-8 md:py-40 lg:px-12 lg:py-48">
+      <div className="relative z-10 mx-auto w-full max-w-[1400px] h-full max-h-[850px] flex flex-col justify-center">
         <div ref={headerRef} className="max-w-3xl">
           <div
             className={`pipeline-reveal ${headerVisible ? "is-visible" : ""}`}
@@ -92,7 +92,7 @@ export default function Manifesto() {
           </p>
         </div>
 
-        <div className="manifesto-grid mt-20 lg:mt-28">
+        <div className="manifesto-grid mt-8 md:mt-12">
           <div className="manifesto-divider" aria-hidden="true" />
           {ROWS.map((row, i) => (
             <ManifestoRow key={i} row={row} index={i} />
@@ -101,7 +101,7 @@ export default function Manifesto() {
 
         <div
           ref={closingRef}
-          className={`manifesto-closing pipeline-reveal ${closingVisible ? "is-visible" : ""} mt-20 lg:mt-28`}
+          className={`manifesto-closing pipeline-reveal ${closingVisible ? "is-visible" : ""} mt-8 md:mt-10`}
           style={{ "--pipeline-reveal-delay": "0ms" }}
         >
           <p
