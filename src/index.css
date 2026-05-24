@@ -321,6 +321,73 @@ body { font-variant-numeric: tabular-nums; }
 
 /* v17: Quantum Core (v16) usunięte — vrócono do Apple Watch fisheye w InfiniteCloud */
 
+/* ── Pipeline section (v19 restore: Hero → Pipeline → InfiniteCloud) ── */
+.pipeline-section {
+  --pipeline-blur: 0px;
+  --pipeline-darken: 0;
+  background: transparent;
+  padding: 18vh 0 22vh;
+}
+@media (max-width: 1023px) {
+  .pipeline-section {
+    padding: 12vh 0 14vh;
+  }
+}
+.pipeline-container {
+  position: relative;
+  z-index: 1;
+  margin: 0 auto;
+  max-width: 1280px;
+  padding: 0 28px;
+}
+@media (min-width: 1024px) {
+  .pipeline-container {
+    padding: 0 56px;
+  }
+}
+.pipeline-blur-overlay {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  -webkit-backdrop-filter: blur(var(--pipeline-blur));
+          backdrop-filter: blur(var(--pipeline-blur));
+  background: rgba(0, 3, 10, calc(0.30 + var(--pipeline-darken) * 0.35));
+  transition: background 200ms linear;
+}
+.pipeline-card {
+  position: relative;
+  padding: 40px;
+  border-radius: 28px;
+  background: rgba(10, 10, 15, 0.62);
+  -webkit-backdrop-filter: blur(24px) saturate(110%);
+          backdrop-filter: blur(24px) saturate(110%);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  box-shadow:
+    0 24px 48px -12px rgba(0, 0, 0, 0.55),
+    inset 0 1px 0 rgba(255, 255, 255, 0.06);
+}
+@media (max-width: 640px) {
+  .pipeline-card {
+    padding: 28px 24px;
+    border-radius: 22px;
+  }
+}
+.pipeline-progress {
+  flex: 1;
+  height: 2px;
+  background: rgba(255, 255, 255, 0.08);
+  border-radius: 1px;
+  overflow: hidden;
+  max-width: 240px;
+}
+.pipeline-progress-fill {
+  height: 100%;
+  background: #FFFFFF;
+  border-radius: 1px;
+  transition: width 480ms var(--ease-soft);
+}
+
 /* ── v18: Case mockup wrapper (inside fisheye tile modal) ── */
 .case-mockup {
   position: relative;
@@ -929,10 +996,10 @@ body { font-variant-numeric: tabular-nums; }
   position: absolute;
   top: 0;
   left: 0;
-  width: 200px;
-  height: 200px;
-  padding: 22px 20px;
-  border-radius: 36px;
+  width: 300px;
+  height: 300px;
+  padding: 28px 26px;
+  border-radius: 44px;
   background: rgba(10, 12, 18, 0.72);
   -webkit-backdrop-filter: blur(28px) saturate(130%);
           backdrop-filter: blur(28px) saturate(130%);

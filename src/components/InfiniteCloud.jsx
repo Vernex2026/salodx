@@ -10,18 +10,18 @@ import { QTraderMockup } from "./cloud/mockups/QTraderMockup";
 import { CRMOmegaMockup } from "./cloud/mockups/CRMOmegaMockup";
 import { GSMFixMockup } from "./cloud/mockups/GSMFixMockup";
 
-const TILE_SIZE = 200;
-const TILE_GAP = 32;
+const TILE_SIZE = 300;
+const TILE_GAP = 36;
 const COLS = 4;
 const ROWS = 3;
 
 const SCALE_CENTER = 1.0;
-const SCALE_MID = 0.7;
-const SCALE_EDGE = 0.32;
+const SCALE_MID = 0.82;
+const SCALE_EDGE = 0.6;
 
 const OPACITY_CENTER = 1.0;
-const OPACITY_MID = 0.6;
-const OPACITY_EDGE = 0.22;
+const OPACITY_MID = 0.85;
+const OPACITY_EDGE = 0.55;
 
 const Glyph = ({ type, accent }) => {
   const c = accent || "#00E5A0";
@@ -208,7 +208,7 @@ function FisheyeTile({ tile, baseX, baseY, dragX, dragY, vc, onClick }) {
   const blurAmount = useTransform(
     distance,
     [0, maxDist * 0.55, maxDist],
-    [0, 0, 2.4]
+    [0, 0, 1.2]
   );
   const filter = useTransform(blurAmount, (b) => `blur(${b}px)`);
 
@@ -322,7 +322,7 @@ export default function InfiniteCloud() {
           <motion.div
             className="cloud-canvas"
             drag
-            dragConstraints={{ left: -700, right: 700, top: -500, bottom: 500 }}
+            dragConstraints={{ left: -900, right: 900, top: -650, bottom: 650 }}
             dragElastic={0.15}
             dragTransition={{ bounceStiffness: 320, bounceDamping: 26 }}
             style={{ x: dragX, y: dragY }}
