@@ -10,8 +10,8 @@ import { QTraderMockup } from "./cloud/mockups/QTraderMockup";
 import { CRMOmegaMockup } from "./cloud/mockups/CRMOmegaMockup";
 import { GSMFixMockup } from "./cloud/mockups/GSMFixMockup";
 
-const TILE_SIZE = 300;
-const TILE_GAP = 36;
+const TILE_SIZE = 240;
+const TILE_GAP = 28;
 const COLS = 4;
 const ROWS = 3;
 
@@ -291,31 +291,49 @@ export default function InfiniteCloud() {
   const totalGridH = ROWS * TILE_SIZE + (ROWS - 1) * TILE_GAP;
 
   return (
-    <section id="cloud" className="cloud-section" aria-labelledby="cloud-heading">
-      <div className="cloud-header-zone">
-        <div ref={headerRef} className="cloud-header mx-auto max-w-6xl px-6 lg:px-10">
-          <div className={`pipeline-reveal ${headerVisible ? "is-visible" : ""}`}>
-            <span className="proof-eyebrow">[ ARSENAŁ // WDROŻENIA ]</span>
+    <section
+      id="cloud"
+      className="cloud-section h-screen w-screen bg-black flex items-center justify-center relative p-6 md:p-10 overflow-hidden"
+      aria-labelledby="cloud-heading"
+    >
+      <div className="cloud-pulpit-wrap w-full max-w-[1400px] h-full flex flex-col">
+        <div ref={headerRef} className="cloud-header shrink-0 pb-3 flex flex-col gap-2 md:flex-row md:items-baseline md:justify-between md:gap-8">
+          <div>
+            <div className={`pipeline-reveal ${headerVisible ? "is-visible" : ""}`}>
+              <span className="proof-eyebrow">[ ARSENAŁ // WDROŻENIA ]</span>
+            </div>
+            <h2
+              id="cloud-heading"
+              className={`pipeline-reveal ${headerVisible ? "is-visible" : ""} m-0 mt-1 text-white`}
+              style={{
+                fontFamily:
+                  "'Geist', -apple-system, BlinkMacSystemFont, 'Inter', sans-serif",
+                fontSize: "clamp(1.5rem, 3vw, 2.25rem)",
+                fontWeight: 800,
+                lineHeight: 1.05,
+                letterSpacing: "-0.035em",
+                "--pipeline-reveal-delay": "120ms",
+              }}
+            >
+              Dwanaście systemów.{" "}
+              <span style={{ color: "#A1A1AA" }}>Jeden warsztat.</span>
+            </h2>
           </div>
-          <h2
-            id="cloud-heading"
-            className={`pipeline-reveal ${headerVisible ? "is-visible" : ""} cloud-section-title`}
-            style={{ "--pipeline-reveal-delay": "120ms" }}
-          >
-            Dwanaście systemów.{" "}
-            <span className="cloud-section-title-mute">Jeden warsztat.</span>
-          </h2>
           <p
-            className={`pipeline-reveal ${headerVisible ? "is-visible" : ""} cloud-section-lead`}
-            style={{ "--pipeline-reveal-delay": "240ms" }}
+            className={`pipeline-reveal ${headerVisible ? "is-visible" : ""} m-0 max-w-[420px] shrink-0`}
+            style={{
+              fontSize: "13px",
+              lineHeight: 1.5,
+              color: "rgba(255,255,255,0.55)",
+              "--pipeline-reveal-delay": "240ms",
+            }}
           >
-            Soczewka powiększa to, co w centrum. Przeciągnij — przesuwasz lupę
-            po portfolio. Kliknij — wchodzisz w detal.
+            Soczewka powiększa centrum. Przeciągnij — przesuwasz lupę po
+            portfolio. Kliknij — wchodzisz w detal.
           </p>
         </div>
-      </div>
 
-      <div className="cloud-stage" ref={stageRef}>
+        <div className="cloud-stage flex-1 min-h-0" ref={stageRef}>
         {isMobile ? (
           <FallbackGrid onSelect={setSelectedId} />
         ) : (
@@ -349,6 +367,7 @@ export default function InfiniteCloud() {
           </motion.div>
         )}
         <div className="cloud-vignette" aria-hidden="true" />
+      </div>
       </div>
 
       <AnimatePresence>

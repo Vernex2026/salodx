@@ -321,71 +321,29 @@ body { font-variant-numeric: tabular-nums; }
 
 /* v17: Quantum Core (v16) usunięte — vrócono do Apple Watch fisheye w InfiniteCloud */
 
-/* ── Pipeline section (v19 restore: Hero → Pipeline → InfiniteCloud) ── */
+/* ── Pipeline section (v20: full-viewport snap, 2x2 bento) ────────────── */
 .pipeline-section {
-  --pipeline-blur: 0px;
-  --pipeline-darken: 0;
-  background: transparent;
-  padding: 18vh 0 22vh;
-}
-@media (max-width: 1023px) {
-  .pipeline-section {
-    padding: 12vh 0 14vh;
-  }
-}
-.pipeline-container {
-  position: relative;
-  z-index: 1;
-  margin: 0 auto;
-  max-width: 1280px;
-  padding: 0 28px;
-}
-@media (min-width: 1024px) {
-  .pipeline-container {
-    padding: 0 56px;
-  }
-}
-.pipeline-blur-overlay {
-  position: absolute;
-  inset: 0;
-  z-index: 0;
-  pointer-events: none;
-  -webkit-backdrop-filter: blur(var(--pipeline-blur));
-          backdrop-filter: blur(var(--pipeline-blur));
-  background: rgba(0, 3, 10, calc(0.30 + var(--pipeline-darken) * 0.35));
-  transition: background 200ms linear;
+  background: #000;
 }
 .pipeline-card {
   position: relative;
-  padding: 40px;
-  border-radius: 28px;
-  background: rgba(10, 10, 15, 0.62);
+  padding: 28px 30px;
+  border-radius: 22px;
+  background: rgba(10, 10, 15, 0.72);
   -webkit-backdrop-filter: blur(24px) saturate(110%);
           backdrop-filter: blur(24px) saturate(110%);
   border: 1px solid rgba(255, 255, 255, 0.08);
   box-shadow:
     0 24px 48px -12px rgba(0, 0, 0, 0.55),
     inset 0 1px 0 rgba(255, 255, 255, 0.06);
+  display: flex;
+  flex-direction: column;
 }
 @media (max-width: 640px) {
   .pipeline-card {
-    padding: 28px 24px;
-    border-radius: 22px;
+    padding: 22px 20px;
+    border-radius: 18px;
   }
-}
-.pipeline-progress {
-  flex: 1;
-  height: 2px;
-  background: rgba(255, 255, 255, 0.08);
-  border-radius: 1px;
-  overflow: hidden;
-  max-width: 240px;
-}
-.pipeline-progress-fill {
-  height: 100%;
-  background: #FFFFFF;
-  border-radius: 1px;
-  transition: width 480ms var(--ease-soft);
 }
 
 /* ── v18: Case mockup wrapper (inside fisheye tile modal) ── */
@@ -907,40 +865,28 @@ body { font-variant-numeric: tabular-nums; }
   gap: 4px;
 }
 
-/* ── Infinite Cloud — Apple Watch Honeycomb (50 squircles drag) v9 ─── */
+/* ── Infinite Cloud — Pulpit (v20: full-viewport snap, bounded 1400×850) ─── */
 .cloud-section {
   position: relative;
-  background: transparent;
-  min-height: 100vh;
-  min-height: 100dvh;
-  display: flex;
-  flex-direction: column;
-  overflow: visible;
+  background: #000;
+  isolation: isolate;
 }
-.cloud-header-zone {
+.cloud-pulpit-wrap {
   position: relative;
-  z-index: 50;
-  padding: 140px 0 32px;
-  pointer-events: none;
-}
-.cloud-header-zone > * { pointer-events: auto; }
-@media (max-width: 1023px) {
-  .cloud-header-zone { padding: 100px 0 24px; }
+  z-index: 2;
 }
 .cloud-header {
   position: relative;
-  z-index: 2;
+  z-index: 3;
 }
 .cloud-stage {
   position: relative;
   z-index: 10;
-  flex: 1 1 auto;
-  min-height: 78vh;
-  width: 100vw;
-  margin-left: calc(-50vw + 50%);
+  width: 100%;
   overflow: hidden;
   cursor: grab;
   touch-action: none;
+  border-radius: 18px;
   /* Sterile center, particles vignette only on edges */
   background: radial-gradient(
     ellipse at 50% 50%,
@@ -953,9 +899,6 @@ body { font-variant-numeric: tabular-nums; }
   isolation: isolate;
 }
 .cloud-stage:active { cursor: grabbing; }
-@media (max-width: 1023px) {
-  .cloud-stage { min-height: 70vh; }
-}
 .cloud-vignette {
   position: absolute;
   inset: 0;
@@ -996,10 +939,10 @@ body { font-variant-numeric: tabular-nums; }
   position: absolute;
   top: 0;
   left: 0;
-  width: 300px;
-  height: 300px;
-  padding: 28px 26px;
-  border-radius: 44px;
+  width: 240px;
+  height: 240px;
+  padding: 22px 20px;
+  border-radius: 32px;
   background: rgba(10, 12, 18, 0.72);
   -webkit-backdrop-filter: blur(28px) saturate(130%);
           backdrop-filter: blur(28px) saturate(130%);

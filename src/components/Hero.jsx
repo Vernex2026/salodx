@@ -76,14 +76,14 @@ export default function Hero() {
       id="top"
       aria-labelledby="hero-heading"
       data-gsap-active={gsapActive ? "true" : "false"}
-      className="relative isolate overflow-hidden"
+      className="relative isolate overflow-hidden h-screen w-screen"
     >
       {/* v15 — ParticleCloud lives global w App.jsx (Big Bang
           scroll-aware). Eclipse mask stays scoped do Hero section. */}
       <div className="hero-eclipse-mask" aria-hidden="true" />
 
       {/* Layer 1 — Hero (left-aligned per Zdj 3) */}
-      <div className="relative z-10 mx-auto flex min-h-screen w-full max-w-[1400px] flex-col items-start justify-center px-6 py-24 sm:px-10 md:px-16 md:py-32 lg:px-20 lg:py-40">
+      <div className="relative z-10 mx-auto flex h-full w-full max-w-[1400px] flex-col items-start justify-center px-6 py-12 sm:px-10 md:px-16 md:py-16 lg:px-20 lg:py-20">
         <div className="hero-content-card">
           <div
             data-rise="pill"
