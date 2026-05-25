@@ -1,7 +1,14 @@
 import { createClient } from "@supabase/supabase-js";
 
-const url = import.meta.env.VITE_SUPABASE_URL;
-const key = import.meta.env.VITE_SUPABASE_ANON_KEY;
+// VERNEX project Supabase. Publishable key — designed for client bundle
+// exposure (anon role, INSERT-only on site_leads via RLS). Hardcoded
+// fallback ensures the agent works even when the host platform misses
+// the env vars; the env vars still take precedence if set.
+const FALLBACK_URL = "https://yachdnnoudjxdxflcjrg.supabase.co";
+const FALLBACK_KEY = "sb_publishable_TRUV6CW9KsAikkSGkI4USg_W-tpfkvg";
+
+const url = import.meta.env.VITE_SUPABASE_URL || FALLBACK_URL;
+const key = import.meta.env.VITE_SUPABASE_ANON_KEY || FALLBACK_KEY;
 
 export const supabase =
   url && key
