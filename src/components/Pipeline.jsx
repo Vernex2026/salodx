@@ -40,9 +40,14 @@ export default function Pipeline() {
     <section
       id="pipeline"
       aria-labelledby="pipeline-heading"
-      className="pipeline-section h-screen w-screen relative isolate bg-black flex items-center justify-center p-6 md:p-10 overflow-hidden"
+      className="pipeline-section h-screen w-screen relative isolate flex items-center justify-center p-6 md:p-10 overflow-hidden"
     >
-      <div className="w-full max-w-[1400px] h-full max-h-[850px] flex flex-col">
+      {/* Volumetric smoke wall — global particles drift behind backdrop-blur */}
+      <div
+        aria-hidden="true"
+        className="absolute inset-0 z-0 backdrop-blur-[100px] bg-black/45 pointer-events-none"
+      />
+      <div className="relative z-10 w-full max-w-[1400px] h-full max-h-[850px] flex flex-col">
         <PipelineHeader />
         <ol
           role="list"
@@ -123,14 +128,14 @@ function PipelineCard({ step }) {
       <div
         style={{
           fontFamily:
-            "'Geist Mono', ui-monospace, SFMono-Regular, monospace",
+            "'JetBrains Mono', ui-monospace, SFMono-Regular, monospace",
           fontSize: "11px",
           fontWeight: 500,
           letterSpacing: "0.08em",
           color: "rgba(255,255,255,0.45)",
         }}
       >
-        <span style={{ color: "#FFFFFF", marginRight: "12px" }}>{step.n}</span>
+        <span className="pipeline-card-num">{step.n}</span>
         {step.badge}
       </div>
 
