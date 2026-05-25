@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState, useCallback } from "react";
+import { useEffect, useMemo, useRef, useState, useCallback } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { useReveal } from "../hooks/useReveal";
 import { QTraderMockup } from "./cloud/mockups/QTraderMockup";
@@ -9,10 +9,10 @@ const COLS = 4;
 const ROWS = 3;
 const CELL_W = 260;
 const CELL_H = 220;
-const CELL_GAP = 18;
+const CELL_GAP = 24;
 
 const HERO_INDICES = new Set([0, 1]);
-const HERO_SCALE = 1.15;
+const HERO_SCALE = 1.0;
 const PERIMETER_SCALE = 0.85;
 const FOCUS_RADIUS = 220;
 
@@ -169,41 +169,65 @@ const CELL_MAP = [
   { col: 3, row: 2, tileIndex: 11 },  // Bank
 ];
 
-function GazeTile({ tile, displayIndex, isHero, x, y, w, h, cursor, onClick }) {
-  // Compute distance from cursor to tile center
+function GazeTile({ tile, displayIndex, isHero, x, y, w, h, isPrimary, anyPrimary, cursor, onClick }) {
+  // Compute focus factor (smooth fall-off for perimeter when not primary)
   const cx = x + w / 2;
   const cy = y + h / 2;
-  let focus = 0;
+  let proximity = 0;
   if (cursor.active) {
     const dx = cursor.x - cx;
     const dy = cursor.y - cy;
     const dist = Math.hypot(dx, dy);
-    focus = Math.max(0, 1 - dist / FOCUS_RADIUS);
+    proximity = Math.max(0, 1 - dist / FOCUS_RADIUS);
   }
 
-  // Hero: locked focused baseline, slight boost on cursor proximity
-  // Perimeter: dim+blur baseline, full focus on cursor proximity
-  const baseScale = isHero ? HERO_SCALE : PERIMETER_SCALE;
-  const baseOpacity = isHero ? 1.0 : 0.4;
-  const baseBlur = isHero ? 0 : 1;
-
-  const scale = isHero
-    ? baseScale + focus * 0.05
-    : baseScale + focus * 0.2;
-  const opacity = isHero
-    ? 1.0
-    : Math.min(1, baseOpacity + focus * 0.6);
-  const blur = isHero ? 0 : Math.max(0, baseBlur - focus * baseBlur);
-  const borderAlpha = isHero
-    ? 0.14 + focus * 0.10
-    : 0.06 + focus * 0.14;
+  // Active Focus Priority rules
+  let scale, opacity, blur, borderAlpha, zIndex;
+  if (isPrimary) {
+    if (isHero) {
+      scale = HERO_SCALE + 0.05; // 1.05
+      opacity = 1.0;
+      blur = 0;
+      borderAlpha = 0.20;
+      zIndex = 40;
+    } else {
+      scale = PERIMETER_SCALE + 0.20; // 1.05
+      opacity = 1.0;
+      blur = 0;
+      borderAlpha = 0.20;
+      zIndex = 35;
+    }
+  } else if (anyPrimary && isHero) {
+    // Another tile took priority — hero defers (oddaje pole)
+    scale = HERO_SCALE - 0.03; // 0.97
+    opacity = 0.65;
+    blur = 0;
+    borderAlpha = 0.10;
+    zIndex = 20;
+  } else {
+    // Baseline (no cursor focus or this tile not affected)
+    if (isHero) {
+      scale = HERO_SCALE; // 1.0
+      opacity = 1.0;
+      blur = 0;
+      borderAlpha = 0.14;
+      zIndex = 20;
+    } else {
+      // Perimeter — soft proximity boost even without primary
+      scale = PERIMETER_SCALE + proximity * 0.08;
+      opacity = 0.4 + proximity * 0.25;
+      blur = Math.max(0, 1 - proximity);
+      borderAlpha = 0.06 + proximity * 0.06;
+      zIndex = 10 + Math.round(proximity * 4);
+    }
+  }
 
   const numLabel = String(displayIndex + 1).padStart(2, "0");
 
   return (
     <button
       type="button"
-      className={`gaze-tile${isHero ? " gaze-tile--hero" : ""}`}
+      className={`gaze-tile${isHero ? " gaze-tile--hero" : ""}${isPrimary ? " is-primary" : ""}`}
       onClick={onClick}
       style={{
         left: x,
@@ -213,7 +237,7 @@ function GazeTile({ tile, displayIndex, isHero, x, y, w, h, cursor, onClick }) {
         transform: `scale(${scale})`,
         opacity,
         filter: blur > 0 ? `blur(${blur}px)` : "none",
-        zIndex: isHero ? 20 : 10 + Math.round(focus * 8),
+        zIndex,
         borderColor: `rgba(255,255,255,${borderAlpha.toFixed(3)})`,
         ["--tile-accent"]: tile.accent,
       }}
@@ -303,6 +327,24 @@ export default function InfiniteCloud() {
   const offsetX = Math.max(0, (stage.w - gridW) / 2);
   const offsetY = Math.max(0, (stage.h - gridH) / 2);
 
+  // Active Focus Priority — pick closest tile within FOCUS_RADIUS.
+  const primaryFocusId = useMemo(() => {
+    if (!cursor.active) return null;
+    let minDist = FOCUS_RADIUS;
+    let best = null;
+    for (const cell of CELL_MAP) {
+      const tcx = offsetX + cell.col * (CELL_W + CELL_GAP) + CELL_W / 2;
+      const tcy = offsetY + cell.row * (CELL_H + CELL_GAP) + CELL_H / 2;
+      const d = Math.hypot(cursor.x - tcx, cursor.y - tcy);
+      if (d < minDist) {
+        minDist = d;
+        best = TILES[cell.tileIndex].id;
+      }
+    }
+    return best;
+  }, [cursor, offsetX, offsetY]);
+  const anyPrimary = primaryFocusId !== null;
+
   return (
     <section
       id="cloud"
@@ -372,6 +414,8 @@ export default function InfiniteCloud() {
                     y={y}
                     w={CELL_W}
                     h={CELL_H}
+                    isPrimary={tile.id === primaryFocusId}
+                    anyPrimary={anyPrimary}
                     cursor={cursor}
                     onClick={() => setSelectedId(tile.id)}
                   />
