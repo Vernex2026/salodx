@@ -195,7 +195,7 @@ export default function Terminal() {
     <section
       id="kontakt"
       aria-labelledby="terminal-heading"
-      className={`terminal-section h-screen w-screen relative isolate flex items-center justify-center px-6 py-16 md:px-10 md:py-20 overflow-hidden snap-start${
+      className={`terminal-section h-screen w-screen relative isolate flex items-center justify-center px-6 pt-24 pb-16 md:px-10 md:pt-28 md:pb-20 overflow-hidden snap-start${
         mode !== "idle" ? " terminal-section--launched section-light" : ""
       }`}
       data-mode={mode}

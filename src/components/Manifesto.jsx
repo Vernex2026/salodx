@@ -41,7 +41,7 @@ export default function Manifesto() {
     <section
       id="manifesto"
       aria-labelledby="manifesto-heading"
-      className="manifesto-section section-light h-screen w-screen relative isolate flex items-center justify-center px-6 py-8 md:px-10 md:py-12 overflow-hidden snap-start"
+      className="manifesto-section section-light h-screen w-screen relative isolate flex items-center justify-center px-6 pt-24 pb-8 md:px-10 md:pt-28 md:pb-12 overflow-hidden snap-start"
     >
       <div className="relative z-10 mx-auto w-full max-w-[1400px] flex flex-col">
         <div ref={headerRef} className="max-w-3xl">

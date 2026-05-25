@@ -40,7 +40,7 @@ export default function Pipeline() {
     <section
       id="pipeline"
       aria-labelledby="pipeline-heading"
-      className="pipeline-section h-screen w-screen relative isolate flex items-center justify-center px-6 py-20 md:px-10 md:py-28 overflow-hidden snap-start"
+      className="pipeline-section h-screen w-screen relative isolate flex items-center justify-center px-6 pt-24 pb-16 md:px-10 md:pt-28 md:pb-20 overflow-hidden snap-start"
     >
       {/* Volumetric smoke wall — global particles bleed through softer glass */}
       <div

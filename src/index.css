@@ -137,8 +137,15 @@ html {
   background: var(--color-black);
   color-scheme: dark;
 }
-/* v30: główny snap container w <main> — każda sekcja zatrzymuje viewport */
-main > section { scroll-snap-stop: always; }
+/* v32: snap-mandatory ze SMOOTH scroll-behavior — eliminuje "rwie"
+   feel, snap-stop:always usunięty (był za agresywny, każdy mały
+   scroll wymusza viewport jump = rwane). */
+main {
+  scroll-behavior: smooth;
+}
+@media (prefers-reduced-motion: reduce) {
+  main { scroll-behavior: auto; }
+}
 @media (prefers-reduced-motion: reduce) {
   html { scroll-behavior: auto; }
 }
