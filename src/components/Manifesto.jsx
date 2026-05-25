@@ -41,9 +41,9 @@ export default function Manifesto() {
     <section
       id="manifesto"
       aria-labelledby="manifesto-heading"
-      className="manifesto-section section-light h-screen w-screen relative isolate overflow-hidden flex items-center justify-center p-6 md:p-10"
+      className="manifesto-section section-light min-h-screen w-screen relative isolate flex items-center justify-center px-6 py-20 md:px-10 md:py-28"
     >
-      <div className="relative z-10 mx-auto w-full max-w-[1400px] h-full max-h-[850px] flex flex-col justify-center">
+      <div className="relative z-10 mx-auto w-full max-w-[1400px] flex flex-col">
         <div ref={headerRef} className="max-w-3xl">
           <div
             className={`pipeline-reveal ${headerVisible ? "is-visible" : ""}`}

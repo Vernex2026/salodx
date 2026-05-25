@@ -1,9 +1,6 @@
 import { useEffect, useMemo, useRef, useState, useCallback } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { useReveal } from "../hooks/useReveal";
-import { QTraderMockup } from "./cloud/mockups/QTraderMockup";
-import { CRMOmegaMockup } from "./cloud/mockups/CRMOmegaMockup";
-import { GSMFixMockup } from "./cloud/mockups/GSMFixMockup";
 
 const COLS = 4;
 const ROWS = 3;
@@ -11,7 +8,7 @@ const CELL_W = 260;
 const CELL_H = 220;
 const CELL_GAP = 24;
 
-const HERO_INDICES = new Set([0, 1]);
+const HERO_INDICES = new Set([0, 3]);
 const HERO_SCALE = 1.0;
 const PERIMETER_SCALE = 0.85;
 const FOCUS_RADIUS = 220;
@@ -128,45 +125,134 @@ const Glyph = ({ type, accent }) => {
 };
 
 const TILES = [
-  { id: "ai-terminal", glyph: "ai", accent: "#00E5A0", title: "AI Terminal", tag: "[ SELF-SERVICE // LLM ]", metric: "Prompt → live deploy", desc: "Edytuj produkt rozmawiając z panelem. Zmiana koloru, dodanie pola, nowy widok — bez agencji, bez tickets, bez czekania." },
-  { id: "qtrader", glyph: "fintech", accent: "#00E5FF", title: "QTrader", tag: "[ FINTECH // WS ]", metric: "1247 ticks/s · 0.4ms", desc: "Real-time order book + AI signals na WebSocket. React 19 z frame budget <10ms na każdym ticku rynkowym.", mockup: "qtrader" },
-  { id: "crm-omega", glyph: "crm", accent: "#FF8A4C", title: "CRM Omega", tag: "[ LEGAL // RLS ]", metric: "47k records · audit", desc: "Kancelaria z 47k rekordami klientów. Row-level security na każdym wierszu, audit trail PII, secured Postgres.", mockup: "crm-omega" },
-  { id: "gsm-fix", glyph: "logistics", accent: "#7C5CFF", title: "GSM-FIX", tag: "[ LOGISTICS // SAAS ]", metric: "QR → SMS w 47ms", desc: "Skanowanie QR serwisu → SMS do klienta w 47ms. Postgres realtime channels, multi-tenant SaaS dla 60+ punktów.", mockup: "gsm-fix" },
-  { id: "supabase", glyph: "cloud", accent: "#00E5FF", title: "Supabase Migration", tag: "[ CLOUD // INFRA ]", metric: "Zero downtime", desc: "Migracja produkcyjnej bazy bez okna serwisowego. RLS policies apply on-the-fly, edge replication." },
-  { id: "lovable", glyph: "ai", accent: "#00E5A0", title: "Lovable Bootstrap", tag: "[ AI // PROTOTYPE ]", metric: "72h klikalny prototyp", desc: "Działający, klikalny prototyp w 72 godziny. Nie statyczne makiety po trzech miesiącach — żywy produkt." },
-  { id: "edge", glyph: "edge", accent: "#00E5FF", title: "Edge Functions", tag: "[ VERCEL // EDGE ]", metric: "<100ms global", desc: "Vercel Edge Runtime — sub-100ms latency w 18 regionach. Bez zimnego startu, geografia bez kompromisów." },
-  { id: "dashboard", glyph: "fintech", accent: "#00E5A0", title: "Real-time Dashboard", tag: "[ B2B // DASHBOARD ]", metric: "WS · 60fps · 12k pts", desc: "Live B2B dashboard z WebSocket. 12k data points w viewporcie, 60fps render lock, canvas + d3 hybrid." },
-  { id: "agents", glyph: "ai", accent: "#7C5CFF", title: "AI Agent Pipeline", tag: "[ LLM // AGENTS ]", metric: "Multi-step reasoning", desc: "Autonomous agent z Vercel AI SDK + Claude streaming. Multi-step pipeline z tool use, end-to-end w 8s." },
-  { id: "nda", glyph: "legal", accent: "#FF5A7C", title: "NDA Generator", tag: "[ LEGAL // NDA ]", metric: "3s · multilang", desc: "AI generator umów NDA. Multilang (PL/EN/DE), wbudowane RODO clauses, gotowe do podpisu w 3 sekundy." },
-  { id: "ecom", glyph: "ecom", accent: "#D4A574", title: "E-com Storefront", tag: "[ E-COM // STRIPE ]", metric: "2.1s LCP · PWA", desc: "Next.js storefront z Stripe Checkout. PWA mobile-first, LCP 2.1s, offline cart sync, real-time stock." },
-  { id: "bank", glyph: "fintech", accent: "#00E5FF", title: "Bank Aggregator", tag: "[ FINTECH // OPEN BANKING ]", metric: "18 banków · PSD2", desc: "Agregator rachunków przez PSD2. 18 banków polskich, real-time sync, transaction categorization AI." },
+  {
+    id: "claude",
+    glyph: "ai",
+    accent: "#D97757",
+    title: "Anthropic Claude API",
+    tag: "[ MULTI-AGENT // ORCHESTRATION ]",
+    metric: "550k wyroków · tool use + RAG",
+    desc: "Autonomiczne agenty z tool use, pamięcią kontekstu i RAG pipeline. Agent prawny analizuje sprawy, przeszukuje 550k wyroków sądowych, generuje pisma i uczy się z każdej sprawy. Nie chatbot — działający system decyzyjny.",
+  },
+  {
+    id: "elevenlabs",
+    glyph: "radial",
+    accent: "#E2255D",
+    title: "ElevenLabs",
+    tag: "[ SYNTHETIC // VOICE ]",
+    metric: "DE/FR/IT · Reels z lektorem",
+    desc: "Agent Content Creator generuje opisy w DE/FR/IT i produkuje Reels z lektorem syntetycznym. Jeden trigger — pełne ogłoszenie na wszystkich portalach z narracją głosową. Zero człowieka w pętli.",
+  },
+  {
+    id: "supabase",
+    glyph: "cloud",
+    accent: "#3ECF8E",
+    title: "Supabase",
+    tag: "[ PGVECTOR // REALTIME // RLS ]",
+    metric: "10k ofert · 4k pts @ 60fps",
+    desc: "Semantic search po 10 000 ofertach pojazdów z embeddings. Row Level Security na poziomie każdego rekordu. Realtime subscriptions dla dashboardów live — 4k punktów danych, 60fps, zero pollingu.",
+  },
+  {
+    id: "mt5",
+    glyph: "fintech",
+    accent: "#2196F3",
+    title: "MetaTrader 5",
+    tag: "[ LIVE // TRADING FEED ]",
+    metric: "1247 ticks/s · 0.4ms",
+    desc: "Tick-by-tick streaming cen przez WebSocket, 1247 ticks/s przy latency 0.4ms. Integracja sygnałów algo do panelu tradera z backtesting engine i P&L tracking w czasie rzeczywistym.",
+  },
+  {
+    id: "base",
+    glyph: "edge",
+    accent: "#0052FF",
+    title: "Base / Ethereum",
+    tag: "[ ON-CHAIN // DATA LAYER ]",
+    metric: "ETH · BSC · Base · L2",
+    desc: "Odczyt danych kontraktów smart przez ethers.js, cross-chain monitoring (ETH, BSC, Base). Agent inwestycyjny analizuje on-chain przepływy i generuje scenariusze tradingowe.",
+  },
+  {
+    id: "stripe",
+    glyph: "ecom",
+    accent: "#635BFF",
+    title: "Stripe Connect",
+    tag: "[ MARKETPLACE // SPLIT ]",
+    metric: "7-day trial → subscription",
+    desc: "Pełny model marketplace: split payments do vendorów, automatyczne wypłaty, prowizje per transakcja, 7-day trial z automatycznym przejściem na subskrypcję. Webhook handler dla każdego zdarzenia.",
+  },
+  {
+    id: "whatsapp",
+    glyph: "crm",
+    accent: "#25D366",
+    title: "WhatsApp Business API",
+    tag: "[ LEAD // PIPELINE ]",
+    metric: "15% poniżej rynku → 60s",
+    desc: "Agent komisu DACH: wykrywa ofertę 15% poniżej rynku → wysyła WhatsApp z gotowym draftem wiadomości do sprzedawcy w 60 sekund od pojawienia się ogłoszenia. Zero ręcznej interwencji.",
+  },
+  {
+    id: "ksef",
+    glyph: "legal",
+    accent: "#DC2626",
+    title: "KSeF API",
+    tag: "[ MF // E-FAKTURA ]",
+    metric: "FA(2) · UPO · session token",
+    desc: "Automatyczne wystawianie faktur ustrukturyzowanych zgodnych ze schematem FA(2) bezpośrednio do Krajowego Systemu e-Faktur. Session token management, parsowanie UPO, archiwizacja w Supabase. System generuje i wysyła fakturę w sekundy od zamknięcia transakcji — zero ręcznego księgowania.",
+  },
+  {
+    id: "resend",
+    glyph: "edge",
+    accent: "#FFFFFF",
+    title: "Resend",
+    tag: "[ TRANSACTIONAL // EMAIL ]",
+    metric: "Event-driven · webhook tracking",
+    desc: "Sekwencje email wyzwalane zdarzeniami (nowy lead, zmiana statusu, wygasający kontrakt). Automatyczne przypomnienia 24h przed wizytą serwisową i 12 miesięcy po instalacji urządzenia. HTML templates, webhook tracking.",
+  },
+  {
+    id: "baselinker",
+    glyph: "logistics",
+    accent: "#FF6500",
+    title: "Baselinker API",
+    tag: "[ MULTI-MARKETPLACE // ORCH ]",
+    metric: "Allegro · Amazon DE · eBay",
+    desc: "Agent monitoruje jakość ofert na Allegro, Amazon DE, eBay jednocześnie. Silnik cenowy z regułami marż, auto-przeliczanie PLN/EUR/GBP, change detection z human-in-the-loop zatwierdzaniem zmian.",
+  },
+  {
+    id: "voice",
+    glyph: "radial",
+    accent: "#10A37F",
+    title: "Web Speech + Whisper",
+    tag: "[ VOICE // LAYER ]",
+    metric: "iOS fallback · live STT",
+    desc: "Obsługa głosowa w widgecie czatu z fallbackiem do Whisper dla iOS/Safari. Klient mówi zapytanie o pojazd — agent transkrybuje, analizuje, zwraca dopasowane oferty z linkami URL. Przetestowane na fizycznym iPhone.",
+  },
+  {
+    id: "playwright",
+    glyph: "ai",
+    accent: "#45BA4B",
+    title: "Playwright + Claude Vision",
+    tag: "[ AUTONOMOUS // WEB AGENT ]",
+    metric: "mobile.de · AutoScout · 60s alert",
+    desc: "Headless scraping mobile.de, AutoScout24, tutti.ch, Ricardo.ch z wykrywaniem zmian cen i parametrów. Claude Vision analizuje zdjęcia pojazdów i historię serwisową. Alert do właściciela komisu w 60 sekund od znalezienia okazji.",
+  },
 ];
 
-const MOCKUP_MAP = {
-  "qtrader": QTraderMockup,
-  "crm-omega": CRMOmegaMockup,
-  "gsm-fix": GSMFixMockup,
-};
-
 // Layout: 4 cols × 3 rows. Hero tiles at center cells (r1c1, r1c2).
-// Hero indices in TILES: 0 (AI Terminal) and 1 (QTrader).
-// Remap so hero tiles land on center cells, perimeter tiles fill rest.
+// Hero indices in TILES: 0 (Anthropic Claude) and 3 (MetaTrader 5).
 const CELL_MAP = [
   // Row 0
-  { col: 0, row: 0, tileIndex: 2 },   // CRM Omega
-  { col: 1, row: 0, tileIndex: 3 },   // GSM-FIX
-  { col: 2, row: 0, tileIndex: 4 },   // Supabase
-  { col: 3, row: 0, tileIndex: 5 },   // Lovable
+  { col: 0, row: 0, tileIndex: 1 },   // ElevenLabs
+  { col: 1, row: 0, tileIndex: 2 },   // Supabase
+  { col: 2, row: 0, tileIndex: 4 },   // Base / Ethereum
+  { col: 3, row: 0, tileIndex: 5 },   // Stripe Connect
   // Row 1 (center row — heroes in middle)
-  { col: 0, row: 1, tileIndex: 6 },   // Edge
-  { col: 1, row: 1, tileIndex: 1 },   // QTrader HERO
-  { col: 2, row: 1, tileIndex: 0 },   // AI Terminal HERO
-  { col: 3, row: 1, tileIndex: 7 },   // Dashboard
+  { col: 0, row: 1, tileIndex: 6 },   // WhatsApp Business API
+  { col: 1, row: 1, tileIndex: 3 },   // MetaTrader 5 HERO
+  { col: 2, row: 1, tileIndex: 0 },   // Anthropic Claude HERO
+  { col: 3, row: 1, tileIndex: 7 },   // KSeF API
   // Row 2
-  { col: 0, row: 2, tileIndex: 8 },   // Agents
-  { col: 1, row: 2, tileIndex: 9 },   // NDA
-  { col: 2, row: 2, tileIndex: 10 },  // E-com
-  { col: 3, row: 2, tileIndex: 11 },  // Bank
+  { col: 0, row: 2, tileIndex: 8 },   // Resend
+  { col: 1, row: 2, tileIndex: 9 },   // Baselinker
+  { col: 2, row: 2, tileIndex: 10 },  // Web Speech + Whisper
+  { col: 3, row: 2, tileIndex: 11 },  // Playwright + Claude Vision
 ];
 
 function GazeTile({ tile, displayIndex, isHero, x, y, w, h, isPrimary, anyPrimary, cursor, onClick }) {
@@ -351,8 +437,8 @@ export default function InfiniteCloud() {
       className="cloud-section h-screen w-screen bg-black flex items-center justify-center relative overflow-hidden"
       aria-labelledby="cloud-heading"
     >
-      {/* Volumetric smoke: heavy backdrop blur layer over particles */}
-      <div className="absolute inset-0 backdrop-blur-[100px] bg-black/40 pointer-events-none z-0" aria-hidden />
+      {/* Volumetric smoke: softer glass — particles bleed through edges */}
+      <div className="absolute inset-0 backdrop-blur-2xl bg-black/40 pointer-events-none z-0" aria-hidden />
 
       <div className="cloud-pulpit-wrap w-full max-w-[1400px] h-full flex flex-col relative z-10 p-6 md:p-10">
         <div ref={headerRef} className="cloud-header shrink-0 pb-3 flex flex-col gap-2 md:flex-row md:items-baseline md:justify-between md:gap-8">
@@ -385,8 +471,8 @@ export default function InfiniteCloud() {
               "--pipeline-reveal-delay": "240ms",
             }}
           >
-            Środek to soczewka. QTrader i AI Terminal trzymają centrum.
-            Reszta wraca do ostrości pod kursorem.
+            Środek to soczewka. Claude API i MetaTrader 5 trzymają
+            centrum. Reszta wraca do ostrości pod kursorem.
           </p>
         </div>
 
@@ -444,7 +530,7 @@ export default function InfiniteCloud() {
               animate={{ opacity: 1, scale: 1, y: 0 }}
               exit={{ opacity: 0, scale: 0.97, y: 6 }}
               transition={{ type: "spring", stiffness: 320, damping: 30 }}
-              className={`cloud-focus-card ${selected.mockup ? "cloud-focus-card--mockup" : ""}`}
+              className="cloud-focus-card"
               style={{ ["--tile-accent"]: selected.accent }}
               onClick={(e) => e.stopPropagation()}
             >
@@ -452,30 +538,21 @@ export default function InfiniteCloud() {
                 type="button"
                 className="cloud-focus-close-x"
                 onClick={() => setSelectedId(null)}
-                aria-label="Zamknij szczegóły projektu"
+                aria-label="Zamknij szczegóły integracji"
               >
                 ×
               </button>
-              {selected.mockup && MOCKUP_MAP[selected.mockup] ? (
-                (() => {
-                  const Mockup = MOCKUP_MAP[selected.mockup];
-                  return <Mockup />;
-                })()
-              ) : (
-                <>
-                  <div className="cloud-focus-stage">
-                    <Glyph type={selected.glyph} accent={selected.accent} />
-                  </div>
-                  <div className="cloud-focus-body">
-                    <span className="cloud-focus-tag">{selected.tag}</span>
-                    <h3 id="cloud-focus-title" className="cloud-focus-title">
-                      {selected.title}
-                    </h3>
-                    <p className="cloud-focus-metric">{selected.metric}</p>
-                    <p className="cloud-focus-desc">{selected.desc}</p>
-                  </div>
-                </>
-              )}
+              <div className="cloud-focus-stage">
+                <Glyph type={selected.glyph} accent={selected.accent} />
+              </div>
+              <div className="cloud-focus-body">
+                <span className="cloud-focus-tag">{selected.tag}</span>
+                <h3 id="cloud-focus-title" className="cloud-focus-title">
+                  {selected.title}
+                </h3>
+                <p className="cloud-focus-metric">{selected.metric}</p>
+                <p className="cloud-focus-desc">{selected.desc}</p>
+              </div>
             </motion.div>
           </motion.div>
         )}

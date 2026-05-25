@@ -40,14 +40,14 @@ export default function Pipeline() {
     <section
       id="pipeline"
       aria-labelledby="pipeline-heading"
-      className="pipeline-section h-screen w-screen relative isolate flex items-center justify-center p-6 md:p-10 overflow-hidden"
+      className="pipeline-section min-h-screen w-screen relative isolate flex items-center justify-center px-6 py-20 md:px-10 md:py-28"
     >
-      {/* Volumetric smoke wall — global particles drift behind backdrop-blur */}
+      {/* Volumetric smoke wall — global particles bleed through softer glass */}
       <div
         aria-hidden="true"
-        className="absolute inset-0 z-0 backdrop-blur-[100px] bg-black/45 pointer-events-none"
+        className="absolute inset-0 z-0 backdrop-blur-2xl bg-black/40 pointer-events-none"
       />
-      <div className="relative z-10 w-full max-w-[1400px] h-full max-h-[850px] flex flex-col">
+      <div className="relative z-10 w-full max-w-[1400px] flex flex-col">
         <PipelineHeader />
         <ol
           role="list"
