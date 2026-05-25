@@ -1271,10 +1271,19 @@ body { font-variant-numeric: tabular-nums; }
     transform: translate(12px, 12px);
   }
 }
-.manifesto-row[data-visible="true"] .manifesto-old,
+.manifesto-row[data-visible="true"] .manifesto-old {
+  opacity: 0.55;
+  transform: translate(0, 0);
+}
 .manifesto-row[data-visible="true"] .manifesto-new {
   opacity: 1;
   transform: translate(0, 0);
+}
+@media (hover: hover) {
+  .manifesto-row:hover .manifesto-old {
+    opacity: 0.85;
+    transition: opacity 320ms var(--ease-soft);
+  }
 }
 .manifesto-eyebrow {
   font-family: 'Geist Mono', ui-monospace, monospace;
@@ -1330,6 +1339,188 @@ body { font-variant-numeric: tabular-nums; }
 .terminal-section {
   background: #000000;
   min-height: 90vh;
+  transition: background 520ms cubic-bezier(0.22, 1, 0.36, 1);
+}
+/* v28 Agent Chat Mode — after "Wyślij brief" the entire section morphs
+   to light-mode (white wash) and the pill turns into a white chat
+   container. Particle burst kicks in just before this transition. */
+.terminal-section--launched {
+  background: #F5F5F7;
+}
+.terminal-chat-shell {
+  position: relative;
+  width: 100%;
+  max-width: 980px;
+  margin: 32px auto 0;
+  padding: 22px 26px 18px;
+  border-radius: 24px;
+  background: #FFFFFF;
+  border: 1px solid rgba(9, 9, 11, 0.06);
+  box-shadow:
+    0 32px 80px -22px rgba(9, 9, 11, 0.18),
+    0 8px 20px -8px rgba(9, 9, 11, 0.10),
+    inset 0 1px 0 rgba(255, 255, 255, 0.92);
+  text-align: left;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  animation: terminal-chat-in 420ms cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+@keyframes terminal-chat-in {
+  0%   { opacity: 0; transform: translateY(14px) scale(0.96); }
+  100% { opacity: 1; transform: translateY(0) scale(1); }
+}
+.terminal-chat-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding-bottom: 12px;
+  border-bottom: 1px solid rgba(9, 9, 11, 0.06);
+  font-family: 'JetBrains Mono', ui-monospace, monospace;
+  font-size: 11px;
+  letter-spacing: 0.08em;
+}
+.terminal-chat-tag {
+  color: #00B580;
+  font-weight: 600;
+}
+.terminal-chat-status {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  color: rgba(9, 9, 11, 0.55);
+}
+.terminal-chat-dot {
+  display: inline-block;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: #00B580;
+  box-shadow: 0 0 0 3px rgba(0, 181, 128, 0.18);
+  animation: chat-dot-pulse 1.8s ease-in-out infinite;
+}
+@keyframes chat-dot-pulse {
+  0%, 100% { box-shadow: 0 0 0 3px rgba(0, 181, 128, 0.18); }
+  50%      { box-shadow: 0 0 0 6px rgba(0, 181, 128, 0.06); }
+}
+.terminal-chat-messages {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+  max-height: 52vh;
+  min-height: 200px;
+  overflow-y: auto;
+  padding: 8px 4px;
+  scrollbar-width: thin;
+  scrollbar-color: rgba(9, 9, 11, 0.20) transparent;
+}
+.terminal-chat-messages::-webkit-scrollbar {
+  width: 6px;
+}
+.terminal-chat-messages::-webkit-scrollbar-thumb {
+  background: rgba(9, 9, 11, 0.18);
+  border-radius: 3px;
+}
+.terminal-chat-msg {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+.terminal-chat-msg-role {
+  font-family: 'JetBrains Mono', ui-monospace, monospace;
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 0.10em;
+  text-transform: uppercase;
+  color: rgba(9, 9, 11, 0.45);
+}
+.terminal-chat-msg--user .terminal-chat-msg-role {
+  color: rgba(9, 9, 11, 0.62);
+}
+.terminal-chat-msg--assistant .terminal-chat-msg-role {
+  color: #00B580;
+}
+.terminal-chat-msg-body {
+  font-family: 'Geist', -apple-system, BlinkMacSystemFont, 'Inter', sans-serif;
+  font-size: 15.5px;
+  line-height: 1.6;
+  color: #18181B;
+  white-space: pre-wrap;
+}
+.terminal-chat-msg--user .terminal-chat-msg-body {
+  font-weight: 500;
+  color: #09090B;
+}
+.terminal-chat-input-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 12px 14px;
+  border-radius: 14px;
+  background: #FAFAFA;
+  border: 1px solid rgba(9, 9, 11, 0.08);
+  transition: border-color 200ms ease, box-shadow 200ms ease;
+}
+.terminal-chat-input-row:focus-within {
+  border-color: rgba(0, 181, 128, 0.45);
+  box-shadow: 0 0 0 3px rgba(0, 181, 128, 0.10);
+}
+.terminal-chat-input {
+  flex: 1;
+  background: transparent;
+  border: none;
+  outline: none;
+  color: #09090B;
+  font-family: 'Geist', sans-serif;
+  font-size: 15px;
+  padding: 6px 4px;
+  line-height: 1.5;
+  caret-color: #00B580;
+}
+.terminal-chat-input::placeholder {
+  color: rgba(9, 9, 11, 0.35);
+}
+.terminal-chat-input:disabled {
+  opacity: 0.5;
+}
+.terminal-chat-submit {
+  appearance: none;
+  padding: 9px 18px;
+  border-radius: 10px;
+  background: #09090B;
+  color: #FFFFFF;
+  font-family: 'Geist', sans-serif;
+  font-size: 13px;
+  font-weight: 600;
+  letter-spacing: 0.01em;
+  border: 1px solid #09090B;
+  cursor: pointer;
+  transition: transform 160ms ease, background 200ms ease;
+}
+.terminal-chat-submit:hover:not(:disabled) {
+  background: #18181B;
+  transform: translateY(-1px);
+}
+.terminal-chat-submit:active:not(:disabled) {
+  transform: scale(0.97);
+}
+.terminal-chat-submit:disabled {
+  background: rgba(9, 9, 11, 0.20);
+  border-color: transparent;
+  cursor: not-allowed;
+}
+.terminal-chat-footer {
+  font-family: 'JetBrains Mono', ui-monospace, monospace;
+  font-size: 10.5px;
+  letter-spacing: 0.06em;
+  color: rgba(9, 9, 11, 0.50);
+  margin: 4px 0 0;
+  text-align: center;
+}
+@media (max-width: 640px) {
+  .terminal-chat-shell { padding: 18px 16px 14px; max-width: calc(100vw - 24px); }
+  .terminal-chat-msg-body { font-size: 14.5px; }
+  .terminal-chat-messages { max-height: 60vh; }
 }
 .terminal-pill {
   position: relative;
@@ -1378,7 +1569,7 @@ body { font-variant-numeric: tabular-nums; }
   display: flex;
   align-items: center;
   gap: 12px;
-  padding: 18px 0 14px;
+  padding: 26px 0 22px;
   position: relative;
 }
 .terminal-pill-prompt {
@@ -1397,8 +1588,8 @@ body { font-variant-numeric: tabular-nums; }
   font-family: 'Geist', sans-serif;
   font-size: 17px;
   font-weight: 400;
-  padding: 0;
-  line-height: 1.4;
+  padding: 4px 0;
+  line-height: 1.55;
   caret-color: #00E5A0;
 }
 .terminal-pill-input::placeholder {

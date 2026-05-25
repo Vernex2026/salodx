@@ -110,10 +110,10 @@ export default function Manifesto() {
               fontFamily:
                 "'Geist', -apple-system, BlinkMacSystemFont, 'Inter', sans-serif",
               fontSize: "clamp(1.25rem, 2.1vw, 1.625rem)",
-              fontWeight: 500,
+              fontWeight: 600,
               lineHeight: 1.4,
               letterSpacing: "-0.025em",
-              color: "#52525B",
+              color: "#3F3F46",
             }}
           >
             Twój zysk: Inwestujesz w technologię, która staje się{" "}

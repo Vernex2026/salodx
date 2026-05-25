@@ -122,10 +122,11 @@ function PipelineCard({ step }) {
   return (
     <li
       ref={ref}
-      className={`pipeline-card pipeline-reveal ${visible ? "is-visible" : ""}`}
+      className="pipeline-card"
       style={{ listStyle: "none" }}
     >
       <div
+        className={`pipeline-reveal ${visible ? "is-visible" : ""}`}
         style={{
           fontFamily:
             "'JetBrains Mono', ui-monospace, SFMono-Regular, monospace",
@@ -133,6 +134,7 @@ function PipelineCard({ step }) {
           fontWeight: 500,
           letterSpacing: "0.08em",
           color: "rgba(255,255,255,0.45)",
+          "--pipeline-reveal-delay": "0ms",
         }}
       >
         <span className="pipeline-card-num">{step.n}</span>
@@ -140,7 +142,7 @@ function PipelineCard({ step }) {
       </div>
 
       <h3
-        className="m-0 mt-3 text-white"
+        className={`pipeline-reveal ${visible ? "is-visible" : ""} m-0 mt-3 text-white`}
         style={{
           fontFamily:
             "'Geist', -apple-system, BlinkMacSystemFont, 'Inter', sans-serif",
@@ -148,6 +150,7 @@ function PipelineCard({ step }) {
           fontWeight: 800,
           lineHeight: 1.1,
           letterSpacing: "-0.035em",
+          "--pipeline-reveal-delay": "60ms",
         }}
       >
         {step.title}{" "}
@@ -156,7 +159,10 @@ function PipelineCard({ step }) {
         </span>
       </h3>
 
-      <div className="mt-3">
+      <div
+        className={`pipeline-reveal ${visible ? "is-visible" : ""} mt-3`}
+        style={{ "--pipeline-reveal-delay": "120ms" }}
+      >
         <span
           style={{
             fontFamily:
@@ -172,11 +178,12 @@ function PipelineCard({ step }) {
       </div>
 
       <p
-        className="mt-2"
+        className={`pipeline-reveal ${visible ? "is-visible" : ""} mt-2`}
         style={{
           fontSize: "14px",
           lineHeight: 1.55,
           color: "#D4D4D8",
+          "--pipeline-reveal-delay": "180ms",
         }}
       >
         {step.body}

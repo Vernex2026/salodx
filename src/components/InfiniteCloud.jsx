@@ -271,24 +271,24 @@ function GazeTile({ tile, displayIndex, isHero, x, y, w, h, isPrimary, anyPrimar
   let scale, opacity, blur, borderAlpha, zIndex;
   if (isPrimary) {
     if (isHero) {
-      scale = HERO_SCALE + 0.05; // 1.05
+      scale = HERO_SCALE + 0.10; // 1.10 — full bloom
       opacity = 1.0;
       blur = 0;
-      borderAlpha = 0.20;
+      borderAlpha = 0.22;
       zIndex = 40;
     } else {
-      scale = PERIMETER_SCALE + 0.20; // 1.05
+      scale = PERIMETER_SCALE + 0.25; // 1.10 — perimeter bloom
       opacity = 1.0;
       blur = 0;
-      borderAlpha = 0.20;
+      borderAlpha = 0.22;
       zIndex = 35;
     }
   } else if (anyPrimary && isHero) {
     // Another tile took priority — hero defers (oddaje pole)
-    scale = HERO_SCALE - 0.03; // 0.97
-    opacity = 0.65;
+    scale = HERO_SCALE - 0.06; // 0.94 — clear defer
+    opacity = 0.55;
     blur = 0;
-    borderAlpha = 0.10;
+    borderAlpha = 0.08;
     zIndex = 20;
   } else {
     // Baseline (no cursor focus or this tile not affected)
@@ -309,6 +309,14 @@ function GazeTile({ tile, displayIndex, isHero, x, y, w, h, isPrimary, anyPrimar
   }
 
   const numLabel = String(displayIndex + 1).padStart(2, "0");
+  // Accent drop-shadow glow on primary focus — color from tile brand.
+  // Hex+alpha (8-digit) format: #RRGGBBAA, "59" = 0x59 = 35% alpha.
+  const accentGlow = `drop-shadow(0 0 18px ${tile.accent}59) drop-shadow(0 0 32px ${tile.accent}33)`;
+  const filterStr = blur > 0
+    ? `blur(${blur}px)`
+    : isPrimary
+      ? accentGlow
+      : "none";
 
   return (
     <button
@@ -322,7 +330,7 @@ function GazeTile({ tile, displayIndex, isHero, x, y, w, h, isPrimary, anyPrimar
         height: h,
         transform: `scale(${scale})`,
         opacity,
-        filter: blur > 0 ? `blur(${blur}px)` : "none",
+        filter: filterStr,
         zIndex,
         borderColor: `rgba(255,255,255,${borderAlpha.toFixed(3)})`,
         ["--tile-accent"]: tile.accent,
@@ -467,7 +475,7 @@ export default function InfiniteCloud() {
             style={{
               fontSize: "13px",
               lineHeight: 1.5,
-              color: "rgba(255,255,255,0.55)",
+              color: "rgba(255,255,255,0.72)",
               "--pipeline-reveal-delay": "240ms",
             }}
           >
