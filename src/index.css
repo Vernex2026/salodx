@@ -1666,28 +1666,6 @@ body { font-variant-numeric: tabular-nums; }
     opacity: 0.45;
   }
 }
-.terminal-pill-hint {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding-top: 12px;
-  border-top: 1px solid rgba(255, 255, 255, 0.06);
-  font-family: 'Geist Mono', ui-monospace, monospace;
-  font-size: 10px;
-  letter-spacing: 0.08em;
-  color: rgba(255, 255, 255, 0.35);
-}
-.terminal-pill-hint kbd {
-  display: inline-block;
-  margin-right: 6px;
-  padding: 1px 6px;
-  border-radius: 4px;
-  background: rgba(255, 255, 255, 0.06);
-  border: 1px solid rgba(255, 255, 255, 0.12);
-  font-family: inherit;
-  font-size: 10px;
-  color: rgba(255, 255, 255, 0.65);
-}
 .terminal-pill-submit {
   margin-top: 16px;
   width: 100%;
@@ -1901,6 +1879,18 @@ body { font-variant-numeric: tabular-nums; }
   outline: 2px solid var(--color-white);
   outline-offset: 3px;
   border-radius: 6px;
+}
+
+/* Terminal pill / chat inputs ship their own focus indicator on the
+   wrapping frame (green border + glow). Suppress the global white
+   focus-visible outline so it doesn't double up as a hard "boxed" ring
+   around the bare input. */
+.terminal-pill-input:focus-visible,
+.terminal-pill-input:focus,
+.terminal-chat-input:focus-visible,
+.terminal-chat-input:focus {
+  outline: none;
+  border-radius: 0;
 }
 
 /* Nav glass pill — global 2px white outline reads as a "boxed" highlight

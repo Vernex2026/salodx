@@ -333,19 +333,6 @@ export default function Terminal() {
               />
             </div>
 
-            <div className="terminal-pill-hint">
-              <span>
-                <kbd>⏎</kbd> <span>wyślij brief</span>
-              </span>
-              <span>
-                {query.length > 0 && (
-                  <span style={{ color: "rgba(255,255,255,0.55)" }}>
-                    {query.length} / {MAX_LEN}
-                  </span>
-                )}
-              </span>
-            </div>
-
             <button
               type="submit"
               disabled={submitting}
