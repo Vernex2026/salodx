@@ -448,7 +448,7 @@ export default function InfiniteCloud() {
       {/* Volumetric smoke: softer glass — particles bleed through edges */}
       <div className="absolute inset-0 backdrop-blur-2xl bg-black/40 pointer-events-none z-0" aria-hidden />
 
-      <div className="cloud-pulpit-wrap w-full max-w-[1400px] h-full flex flex-col relative z-10 p-6 md:p-10">
+      <div className="cloud-pulpit-wrap w-full max-w-[1400px] h-full flex flex-col relative z-10 px-6 pt-24 pb-6 md:px-10 md:pt-28 md:pb-10">
         <div ref={headerRef} className="cloud-header shrink-0 pb-3 flex flex-col gap-2 md:flex-row md:items-baseline md:justify-between md:gap-8">
           <div>
             <div className={`pipeline-reveal ${headerVisible ? "is-visible" : ""}`}>

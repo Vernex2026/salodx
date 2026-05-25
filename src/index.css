@@ -134,9 +134,17 @@
 }
 
 html {
-  scroll-padding-top: 96px;
   background: var(--color-black);
   color-scheme: dark;
+}
+/* v32: snap-mandatory ze SMOOTH scroll-behavior — eliminuje "rwie"
+   feel, snap-stop:always usunięty (był za agresywny, każdy mały
+   scroll wymusza viewport jump = rwane). */
+main {
+  scroll-behavior: smooth;
+}
+@media (prefers-reduced-motion: reduce) {
+  main { scroll-behavior: auto; }
 }
 @media (prefers-reduced-motion: reduce) {
   html { scroll-behavior: auto; }
@@ -1209,7 +1217,10 @@ body { font-variant-numeric: tabular-nums; }
   position: relative;
   display: flex;
   flex-direction: column;
-  gap: 56px;
+  gap: 28px;
+}
+@media (min-width: 1024px) {
+  .manifesto-grid { gap: 32px; }
 }
 .manifesto-divider {
   display: none;
@@ -1339,7 +1350,9 @@ body { font-variant-numeric: tabular-nums; }
 .terminal-section {
   background: #000000;
   min-height: 90vh;
-  transition: background 520ms cubic-bezier(0.22, 1, 0.36, 1);
+  /* v31: 520 → 600ms sync z setTimeout("chatting") = 600ms. Eliminuje
+     ghost period gdzie bg już biały ale chat shell jeszcze niemontowany. */
+  transition: background 600ms cubic-bezier(0.22, 1, 0.36, 1);
 }
 /* v28 Agent Chat Mode — after "Wyślij brief" the entire section morphs
    to light-mode (white wash) and the pill turns into a white chat
@@ -1372,6 +1385,38 @@ body { font-variant-numeric: tabular-nums; }
 @keyframes terminal-chat-in {
   0%   { opacity: 0; transform: translateY(14px) scale(0.96); }
   100% { opacity: 1; transform: translateY(0) scale(1); }
+}
+/* v31 Gemini/Siri-style thinking glow — pulsuje pod chat shell gdy
+   LLM stream w toku. Owner spec: muted cyan radial + blur. */
+.terminal-thinking-glow {
+  position: absolute;
+  inset: -60px;
+  z-index: -1;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 600ms ease;
+  background: radial-gradient(
+    circle at 50% 50%,
+    rgba(0, 229, 255, 0.22) 0%,
+    rgba(0, 229, 255, 0.08) 32%,
+    transparent 62%
+  );
+  filter: blur(40px);
+  border-radius: 28px;
+}
+.terminal-thinking-glow.is-active {
+  opacity: 1;
+  animation: thinking-pulse 2.4s ease-in-out infinite;
+}
+@keyframes thinking-pulse {
+  0%, 100% { transform: scale(0.94); opacity: 0.72; }
+  50%      { transform: scale(1.08); opacity: 1; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .terminal-thinking-glow.is-active {
+    animation: none;
+    opacity: 0.85;
+  }
 }
 .terminal-chat-head {
   display: flex;

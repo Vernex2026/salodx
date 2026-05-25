@@ -41,7 +41,7 @@ export default function Manifesto() {
     <section
       id="manifesto"
       aria-labelledby="manifesto-heading"
-      className="manifesto-section section-light h-screen w-screen relative isolate flex items-center justify-center px-6 py-12 md:px-10 md:py-16 overflow-y-auto snap-start"
+      className="manifesto-section section-light h-screen w-screen relative isolate flex items-center justify-center px-6 pt-24 pb-8 md:px-10 md:pt-28 md:pb-12 overflow-hidden snap-start"
     >
       <div className="relative z-10 mx-auto w-full max-w-[1400px] flex flex-col">
         <div ref={headerRef} className="max-w-3xl">
@@ -62,11 +62,11 @@ export default function Manifesto() {
 
           <h2
             id="manifesto-heading"
-            className={`pipeline-reveal ${headerVisible ? "is-visible" : ""} m-0 mt-6`}
+            className={`pipeline-reveal ${headerVisible ? "is-visible" : ""} m-0 mt-4`}
             style={{
               fontFamily:
                 "'Geist', -apple-system, BlinkMacSystemFont, 'Inter', sans-serif",
-              fontSize: "clamp(2.75rem, 7vw, 5rem)",
+              fontSize: "clamp(2rem, 5.5vw, 3.75rem)",
               fontWeight: 800,
               lineHeight: 1.02,
               letterSpacing: "-0.045em",
@@ -79,9 +79,9 @@ export default function Manifesto() {
           </h2>
 
           <p
-            className={`pipeline-reveal ${headerVisible ? "is-visible" : ""} mt-6 max-w-[640px]`}
+            className={`pipeline-reveal ${headerVisible ? "is-visible" : ""} mt-4 max-w-[640px]`}
             style={{
-              fontSize: "18px",
+              fontSize: "16px",
               lineHeight: 1.55,
               color: "#52525B",
               "--pipeline-reveal-delay": "260ms",
@@ -92,7 +92,7 @@ export default function Manifesto() {
           </p>
         </div>
 
-        <div className="manifesto-grid mt-8 md:mt-12">
+        <div className="manifesto-grid mt-6 md:mt-8">
           <div className="manifesto-divider" aria-hidden="true" />
           {ROWS.map((row, i) => (
             <ManifestoRow key={i} row={row} index={i} />
@@ -101,7 +101,7 @@ export default function Manifesto() {
 
         <div
           ref={closingRef}
-          className={`manifesto-closing pipeline-reveal ${closingVisible ? "is-visible" : ""} mt-8 md:mt-10`}
+          className={`manifesto-closing pipeline-reveal ${closingVisible ? "is-visible" : ""} mt-6 md:mt-8`}
           style={{ "--pipeline-reveal-delay": "0ms" }}
         >
           <p
@@ -109,7 +109,7 @@ export default function Manifesto() {
             style={{
               fontFamily:
                 "'Geist', -apple-system, BlinkMacSystemFont, 'Inter', sans-serif",
-              fontSize: "clamp(1.25rem, 2.1vw, 1.625rem)",
+              fontSize: "clamp(1rem, 1.8vw, 1.35rem)",
               fontWeight: 600,
               lineHeight: 1.4,
               letterSpacing: "-0.025em",
