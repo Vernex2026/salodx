@@ -2,6 +2,7 @@ import Nav from "./components/Nav";
 import Hero from "./components/Hero";
 import Pipeline from "./components/Pipeline";
 import InfiniteCloud from "./components/InfiniteCloud";
+import AIPanel from "./components/AIPanel";
 import Manifesto from "./components/Manifesto";
 import Terminal from "./components/Terminal";
 import Footer from "./components/Footer";
@@ -34,6 +35,7 @@ export default function App() {
         <Hero />
         <Pipeline />
         <InfiniteCloud />
+        <AIPanel />
         <Manifesto />
         <Terminal />
       </main>
