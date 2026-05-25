@@ -19,6 +19,35 @@ export default function CommandPalette() {
   const [isMobile, setIsMobile] = useState(false);
   const inputRef = useRef(null);
   const responseEndRef = useRef(null);
+  const typingTimeoutRef = useRef(0);
+  const typingActiveRef = useRef(false);
+
+  // Kinetic feedback: broadcast typing state to ParticleCloud via window event.
+  // Debounced 650ms — particles relax back to idle after typing stops.
+  const signalTyping = () => {
+    if (!typingActiveRef.current) {
+      typingActiveRef.current = true;
+      window.dispatchEvent(
+        new CustomEvent("vernex:typing", { detail: { active: true } })
+      );
+    }
+    if (typingTimeoutRef.current) clearTimeout(typingTimeoutRef.current);
+    typingTimeoutRef.current = window.setTimeout(() => {
+      typingActiveRef.current = false;
+      window.dispatchEvent(
+        new CustomEvent("vernex:typing", { detail: { active: false } })
+      );
+    }, 650);
+  };
+
+  useEffect(() => () => {
+    if (typingTimeoutRef.current) clearTimeout(typingTimeoutRef.current);
+    if (typingActiveRef.current) {
+      window.dispatchEvent(
+        new CustomEvent("vernex:typing", { detail: { active: false } })
+      );
+    }
+  }, []);
 
   // Mount delay 800ms — let Hero entrance animations finish before
   // pill appears at the bottom.
@@ -270,7 +299,10 @@ export default function CommandPalette() {
             ref={inputRef}
             type="text"
             value={input}
-            onChange={(e) => setInput(e.target.value)}
+            onChange={(e) => {
+              setInput(e.target.value);
+              signalTyping();
+            }}
             placeholder="Zapytaj o architekturę, stack, projekty…"
             disabled={streaming}
             autoComplete="off"

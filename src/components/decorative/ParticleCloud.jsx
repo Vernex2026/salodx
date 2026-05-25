@@ -24,6 +24,7 @@ import * as THREE from "three";
 const VERTEX = /* glsl */ `
   uniform float uTime;
   uniform float uScroll;
+  uniform float uIntensity;
   attribute float size;
   attribute vec3 customColor;
   attribute vec3 aTargetPos;
@@ -31,15 +32,18 @@ const VERTEX = /* glsl */ `
   varying vec3  vColor;
   varying float vPulse;
   varying float vCoalesce;
+  varying float vIntensity;
 
   void main() {
     vColor = customColor;
+    vIntensity = uIntensity;
     vec3 pos = position;
 
-    float wave = sin(pos.y * 1.5 + uTime * 1.2) *
-                 cos(pos.z * 2.0 + uTime * 0.8);
-    pos.x += wave * 0.6;
-    pos.z -= wave * 0.6;
+    // Wave deform — amplified by overdrive intensity when agent is typed
+    float wave = sin(pos.y * 1.5 + uTime * 1.2 * uIntensity) *
+                 cos(pos.z * 2.0 + uTime * 0.8 * uIntensity);
+    pos.x += wave * 0.6 * uIntensity;
+    pos.z -= wave * 0.6 * uIntensity;
 
     // v15 Big Bang phase compute
     float phase = clamp(uScroll, 0.0, 4.0);
@@ -59,13 +63,17 @@ const VERTEX = /* glsl */ `
     // Phase 4: coalesce toward V logo target
     vec3 finalPos = mix(river, aTargetPos, coalesceAmt);
 
-    vPulse = 0.6 + 0.4 * sin(uTime * 4.0 + finalPos.y * 5.0);
+    // Pulse: frequency rises with overdrive, amplitude grows too
+    vPulse = 0.6 + 0.4 * sin(uTime * 4.0 * uIntensity + finalPos.y * 5.0);
     // Brightness boost na implosion peak
     float brightBoost = 1.0 + implodeAmt * (1.0 - explodeAmt) * 1.5;
     vPulse *= brightBoost;
+    // Overdrive adds bloom (saturation handled in fragment via vIntensity)
+    vPulse *= (1.0 + (uIntensity - 1.0) * 0.55);
 
     vec4 mvPosition = modelViewMatrix * vec4(finalPos, 1.0);
-    gl_PointSize = size * (50.0 / -mvPosition.z) * (1.0 + wave * 0.3);
+    float sizeBoost = mix(1.0, 1.25, clamp(uIntensity - 1.0, 0.0, 1.5));
+    gl_PointSize = size * (50.0 / -mvPosition.z) * (1.0 + wave * 0.3) * sizeBoost;
     gl_Position = projectionMatrix * mvPosition;
   }
 `;
@@ -74,6 +82,7 @@ const FRAGMENT = /* glsl */ `
   varying vec3  vColor;
   varying float vPulse;
   varying float vCoalesce;
+  varying float vIntensity;
 
   void main() {
     float d = distance(gl_PointCoord, vec2(0.5));
@@ -82,6 +91,10 @@ const FRAGMENT = /* glsl */ `
     // Mint accent na coalescence
     vec3 mintAccent = vec3(0.0, 0.9, 0.6);
     vec3 finalColor = mix(vColor, mintAccent, vCoalesce * 0.85);
+    // Overdrive: shift toward cyan + amber bloom when agent is typed at
+    vec3 overdrive = vec3(0.2, 1.4, 2.6);
+    float od = clamp(vIntensity - 1.0, 0.0, 1.5);
+    finalColor = mix(finalColor, overdrive, od * 0.35);
     gl_FragColor = vec4(finalColor, core * vPulse);
   }
 `;
@@ -90,6 +103,8 @@ function QuantumCore({ count, reduceMotion }) {
   const materialRef = useRef(null);
   const groupRef = useRef(null);
   const scrollRef = useRef(0);
+  const intensityTargetRef = useRef(1.0);
+  const intensityRef = useRef(1.0);
 
   const [positions, colors, sizes, targets] = useMemo(() => {
     const pos = new Float32Array(count * 3);
@@ -143,9 +158,25 @@ function QuantumCore({ count, reduceMotion }) {
   }, [count]);
 
   const uniforms = useMemo(
-    () => ({ uTime: { value: 0 }, uScroll: { value: 0 } }),
+    () => ({
+      uTime: { value: 0 },
+      uScroll: { value: 0 },
+      uIntensity: { value: 1.0 },
+    }),
     []
   );
+
+  // Kinetic feedback: CommandPalette dispatches "vernex:typing" — particles
+  // shift to overdrive (faster wave, brighter pulse, cyan bloom) while user
+  // is typing; lerp smoothly back to idle when typing pauses.
+  useEffect(() => {
+    const onTyping = (e) => {
+      const active = !!(e.detail && e.detail.active);
+      intensityTargetRef.current = active ? 2.4 : 1.0;
+    };
+    window.addEventListener("vernex:typing", onTyping);
+    return () => window.removeEventListener("vernex:typing", onTyping);
+  }, []);
 
   // Big Bang scroll listener — map scrollY do uScroll phase (0..4)
   useEffect(() => {
@@ -168,8 +199,14 @@ function QuantumCore({ count, reduceMotion }) {
   useFrame((state) => {
     if (reduceMotion) return;
     const time = state.clock.elapsedTime;
+    // Lerp intensity toward typing target — fast attack (0.12), slow release
+    const iCur = intensityRef.current;
+    const iTgt = intensityTargetRef.current;
+    const lerpRate = iTgt > iCur ? 0.12 : 0.05;
+    intensityRef.current = iCur + (iTgt - iCur) * lerpRate;
     if (materialRef.current) {
       materialRef.current.uniforms.uTime.value = time;
+      materialRef.current.uniforms.uIntensity.value = intensityRef.current;
       // Lerp uScroll uniform toward scrollRef target (smooth catch-up)
       const cur = materialRef.current.uniforms.uScroll.value;
       const target = scrollRef.current;
