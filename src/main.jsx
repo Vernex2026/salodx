@@ -5,9 +5,10 @@ import '@fontsource/jetbrains-mono/400.css'
 import '@fontsource/jetbrains-mono/500.css'
 import '@fontsource/jetbrains-mono/700.css'
 import './index.css'
-import { initLenis } from './hooks/useLenis.js'
-
-initLenis()
+// v29: Lenis disabled — conflicts z CSS scroll-snap-mandatory na <main>.
+// Native snap-y daje wymagane "one section per viewport" lock.
+// import { initLenis } from './hooks/useLenis.js'
+// initLenis()
 
 ReactDOM.createRoot(document.getElementById('root')).render(
   <React.StrictMode>

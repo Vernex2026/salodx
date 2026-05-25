@@ -76,7 +76,7 @@ export default function Hero() {
       id="top"
       aria-labelledby="hero-heading"
       data-gsap-active={gsapActive ? "true" : "false"}
-      className="relative isolate overflow-hidden h-screen w-screen"
+      className="relative isolate overflow-hidden h-screen w-screen snap-start"
     >
       {/* v15 — ParticleCloud lives global w App.jsx (Big Bang
           scroll-aware). Eclipse mask stays scoped do Hero section. */}

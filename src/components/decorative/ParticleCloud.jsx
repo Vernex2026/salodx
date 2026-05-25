@@ -270,8 +270,12 @@ function QuantumCore({ count, reduceMotion }) {
       materialRef.current.uniforms.uTime.value = time;
       materialRef.current.uniforms.uIntensity.value = intensityRef.current;
       materialRef.current.uniforms.uBurst.value = burstAmp;
-      const o = burstOriginRef.current;
-      materialRef.current.uniforms.uBurstOrigin.value.set(o[0], o[1], o[2]);
+      // Skip Vector3 allocation gdy burst nieaktywny (origin stays at
+      // last set value, irrelevant przy uBurst=0 — shader skipuje branch)
+      if (burstAmp > 0.001) {
+        const o = burstOriginRef.current;
+        materialRef.current.uniforms.uBurstOrigin.value.set(o[0], o[1], o[2]);
+      }
       // Lerp uScroll uniform toward scrollRef target (smooth catch-up)
       const cur = materialRef.current.uniforms.uScroll.value;
       const target = scrollRef.current;
@@ -336,7 +340,10 @@ function QuantumCore({ count, reduceMotion }) {
   );
 }
 
-export function ParticleCloud({ className = "", count = 75000 }) {
+export function ParticleCloud({ className = "", count = 45000 }) {
+  // v29: default 75k → 45k (-40% desktop). Owner widzi typing-reactive
+  // lag na słabszych maszynach; mniej particle = stabilne 60fps bez
+  // utraty volumetrycznego feel'u (size compensate w shader).
   const [reduceMotion, setReduceMotion] = useState(false);
   const [resolved, setResolved] = useState(false);
   const [finalCount, setFinalCount] = useState(count);
@@ -345,7 +352,8 @@ export function ParticleCloud({ className = "", count = 75000 }) {
     const rm = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
     const mobile = window.innerWidth < 768;
     setReduceMotion(rm);
-    setFinalCount(Math.round(count * (mobile ? 0.4 : 1)));
+    // Mobile factor 0.4 → 0.35 (= ~15.7k particles on small screens)
+    setFinalCount(Math.round(count * (mobile ? 0.35 : 1)));
     setResolved(true);
   }, [count]);
 

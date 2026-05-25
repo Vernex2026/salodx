@@ -442,7 +442,7 @@ export default function InfiniteCloud() {
   return (
     <section
       id="cloud"
-      className="cloud-section h-screen w-screen bg-black flex items-center justify-center relative overflow-hidden"
+      className="cloud-section h-screen w-screen bg-black flex items-center justify-center relative overflow-hidden snap-start"
       aria-labelledby="cloud-heading"
     >
       {/* Volumetric smoke: softer glass — particles bleed through edges */}
@@ -475,7 +475,7 @@ export default function InfiniteCloud() {
             style={{
               fontSize: "13px",
               lineHeight: 1.5,
-              color: "rgba(255,255,255,0.72)",
+              color: "#D4D4D8",
               "--pipeline-reveal-delay": "240ms",
             }}
           >

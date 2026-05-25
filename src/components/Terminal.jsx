@@ -166,16 +166,17 @@ export default function Terminal() {
     <section
       id="kontakt"
       aria-labelledby="terminal-heading"
-      className={`terminal-section min-h-screen w-screen relative isolate flex items-center justify-center px-6 py-20 md:px-10 md:py-28 overflow-hidden${
+      className={`terminal-section h-screen w-screen relative isolate flex items-center justify-center px-6 py-16 md:px-10 md:py-20 overflow-hidden snap-start${
         mode !== "idle" ? " terminal-section--launched" : ""
       }`}
       data-mode={mode}
     >
       <div
-        className="relative z-10 mx-auto flex w-full flex-col items-center justify-center px-2 text-center sm:px-4"
+        className={`relative z-10 mx-auto flex w-full flex-col items-center px-2 text-center sm:px-4 ${
+          isChat ? "h-full justify-start" : "justify-center"
+        }`}
         style={{
-          maxWidth: isChat ? "1100px" : "1100px",
-          transition: "max-width 480ms cubic-bezier(0.22, 1, 0.36, 1)",
+          maxWidth: "1100px",
         }}
       >
         {!isChat && (
