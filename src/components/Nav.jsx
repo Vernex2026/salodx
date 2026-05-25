@@ -3,9 +3,9 @@ import { createPortal } from "react-dom";
 
 const LINKS = [
   { label: "Proces",        href: "#pipeline" },
-  { label: "Panel AI",      href: "#panel" },
-  { label: "Case studies",  href: "#proof" },
-  { label: "Kontakt",       href: "mailto:biuro@vernex.pl" },
+  { label: "Arsenał",       href: "#cloud" },
+  { label: "Manifest",      href: "#manifesto" },
+  { label: "Kontakt",       href: "#kontakt" },
 ];
 
 export default function Nav() {
@@ -110,12 +110,14 @@ export default function Nav() {
 
           {/* Right cluster */}
           <div className="flex items-center gap-3">
-            <a
-              href="mailto:biuro@vernex.pl"
+            <button
+              type="button"
+              onClick={() => window.dispatchEvent(new CustomEvent("vernex:open-palette"))}
               className="hidden h-10 items-center rounded-full border border-[var(--color-hairline)] bg-white/[0.04] px-4 text-[13px] font-medium text-[var(--color-ink)] transition-colors hover:border-white/20 hover:bg-white/[0.08] sm:inline-flex"
+              aria-label="Otwórz agenta Vernex"
             >
               Skontaktuj się
-            </a>
+            </button>
 
             <button
               ref={hamburgerRef}

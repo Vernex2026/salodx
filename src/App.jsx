@@ -30,7 +30,7 @@ export default function App() {
 
       <Nav />
 
-      <main className="relative z-10 h-screen w-screen overflow-y-scroll snap-y snap-mandatory overscroll-y-none">
+      <main className="relative z-10 h-screen w-screen overflow-y-scroll snap-y snap-proximity overscroll-y-none">
         <Hero />
         <Pipeline />
         <InfiniteCloud />

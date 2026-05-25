@@ -34,6 +34,14 @@ export default function CommandPalette() {
     return () => window.removeEventListener("vernex:chat-mode", onChatMode);
   }, []);
 
+  // v33: Nav "Skontaktuj się" + inne CTA mogą otworzyć paletę bez
+  // potrzeby Cmd+K. Replace mailto: linki na premium UX.
+  useEffect(() => {
+    const onOpen = () => setOpen(true);
+    window.addEventListener("vernex:open-palette", onOpen);
+    return () => window.removeEventListener("vernex:open-palette", onOpen);
+  }, []);
+
   // Kinetic feedback: broadcast typing state to ParticleCloud via window event.
   // Debounced 650ms — particles relax back to idle after typing stops.
   const signalTyping = () => {
