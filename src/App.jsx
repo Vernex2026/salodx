@@ -36,8 +36,9 @@ export default function App() {
         <InfiniteCloud />
         <Manifesto />
         <Terminal />
-        <Footer />
       </main>
+
+      <Footer />
 
       <CommandPalette />
     </>

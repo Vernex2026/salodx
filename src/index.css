@@ -134,10 +134,11 @@
 }
 
 html {
-  scroll-padding-top: 96px;
   background: var(--color-black);
   color-scheme: dark;
 }
+/* v30: główny snap container w <main> — każda sekcja zatrzymuje viewport */
+main > section { scroll-snap-stop: always; }
 @media (prefers-reduced-motion: reduce) {
   html { scroll-behavior: auto; }
 }
@@ -1209,7 +1210,10 @@ body { font-variant-numeric: tabular-nums; }
   position: relative;
   display: flex;
   flex-direction: column;
-  gap: 56px;
+  gap: 28px;
+}
+@media (min-width: 1024px) {
+  .manifesto-grid { gap: 32px; }
 }
 .manifesto-divider {
   display: none;

@@ -12,7 +12,7 @@ export default function Terminal() {
   const inputRef = useRef(null);
   const honeypotRef = useRef(null);
   const chatInputRef = useRef(null);
-  const chatEndRef = useRef(null);
+  const messagesContainerRef = useRef(null);
 
   const [query, setQuery] = useState("");
   const [submitting, setSubmitting] = useState(false);
@@ -32,15 +32,25 @@ export default function Terminal() {
     return () => clearTimeout(id);
   }, [toast]);
 
+  // v30: direct scrollTop assignment na messages container — NIE używamy
+  // scrollIntoView (bubbluje do parent snap container <main> i wymusza
+  // scroll viewport do najbliższego snap-point = Hero).
   useEffect(() => {
-    if (mode === "chatting") {
-      chatEndRef.current?.scrollIntoView({ behavior: "smooth", block: "end" });
+    if (mode === "chatting" && messagesContainerRef.current) {
+      const el = messagesContainerRef.current;
+      el.scrollTop = el.scrollHeight;
     }
   }, [messages, mode]);
 
+  // v30: focus z preventScroll: true — domyślnie focus() scrolluje
+  // viewport żeby pokazać input. Z snap-mandatory parentem to wybija
+  // scroll do top page.
   useEffect(() => {
     if (mode === "chatting") {
-      const t = setTimeout(() => chatInputRef.current?.focus(), 400);
+      const t = setTimeout(
+        () => chatInputRef.current?.focus({ preventScroll: true }),
+        400
+      );
       return () => clearTimeout(t);
     }
   }, [mode]);
@@ -355,7 +365,12 @@ export default function Terminal() {
               </span>
             </div>
 
-            <div className="terminal-chat-messages" role="log" aria-live="polite">
+            <div
+              ref={messagesContainerRef}
+              className="terminal-chat-messages"
+              role="log"
+              aria-live="polite"
+            >
               {messages.map((msg, i) => (
                 <div
                   key={i}
@@ -370,7 +385,6 @@ export default function Terminal() {
                   </div>
                 </div>
               ))}
-              <div ref={chatEndRef} />
             </div>
 
             <form onSubmit={onChatSubmit} className="terminal-chat-input-row">
