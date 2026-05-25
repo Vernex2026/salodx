@@ -42,6 +42,22 @@ export default function Terminal() {
     }
   }, [messages, mode]);
 
+  // v31: broadcast chat-mode state — CommandPalette listens i ukrywa
+  // floating ⌘K pill gdy klient już w live chat (redundancja UX).
+  useEffect(() => {
+    window.dispatchEvent(
+      new CustomEvent("vernex:chat-mode", {
+        detail: { active: mode !== "idle" },
+      })
+    );
+    return () => {
+      // Cleanup on unmount — signal idle so pill returns
+      window.dispatchEvent(
+        new CustomEvent("vernex:chat-mode", { detail: { active: false } })
+      );
+    };
+  }, [mode]);
+
   // v30: focus z preventScroll: true — domyślnie focus() scrolluje
   // viewport żeby pokazać input. Z snap-mandatory parentem to wybija
   // scroll do top page.
@@ -155,11 +171,14 @@ export default function Terminal() {
     );
 
     setMode("launching");
+    // v31: 850 → 600ms sync z bg transition (520→600ms). Eliminuje
+    // ~300ms ghost period gdzie bg już biały ALE chat shell jeszcze
+    // niemontowany.
     setTimeout(() => {
       setMode("chatting");
       streamAgentReply(trimmed);
       setSubmitting(false);
-    }, 850);
+    }, 600);
   }
 
   function onChatSubmit(e) {
@@ -177,7 +196,7 @@ export default function Terminal() {
       id="kontakt"
       aria-labelledby="terminal-heading"
       className={`terminal-section h-screen w-screen relative isolate flex items-center justify-center px-6 py-16 md:px-10 md:py-20 overflow-hidden snap-start${
-        mode !== "idle" ? " terminal-section--launched" : ""
+        mode !== "idle" ? " terminal-section--launched section-light" : ""
       }`}
       data-mode={mode}
     >
@@ -357,6 +376,11 @@ export default function Terminal() {
 
         {isChat && (
           <div className="terminal-chat-shell">
+            {/* v31: Gemini/Siri thinking glow — pulsuje gdy LLM stream w toku */}
+            <div
+              className={`terminal-thinking-glow${chatStreaming ? " is-active" : ""}`}
+              aria-hidden="true"
+            />
             <div className="terminal-chat-head">
               <span className="terminal-chat-tag">[ AGENT // ACTIVE ]</span>
               <span className="terminal-chat-status">

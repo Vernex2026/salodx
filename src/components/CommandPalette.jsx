@@ -17,10 +17,22 @@ export default function CommandPalette() {
   const [streaming, setStreaming] = useState(false);
   const [usingFallback, setUsingFallback] = useState(false);
   const [isMobile, setIsMobile] = useState(false);
+  // v31: hide floating pill gdy Terminal jest w live chat — Terminal
+  // dispatchuje "vernex:chat-mode" {active}. Eliminuje redundancję
+  // dwa wejścia do tego samego asystenta.
+  const [chatModeActive, setChatModeActive] = useState(false);
   const inputRef = useRef(null);
   const responseEndRef = useRef(null);
   const typingTimeoutRef = useRef(0);
   const typingActiveRef = useRef(false);
+
+  useEffect(() => {
+    const onChatMode = (e) => {
+      setChatModeActive(!!(e.detail && e.detail.active));
+    };
+    window.addEventListener("vernex:chat-mode", onChatMode);
+    return () => window.removeEventListener("vernex:chat-mode", onChatMode);
+  }, []);
 
   // Kinetic feedback: broadcast typing state to ParticleCloud via window event.
   // Debounced 650ms — particles relax back to idle after typing stops.
@@ -160,7 +172,7 @@ export default function CommandPalette() {
     setTimeout(() => inputRef.current?.focus(), 0);
   }
 
-  const showPill = mounted && !open;
+  const showPill = mounted && !open && !chatModeActive;
 
   const pill = showPill ? (
     <button
