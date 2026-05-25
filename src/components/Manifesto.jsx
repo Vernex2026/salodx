@@ -41,7 +41,7 @@ export default function Manifesto() {
     <section
       id="manifesto"
       aria-labelledby="manifesto-heading"
-      className="manifesto-section section-light min-h-screen w-screen relative isolate flex items-center justify-center px-6 py-20 md:px-10 md:py-28"
+      className="manifesto-section section-light h-screen w-screen relative isolate flex items-center justify-center px-6 py-12 md:px-10 md:py-16 overflow-y-auto snap-start"
     >
       <div className="relative z-10 mx-auto w-full max-w-[1400px] flex flex-col">
         <div ref={headerRef} className="max-w-3xl">
@@ -110,10 +110,10 @@ export default function Manifesto() {
               fontFamily:
                 "'Geist', -apple-system, BlinkMacSystemFont, 'Inter', sans-serif",
               fontSize: "clamp(1.25rem, 2.1vw, 1.625rem)",
-              fontWeight: 500,
+              fontWeight: 600,
               lineHeight: 1.4,
               letterSpacing: "-0.025em",
-              color: "#52525B",
+              color: "#3F3F46",
             }}
           >
             Twój zysk: Inwestujesz w technologię, która staje się{" "}

@@ -25,6 +25,8 @@ const VERTEX = /* glsl */ `
   uniform float uTime;
   uniform float uScroll;
   uniform float uIntensity;
+  uniform float uBurst;
+  uniform vec3  uBurstOrigin;
   attribute float size;
   attribute vec3 customColor;
   attribute vec3 aTargetPos;
@@ -33,10 +35,12 @@ const VERTEX = /* glsl */ `
   varying float vPulse;
   varying float vCoalesce;
   varying float vIntensity;
+  varying float vBurst;
 
   void main() {
     vColor = customColor;
     vIntensity = uIntensity;
+    vBurst = uBurst;
     vec3 pos = position;
 
     // Wave deform — amplified by overdrive intensity when agent is typed
@@ -63,6 +67,19 @@ const VERTEX = /* glsl */ `
     // Phase 4: coalesce toward V logo target
     vec3 finalPos = mix(river, aTargetPos, coalesceAmt);
 
+    // v28 BURST — one-shot trigger on "Wyślij brief" submit.
+    // uBurst encodes both phase (0..1 implode, 1..0 blast) AND amplitude:
+    //   actual progress in JS = monotonic 0..1 over ~700ms
+    //   shader uBurst is amplitude (0..1) lerped from progress curve
+    // We use uBurst as a single "intensity" — implode strength = uBurst,
+    // blast distance = uBurst * (1 - smoothstep) past peak in JS-side.
+    if (uBurst > 0.001) {
+      vec3 burstDir = normalize(finalPos - uBurstOrigin + vec3(0.001));
+      // Implode toward origin proportional to uBurst (max 70% suction)
+      vec3 imploded2 = mix(finalPos, uBurstOrigin, uBurst * 0.7);
+      finalPos = imploded2;
+    }
+
     // Pulse: frequency rises with overdrive, amplitude grows too
     vPulse = 0.6 + 0.4 * sin(uTime * 4.0 * uIntensity + finalPos.y * 5.0);
     // Brightness boost na implosion peak
@@ -70,10 +87,13 @@ const VERTEX = /* glsl */ `
     vPulse *= brightBoost;
     // Overdrive adds bloom (saturation handled in fragment via vIntensity)
     vPulse *= (1.0 + (uIntensity - 1.0) * 0.55);
+    // Burst flash — particles glow brighter during the implode peak
+    vPulse *= (1.0 + uBurst * 1.8);
 
     vec4 mvPosition = modelViewMatrix * vec4(finalPos, 1.0);
     float sizeBoost = mix(1.0, 1.25, clamp(uIntensity - 1.0, 0.0, 1.5));
-    gl_PointSize = size * (50.0 / -mvPosition.z) * (1.0 + wave * 0.3) * sizeBoost;
+    float burstSize = 1.0 + uBurst * 0.8;
+    gl_PointSize = size * (50.0 / -mvPosition.z) * (1.0 + wave * 0.3) * sizeBoost * burstSize;
     gl_Position = projectionMatrix * mvPosition;
   }
 `;
@@ -83,6 +103,7 @@ const FRAGMENT = /* glsl */ `
   varying float vPulse;
   varying float vCoalesce;
   varying float vIntensity;
+  varying float vBurst;
 
   void main() {
     float d = distance(gl_PointCoord, vec2(0.5));
@@ -95,6 +116,9 @@ const FRAGMENT = /* glsl */ `
     vec3 overdrive = vec3(0.2, 1.4, 2.6);
     float od = clamp(vIntensity - 1.0, 0.0, 1.5);
     finalColor = mix(finalColor, overdrive, od * 0.35);
+    // Burst — saturate to bright cyan flash (60% mix at peak)
+    vec3 burstColor = vec3(0.4, 1.8, 3.0);
+    finalColor = mix(finalColor, burstColor, vBurst * 0.6);
     gl_FragColor = vec4(finalColor, core * vPulse);
   }
 `;
@@ -105,6 +129,11 @@ function QuantumCore({ count, reduceMotion }) {
   const scrollRef = useRef(0);
   const intensityTargetRef = useRef(1.0);
   const intensityRef = useRef(1.0);
+  // v28 burst — one-shot "Wyślij brief" particle implosion.
+  // burstStartRef === null means idle; otherwise = elapsedTime when fired.
+  const burstStartRef = useRef(null);
+  const burstOriginRef = useRef([0, 0, 0]);
+  const BURST_DURATION = 0.7; // seconds, total implode + decay envelope
 
   const [positions, colors, sizes, targets] = useMemo(() => {
     const pos = new Float32Array(count * 3);
@@ -162,6 +191,8 @@ function QuantumCore({ count, reduceMotion }) {
       uTime: { value: 0 },
       uScroll: { value: 0 },
       uIntensity: { value: 1.0 },
+      uBurst: { value: 0 },
+      uBurstOrigin: { value: new THREE.Vector3(0, 0, 0) },
     }),
     []
   );
@@ -176,6 +207,19 @@ function QuantumCore({ count, reduceMotion }) {
     };
     window.addEventListener("vernex:typing", onTyping);
     return () => window.removeEventListener("vernex:typing", onTyping);
+  }, []);
+
+  // v28 burst: Terminal "Wyślij brief" submit triggers one-shot implode.
+  // Origin in world coords (default: middle of viewport ~ (0, -2, 0)
+  // since Terminal sits in lower half of screen).
+  useEffect(() => {
+    const onBurst = (e) => {
+      const o = (e.detail && e.detail.origin) || [0, -2, 0];
+      burstOriginRef.current = o;
+      burstStartRef.current = performance.now() / 1000;
+    };
+    window.addEventListener("vernex:burst", onBurst);
+    return () => window.removeEventListener("vernex:burst", onBurst);
   }, []);
 
   // Big Bang scroll listener — map scrollY do uScroll phase (0..4)
@@ -204,9 +248,34 @@ function QuantumCore({ count, reduceMotion }) {
     const iTgt = intensityTargetRef.current;
     const lerpRate = iTgt > iCur ? 0.12 : 0.05;
     intensityRef.current = iCur + (iTgt - iCur) * lerpRate;
+
+    // Burst envelope: implode 0→1 over first 0.25s, decay 1→0 over rest
+    let burstAmp = 0;
+    if (burstStartRef.current !== null) {
+      const tNow = performance.now() / 1000;
+      const elapsed = tNow - burstStartRef.current;
+      if (elapsed < BURST_DURATION) {
+        const p = elapsed / BURST_DURATION;
+        // Triangle: ramp up to 1 at 35% then ease back to 0
+        burstAmp = p < 0.35
+          ? p / 0.35
+          : 1.0 - ((p - 0.35) / 0.65);
+        burstAmp = Math.max(0, Math.min(1, burstAmp));
+      } else {
+        burstStartRef.current = null;
+      }
+    }
+
     if (materialRef.current) {
       materialRef.current.uniforms.uTime.value = time;
       materialRef.current.uniforms.uIntensity.value = intensityRef.current;
+      materialRef.current.uniforms.uBurst.value = burstAmp;
+      // Skip Vector3 allocation gdy burst nieaktywny (origin stays at
+      // last set value, irrelevant przy uBurst=0 — shader skipuje branch)
+      if (burstAmp > 0.001) {
+        const o = burstOriginRef.current;
+        materialRef.current.uniforms.uBurstOrigin.value.set(o[0], o[1], o[2]);
+      }
       // Lerp uScroll uniform toward scrollRef target (smooth catch-up)
       const cur = materialRef.current.uniforms.uScroll.value;
       const target = scrollRef.current;
@@ -271,7 +340,10 @@ function QuantumCore({ count, reduceMotion }) {
   );
 }
 
-export function ParticleCloud({ className = "", count = 75000 }) {
+export function ParticleCloud({ className = "", count = 45000 }) {
+  // v29: default 75k → 45k (-40% desktop). Owner widzi typing-reactive
+  // lag na słabszych maszynach; mniej particle = stabilne 60fps bez
+  // utraty volumetrycznego feel'u (size compensate w shader).
   const [reduceMotion, setReduceMotion] = useState(false);
   const [resolved, setResolved] = useState(false);
   const [finalCount, setFinalCount] = useState(count);
@@ -280,7 +352,8 @@ export function ParticleCloud({ className = "", count = 75000 }) {
     const rm = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
     const mobile = window.innerWidth < 768;
     setReduceMotion(rm);
-    setFinalCount(Math.round(count * (mobile ? 0.4 : 1)));
+    // Mobile factor 0.4 → 0.35 (= ~15.7k particles on small screens)
+    setFinalCount(Math.round(count * (mobile ? 0.35 : 1)));
     setResolved(true);
   }, [count]);
 
