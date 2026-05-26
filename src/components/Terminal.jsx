@@ -1,9 +1,11 @@
 import { useEffect, useRef, useState } from "react";
 import { supabase, supabaseReady } from "../lib/supabase";
 import { useReveal } from "../hooks/useReveal";
+import { useAgentChat } from "../hooks/useAgentChat";
 
 const MIN_LEN = 12;
 const MAX_LEN = 2000;
+const LAUNCH_TRANSITION_MS = 600;
 
 export default function Terminal() {
   const [headerRef, headerVisible] = useReveal({ threshold: 0.4 });
@@ -19,11 +21,10 @@ export default function Terminal() {
   const [focused, setFocused] = useState(false);
 
   // v28 Agent Chat Mode — submit transforms section into white chat container.
-  // idle → launching (burst + white wash, 850ms) → chatting (white chat UI)
+  // idle → launching (burst + white wash) → chatting (white chat UI)
   const [mode, setMode] = useState("idle");
-  const [messages, setMessages] = useState([]);
   const [chatInput, setChatInput] = useState("");
-  const [chatStreaming, setChatStreaming] = useState(false);
+  const { messages, streaming: chatStreaming, streamReply } = useAgentChat();
 
   useEffect(() => {
     if (!toast) return;
@@ -69,53 +70,6 @@ export default function Terminal() {
       return () => clearTimeout(t);
     }
   }, [mode]);
-
-  // Stream agent reply — mirrored from CommandPalette.sendQuery pattern
-  async function streamAgentReply(userQuery, prefixMessages) {
-    const base = prefixMessages || [];
-    const nextMessages = [...base, { role: "user", content: userQuery }];
-    setMessages([...nextMessages, { role: "assistant", content: "" }]);
-    setChatStreaming(true);
-
-    const updateLast = (text) => {
-      setMessages((prev) => {
-        if (!prev.length) return prev;
-        const copy = prev.slice();
-        const lastIdx = copy.length - 1;
-        if (copy[lastIdx].role === "assistant") {
-          copy[lastIdx] = { role: "assistant", content: text };
-        }
-        return copy;
-      });
-    };
-
-    try {
-      const res = await fetch("/api/chat", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ messages: nextMessages }),
-      });
-      if (!res.ok || !res.body) throw new Error("endpoint-error");
-      const reader = res.body.getReader();
-      const decoder = new TextDecoder();
-      let acc = "";
-      while (true) {
-        const { done, value } = await reader.read();
-        if (done) break;
-        acc += decoder.decode(value, { stream: true });
-        updateLast(acc);
-      }
-    } catch (err) {
-      const offline =
-        "⚠ Agent chwilowo offline. Napisz brief na biuro@vernex.pl — wracamy z propozycją architektury w 24h.";
-      for (let i = 0; i <= offline.length; i++) {
-        updateLast(offline.slice(0, i));
-        await new Promise((r) => setTimeout(r, 16));
-      }
-    } finally {
-      setChatStreaming(false);
-    }
-  }
 
   async function onSubmit(e) {
     e.preventDefault();
@@ -175,9 +129,9 @@ export default function Terminal() {
     // niemontowany.
     setTimeout(() => {
       setMode("chatting");
-      streamAgentReply(trimmed);
+      streamReply(trimmed);
       setSubmitting(false);
-    }, 600);
+    }, LAUNCH_TRANSITION_MS);
   }
 
   function onChatSubmit(e) {
@@ -185,7 +139,7 @@ export default function Terminal() {
     const q = chatInput.trim();
     if (!q || chatStreaming) return;
     setChatInput("");
-    streamAgentReply(q, messages);
+    streamReply(q);
   }
 
   const isChat = mode === "chatting";
