@@ -11,6 +11,16 @@ function devApiPlugin(apiKey) {
     apply: 'serve',
     configureServer(server) {
       server.middlewares.use('/api/chat', (req, res, next) => {
+        if (req.method === 'GET') {
+          res.setHeader('Content-Type', 'application/json')
+          return res.end(
+            JSON.stringify({
+              ok: Boolean(apiKey),
+              model: 'claude-haiku-4-5-20251001',
+              hasKey: Boolean(apiKey),
+            })
+          )
+        }
         if (req.method !== 'POST') return next()
         if (!apiKey) {
           res.statusCode = 503
@@ -19,32 +29,36 @@ function devApiPlugin(apiKey) {
         let body = ''
         req.on('data', (c) => (body += c))
         req.on('end', async () => {
+          let messages
           try {
-            const { messages } = JSON.parse(body)
-            if (!Array.isArray(messages) || messages.length === 0) {
-              res.statusCode = 400
-              return res.end('messages required')
-            }
-            const client = createAnthropic({ apiKey })
-            const result = streamText({
-              model: client('claude-haiku-4-5-20251001'),
-              system: SYSTEM_PROMPT,
-              messages,
-              maxOutputTokens: 600,
-              temperature: 0.3,
-            })
-            res.setHeader('Content-Type', 'text/plain; charset=utf-8')
-            for await (const chunk of result.textStream) res.write(chunk)
-            res.end()
-          } catch (err) {
-            console.error('[dev-api/chat] upstream error:', err)
-            if (!res.headersSent) {
-              res.statusCode = 502
-              res.end('upstream error')
-            } else {
-              res.end()
-            }
+            messages = JSON.parse(body).messages
+          } catch {
+            res.statusCode = 400
+            return res.end('invalid JSON')
           }
+          if (!Array.isArray(messages) || messages.length === 0) {
+            res.statusCode = 400
+            return res.end('messages required')
+          }
+          res.setHeader('Content-Type', 'text/plain; charset=utf-8')
+          const client = createAnthropic({ apiKey })
+          const result = streamText({
+            model: client('claude-haiku-4-5-20251001'),
+            system: SYSTEM_PROMPT,
+            messages,
+            maxOutputTokens: 600,
+            temperature: 0.3,
+            onError({ error }) {
+              console.error('[dev-api/chat] stream error:', error)
+            },
+          })
+          try {
+            for await (const chunk of result.textStream) res.write(chunk)
+          } catch (err) {
+            const msg = err instanceof Error ? err.message : String(err)
+            res.write(`\n\n[upstream-error] ${msg}`)
+          }
+          res.end()
         })
       })
     },

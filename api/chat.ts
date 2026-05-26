@@ -4,28 +4,64 @@ import { SYSTEM_PROMPT } from "./_system-prompt.js";
 
 export const runtime = "edge";
 
+const MODEL_ID = "claude-haiku-4-5-20251001";
+
+export async function GET() {
+  return Response.json({
+    ok: Boolean(process.env.ANTHROPIC_API_KEY),
+    model: MODEL_ID,
+    hasKey: Boolean(process.env.ANTHROPIC_API_KEY),
+  });
+}
+
 export async function POST(req: Request) {
   if (!process.env.ANTHROPIC_API_KEY) {
     return new Response("API key not configured", { status: 503 });
   }
 
+  let messages: unknown;
   try {
-    const { messages } = await req.json();
-
-    if (!Array.isArray(messages) || messages.length === 0) {
-      return new Response("messages required", { status: 400 });
-    }
-
-    const result = streamText({
-      model: anthropic("claude-haiku-4-5-20251001"),
-      system: SYSTEM_PROMPT,
-      messages,
-      maxOutputTokens: 600,
-      temperature: 0.3,
-    });
-
-    return result.toTextStreamResponse();
-  } catch (err) {
-    return new Response("upstream error", { status: 502 });
+    const body = await req.json();
+    messages = (body as { messages?: unknown }).messages;
+  } catch {
+    return new Response("invalid JSON", { status: 400 });
   }
+
+  if (!Array.isArray(messages) || messages.length === 0) {
+    return new Response("messages required", { status: 400 });
+  }
+
+  const result = streamText({
+    model: anthropic(MODEL_ID),
+    system: SYSTEM_PROMPT,
+    messages: messages as Parameters<typeof streamText>[0]["messages"],
+    maxOutputTokens: 600,
+    temperature: 0.3,
+    onError({ error }) {
+      console.error("[chat] stream error:", error);
+    },
+  });
+
+  const encoder = new TextEncoder();
+  const stream = new ReadableStream({
+    async start(controller) {
+      try {
+        for await (const chunk of result.textStream) {
+          controller.enqueue(encoder.encode(chunk));
+        }
+        controller.close();
+      } catch (err) {
+        const msg =
+          err instanceof Error ? err.message : String(err);
+        controller.enqueue(
+          encoder.encode(`\n\n[upstream-error] ${msg}`)
+        );
+        controller.close();
+      }
+    },
+  });
+
+  return new Response(stream, {
+    headers: { "Content-Type": "text/plain; charset=utf-8" },
+  });
 }
