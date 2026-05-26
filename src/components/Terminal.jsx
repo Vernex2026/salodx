@@ -1,7 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 import { supabase, supabaseReady } from "../lib/supabase";
 import { useReveal } from "../hooks/useReveal";
-import { FALLBACK_RESPONSES, matchIntent } from "../data/agent-responses";
 
 const MIN_LEN = 12;
 const MAX_LEN = 2000;
@@ -107,10 +106,10 @@ export default function Terminal() {
         updateLast(acc);
       }
     } catch (err) {
-      const intent = matchIntent(userQuery);
-      const text = FALLBACK_RESPONSES[intent] || FALLBACK_RESPONSES.default;
-      for (let i = 0; i <= text.length; i++) {
-        updateLast(text.slice(0, i));
+      const offline =
+        "⚠ Agent chwilowo offline. Napisz brief na biuro@vernex.pl — wracamy z propozycją architektury w 24h.";
+      for (let i = 0; i <= offline.length; i++) {
+        updateLast(offline.slice(0, i));
         await new Promise((r) => setTimeout(r, 16));
       }
     } finally {
@@ -331,19 +330,6 @@ export default function Terminal() {
                 tabIndex={-1}
                 autoComplete="off"
               />
-            </div>
-
-            <div className="terminal-pill-hint">
-              <span>
-                <kbd>⏎</kbd> <span>wyślij brief</span>
-              </span>
-              <span>
-                {query.length > 0 && (
-                  <span style={{ color: "rgba(255,255,255,0.55)" }}>
-                    {query.length} / {MAX_LEN}
-                  </span>
-                )}
-              </span>
             </div>
 
             <button
