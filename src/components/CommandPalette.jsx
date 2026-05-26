@@ -1,6 +1,5 @@
 import { useEffect, useRef, useState } from "react";
 import { createPortal } from "react-dom";
-import { FALLBACK_RESPONSES, matchIntent } from "../data/agent-responses";
 
 const SUGGESTED = [
   "Potrzebuję CRM dla kancelarii",
@@ -15,7 +14,7 @@ export default function CommandPalette() {
   const [input, setInput] = useState("");
   const [messages, setMessages] = useState([]); // [{role, content}]
   const [streaming, setStreaming] = useState(false);
-  const [usingFallback, setUsingFallback] = useState(false);
+  const [offline, setOffline] = useState(false);
   const [isMobile, setIsMobile] = useState(false);
   // v31: hide floating pill gdy Terminal jest w live chat — Terminal
   // dispatchuje "vernex:chat-mode" {active}. Eliminuje redundancję
@@ -124,7 +123,7 @@ export default function CommandPalette() {
     const nextMessages = [...messages, { role: "user", content: query }];
     setMessages([...nextMessages, { role: "assistant", content: "" }]);
     setStreaming(true);
-    setUsingFallback(false);
+    setOffline(false);
 
     const updateLast = (text) => {
       setMessages((prev) => {
@@ -156,9 +155,9 @@ export default function CommandPalette() {
         updateLast(acc);
       }
     } catch (err) {
-      setUsingFallback(true);
-      const intent = matchIntent(query);
-      const text = FALLBACK_RESPONSES[intent] || FALLBACK_RESPONSES.default;
+      setOffline(true);
+      const text =
+        "⚠ Agent chwilowo offline. Napisz brief na biuro@vernex.pl — wracamy z propozycją architektury w 24h.";
       for (let i = 0; i <= text.length; i++) {
         updateLast(text.slice(0, i));
         await new Promise((r) => setTimeout(r, 18));
@@ -175,7 +174,7 @@ export default function CommandPalette() {
 
   function clearConversation() {
     setMessages([]);
-    setUsingFallback(false);
+    setOffline(false);
     setInput("");
     setTimeout(() => inputRef.current?.focus(), 0);
   }
@@ -368,7 +367,7 @@ export default function CommandPalette() {
           <ResponseArea
             messages={messages}
             streaming={streaming}
-            fallback={usingFallback}
+            offline={offline}
             endRef={responseEndRef}
             onClear={clearConversation}
           />
@@ -472,7 +471,7 @@ function Suggestions({ onPick, items }) {
   );
 }
 
-function ResponseArea({ messages, streaming, fallback, endRef, onClear }) {
+function ResponseArea({ messages, streaming, offline, endRef, onClear }) {
   return (
     <div
       style={{
@@ -496,7 +495,7 @@ function ResponseArea({ messages, streaming, fallback, endRef, onClear }) {
         />
       ))}
 
-      {fallback && !streaming && (
+      {offline && !streaming && (
         <div
           style={{
             fontFamily: "'Geist Mono', monospace",
@@ -508,7 +507,7 @@ function ResponseArea({ messages, streaming, fallback, endRef, onClear }) {
             marginTop: "4px",
           }}
         >
-          ⚡ Fallback · Live agent dostępny po wpięciu klucza w Vercel
+          ⚠ Agent offline · biuro@vernex.pl
         </div>
       )}
 
