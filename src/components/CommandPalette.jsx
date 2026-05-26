@@ -189,8 +189,7 @@ export default function CommandPalette() {
       style={{
         position: "fixed",
         bottom: "24px",
-        left: "50%",
-        transform: "translateX(-50%)",
+        right: "24px",
         height: "40px",
         padding: "0 16px",
         borderRadius: "9999px",
