@@ -329,526 +329,6 @@ body { font-variant-numeric: tabular-nums; }
 
 /* v17: Quantum Core (v16) usunięte — vrócono do Apple Watch fisheye w InfiniteCloud */
 
-/* ── v18: Case mockup wrapper (inside fisheye tile modal) ── */
-.case-mockup {
-  position: relative;
-  display: flex;
-  flex-direction: column;
-  width: 100%;
-  height: 100%;
-  padding: 32px 36px 36px;
-  gap: 24px;
-  background: linear-gradient(180deg, rgba(15, 18, 28, 0.7) 0%, rgba(8, 10, 16, 0.95) 100%);
-}
-@media (max-width: 768px) {
-  .case-mockup { padding: 22px 18px 24px; gap: 16px; }
-}
-.case-mockup-head {
-  display: flex;
-  flex-direction: column;
-  gap: 18px;
-}
-@media (min-width: 1024px) {
-  .case-mockup-head {
-    flex-direction: row;
-    align-items: flex-start;
-    justify-content: space-between;
-    gap: 32px;
-  }
-}
-.case-mockup-title {
-  font-family: 'Geist', ui-sans-serif, system-ui, sans-serif;
-  font-size: clamp(1.4rem, 2.6vw, 2rem);
-  font-weight: 700;
-  letter-spacing: -0.02em;
-  line-height: 1.1;
-  color: #FAFAFA;
-  margin: 0;
-}
-.case-mockup-gain {
-  font-size: 14px;
-  line-height: 1.55;
-  color: rgba(228, 228, 231, 0.72);
-  margin: 8px 0 0;
-  max-width: 560px;
-}
-.case-mockup-badges {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 8px;
-  margin-top: 14px;
-}
-.case-badge {
-  display: inline-flex;
-  align-items: center;
-  padding: 5px 12px;
-  border-radius: 999px;
-  background: rgba(255, 255, 255, 0.05);
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  font-family: 'Geist Mono', ui-monospace, monospace;
-  font-size: 10px;
-  font-weight: 500;
-  letter-spacing: 0.06em;
-  color: rgba(255, 255, 255, 0.75);
-  text-transform: uppercase;
-}
-.case-mockup-toggle {
-  display: inline-flex;
-  background: rgba(255, 255, 255, 0.04);
-  border: 1px solid rgba(255, 255, 255, 0.08);
-  border-radius: 999px;
-  padding: 4px;
-  flex-shrink: 0;
-}
-.case-mockup-toggle button {
-  appearance: none;
-  border: none;
-  background: transparent;
-  padding: 7px 14px;
-  border-radius: 999px;
-  font-family: 'Geist Mono', ui-monospace, monospace;
-  font-size: 10px;
-  font-weight: 500;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
-  color: rgba(255, 255, 255, 0.55);
-  cursor: pointer;
-  transition: background 220ms ease, color 220ms ease;
-}
-.case-mockup-toggle button:hover {
-  color: rgba(255, 255, 255, 0.85);
-}
-.case-mockup-toggle button[data-active="true"] {
-  background: rgba(0, 229, 160, 0.16);
-  color: #00E5A0;
-}
-.case-mockup-stage {
-  position: relative;
-  flex: 1 1 auto;
-  min-height: 460px;
-  border-radius: 18px;
-  border: 1px solid rgba(255, 255, 255, 0.06);
-  background: #06080d;
-  overflow: hidden;
-  padding: 22px;
-}
-@media (max-width: 768px) {
-  .case-mockup-stage { min-height: 360px; padding: 14px; }
-}
-
-/* QTrader mock — trading dashboard inside Proof Panel 01 */
-.qtrader-mock {
-  display: flex;
-  flex-direction: column;
-  height: 100%;
-  gap: 14px;
-}
-.qtrader-mock-header {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding-bottom: 12px;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
-}
-.qtrader-mock-live {
-  display: inline-flex;
-  align-items: center;
-  gap: 8px;
-  font-family: 'Geist Mono', ui-monospace, monospace;
-  font-size: 11px;
-  letter-spacing: 0.08em;
-  color: #00E5A0;
-}
-.qtrader-mock-body {
-  flex: 1;
-  display: grid;
-  grid-template-columns: 0.7fr 1fr;
-  gap: 16px;
-  min-height: 0;
-}
-@media (max-width: 700px) {
-  .qtrader-mock-body {
-    grid-template-columns: 1fr;
-  }
-}
-.qtrader-mock-book {
-  font-family: 'Geist Mono', ui-monospace, monospace;
-  font-size: 11px;
-  display: flex;
-  flex-direction: column;
-  gap: 4px;
-}
-.qtrader-mock-book-head,
-.qtrader-mock-book-row {
-  display: grid;
-  grid-template-columns: 1fr 1fr 1fr 1fr;
-  gap: 6px;
-  padding: 4px 0;
-}
-.qtrader-mock-book-head {
-  color: rgba(255, 255, 255, 0.4);
-  font-size: 9px;
-  letter-spacing: 0.12em;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
-  padding-bottom: 6px;
-  margin-bottom: 2px;
-}
-.qtrader-mock-chart {
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
-}
-.qtrader-mock-chart svg {
-  width: 100%;
-  height: 160px;
-  display: block;
-}
-.qtrader-mock-chart-meta {
-  display: flex;
-  justify-content: space-between;
-}
-.qtrader-mock-footer {
-  display: grid;
-  grid-template-columns: 1fr 1fr 1fr;
-  gap: 16px;
-  padding-top: 12px;
-  border-top: 1px solid rgba(255, 255, 255, 0.06);
-}
-
-/* X-Ray content — WebSocket log */
-.proof-xray-log {
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
-  height: 100%;
-}
-.proof-xray-log-head {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  padding-bottom: 10px;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
-  font-family: 'Geist Mono', ui-monospace, monospace;
-  font-size: 11px;
-  color: rgba(255, 255, 255, 0.75);
-}
-.proof-xray-log-line {
-  font-family: 'Geist Mono', ui-monospace, monospace;
-  font-size: 11px;
-  line-height: 1.55;
-  color: rgba(0, 229, 160, 0.85);
-  opacity: 0;
-  animation: proof-log-in 320ms var(--ease-soft) forwards;
-}
-@keyframes proof-log-in {
-  from { opacity: 0; transform: translateX(-6px); }
-  to   { opacity: 1; transform: translateX(0); }
-}
-
-/* CRM mock — dashboard layout */
-.crm-app-mock {
-  display: grid;
-  grid-template-columns: 160px 1fr;
-  height: 100%;
-  gap: 0;
-  border-radius: 12px;
-  overflow: hidden;
-  border: 1px solid rgba(255, 255, 255, 0.05);
-}
-@media (max-width: 700px) {
-  .crm-app-mock {
-    grid-template-columns: 1fr;
-  }
-}
-.crm-app-mock-sidebar {
-  background: rgba(0, 0, 0, 0.4);
-  padding: 16px 14px;
-  border-right: 1px solid rgba(255, 255, 255, 0.05);
-  display: flex;
-  flex-direction: column;
-  gap: 18px;
-}
-@media (max-width: 700px) {
-  .crm-app-mock-sidebar {
-    flex-direction: row;
-    overflow-x: auto;
-  }
-}
-.crm-app-mock-brand {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-}
-.crm-app-mock-brand-mark {
-  width: 28px;
-  height: 28px;
-  border-radius: 8px;
-  background: #00E5A0;
-  color: #06070B;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-family: 'Geist', sans-serif;
-  font-weight: 800;
-  font-size: 14px;
-}
-.crm-app-mock-nav {
-  display: flex;
-  flex-direction: column;
-  gap: 2px;
-}
-.crm-app-mock-nav-item {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 7px 10px;
-  border-radius: 6px;
-  font-family: 'Geist', sans-serif;
-  font-size: 12px;
-  color: rgba(255, 255, 255, 0.55);
-  cursor: default;
-}
-.crm-app-mock-nav-item[data-active="true"] {
-  background: rgba(255, 255, 255, 0.06);
-  color: #FFFFFF;
-}
-.crm-app-mock-main {
-  padding: 18px;
-  display: flex;
-  flex-direction: column;
-  gap: 16px;
-  min-width: 0;
-}
-.crm-app-mock-stats {
-  display: grid;
-  grid-template-columns: 1fr 1fr 1fr;
-  gap: 12px;
-}
-.crm-app-mock-stat {
-  padding: 12px 14px;
-  border-radius: 10px;
-  background: rgba(255, 255, 255, 0.03);
-  border: 1px solid rgba(255, 255, 255, 0.05);
-}
-.crm-app-mock-table {
-  border-radius: 10px;
-  background: rgba(0, 0, 0, 0.30);
-  border: 1px solid rgba(255, 255, 255, 0.05);
-  overflow: hidden;
-}
-.crm-app-mock-table-head,
-.crm-app-mock-table-row {
-  display: grid;
-  grid-template-columns: 70px 1.4fr 1fr 80px 60px;
-  gap: 10px;
-  padding: 8px 14px;
-  font-family: 'Geist Mono', ui-monospace, monospace;
-  font-size: 11px;
-  align-items: center;
-}
-.crm-app-mock-table-head {
-  background: rgba(255, 255, 255, 0.03);
-  color: rgba(255, 255, 255, 0.45);
-  font-size: 9px;
-  letter-spacing: 0.12em;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
-}
-.crm-app-mock-table-row {
-  border-bottom: 1px solid rgba(255, 255, 255, 0.04);
-}
-.crm-app-mock-table-row:last-child {
-  border-bottom: none;
-}
-
-/* SaaS mock — inventory + QR scanner (Case 02) */
-.saas-mock {
-  display: flex;
-  flex-direction: column;
-  height: 100%;
-  gap: 14px;
-}
-.saas-mock-header {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding-bottom: 12px;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
-}
-.saas-mock-live {
-  display: inline-flex;
-  align-items: center;
-  gap: 8px;
-  font-family: 'Geist Mono', ui-monospace, monospace;
-  font-size: 11px;
-  letter-spacing: 0.08em;
-  color: #00E5A0;
-}
-.saas-mock-body {
-  flex: 1;
-  display: grid;
-  grid-template-columns: 1.4fr 1fr;
-  gap: 16px;
-  min-height: 0;
-}
-@media (max-width: 900px) {
-  .saas-mock-body {
-    grid-template-columns: 1fr;
-  }
-}
-.saas-mock-inventory {
-  font-family: 'Geist Mono', ui-monospace, monospace;
-  font-size: 11px;
-  display: flex;
-  flex-direction: column;
-}
-.saas-mock-inventory-head,
-.saas-mock-inventory-row {
-  display: grid;
-  grid-template-columns: 1.3fr 1.7fr 1fr 0.6fr;
-  gap: 10px;
-  padding: 8px 0;
-  align-items: center;
-}
-.saas-mock-inventory-head {
-  color: rgba(255, 255, 255, 0.45);
-  font-size: 9px;
-  letter-spacing: 0.12em;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
-}
-.saas-mock-inventory-row {
-  border-bottom: 1px solid rgba(255, 255, 255, 0.04);
-}
-.saas-mock-inventory-row:last-child {
-  border-bottom: none;
-}
-
-.saas-mock-scanner {
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
-  padding: 12px;
-  border-radius: 12px;
-  background: rgba(0, 0, 0, 0.30);
-  border: 1px solid rgba(255, 255, 255, 0.05);
-}
-.saas-mock-scanner-head {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-}
-.saas-mock-scanner-frame {
-  position: relative;
-  aspect-ratio: 1;
-  max-width: 180px;
-  margin: 0 auto;
-  background: #000000;
-  border-radius: 8px;
-  overflow: hidden;
-}
-.saas-mock-qr {
-  width: 100%;
-  height: 100%;
-  display: block;
-  opacity: 0.92;
-}
-.saas-mock-scanner-corner {
-  position: absolute;
-  width: 18px;
-  height: 18px;
-  border: 2px solid #00E5A0;
-}
-.saas-mock-scanner-corner--tl {
-  top: 6px; left: 6px;
-  border-right: none; border-bottom: none;
-}
-.saas-mock-scanner-corner--tr {
-  top: 6px; right: 6px;
-  border-left: none; border-bottom: none;
-}
-.saas-mock-scanner-corner--bl {
-  bottom: 6px; left: 6px;
-  border-right: none; border-top: none;
-}
-.saas-mock-scanner-corner--br {
-  bottom: 6px; right: 6px;
-  border-left: none; border-top: none;
-}
-.saas-mock-scanner-line {
-  position: absolute;
-  left: 8px;
-  right: 8px;
-  height: 1.5px;
-  background: linear-gradient(90deg,
-    transparent 0%,
-    #00E5A0 30%,
-    #00E5A0 70%,
-    transparent 100%);
-  box-shadow: 0 0 12px rgba(0, 229, 160, 0.6);
-  animation: saas-scan-sweep 2.4s var(--ease-soft) infinite;
-}
-@keyframes saas-scan-sweep {
-  0%   { top: 12%; opacity: 0; }
-  10%  { opacity: 1; }
-  90%  { opacity: 1; }
-  100% { top: 88%; opacity: 0; }
-}
-@media (prefers-reduced-motion: reduce) {
-  .saas-mock-scanner-line {
-    animation: none;
-    top: 50%;
-    opacity: 0.6;
-  }
-}
-.saas-mock-scanner-recent {
-  display: flex;
-  flex-direction: column;
-  gap: 4px;
-  font-family: 'Geist Mono', ui-monospace, monospace;
-  font-size: 10px;
-}
-.saas-mock-scanner-recent-row {
-  display: grid;
-  grid-template-columns: 1fr 1fr 1.4fr 12px;
-  gap: 6px;
-  padding: 3px 0;
-  align-items: center;
-}
-
-/* X-Ray schema SVG */
-.proof-xray-schema {
-  display: flex;
-  flex-direction: column;
-  height: 100%;
-  gap: 10px;
-}
-.proof-xray-schema-svg {
-  flex: 1;
-  width: 100%;
-  height: auto;
-  max-height: 380px;
-}
-.proof-schema-line {
-  stroke-dasharray: 200;
-  stroke-dashoffset: 200;
-  animation: proof-schema-draw 1200ms var(--ease-soft) forwards;
-}
-@keyframes proof-schema-draw {
-  to { stroke-dashoffset: 0; }
-}
-.proof-xray-schema-meta {
-  display: grid;
-  grid-template-columns: 1fr 1fr 1fr;
-  gap: 12px;
-  padding-top: 10px;
-  border-top: 1px solid rgba(255, 255, 255, 0.06);
-}
-.proof-xray-schema-stat {
-  display: flex;
-  flex-direction: column;
-  gap: 4px;
-}
-
-
 /* ── v23 InfiniteCloud — Cupertino Gaze Control ─────────────────────────── */
 .cloud-section {
   position: relative;
@@ -1728,8 +1208,8 @@ body { font-variant-numeric: tabular-nums; }
 
 /* Cmd+K command palette — pill rise, overlay fade, modal pop */
 @keyframes cmdk-pill-rise {
-  from { opacity: 0; transform: translate(-50%, 16px); }
-  to   { opacity: 1; transform: translate(-50%, 0); }
+  from { opacity: 0; transform: translateY(16px); }
+  to   { opacity: 1; transform: translateY(0); }
 }
 @keyframes cmdk-overlay-in {
   from { opacity: 0; }
@@ -1752,6 +1232,237 @@ body { font-variant-numeric: tabular-nums; }
   .cmdk-cursor { animation: none; opacity: 0.6; }
 }
 
+/* Pill (bottom-right floating ⌘K) */
+.cmdk-pill {
+  position: fixed;
+  bottom: 24px;
+  right: 24px;
+  height: 40px;
+  padding: 0 16px;
+  border-radius: 9999px;
+  background: rgba(15, 15, 20, 0.92);
+  -webkit-backdrop-filter: blur(32px);
+  backdrop-filter: blur(32px);
+  border: 1px solid rgba(255, 255, 255, 0.10);
+  box-shadow: 0 12px 32px -8px rgba(0, 0, 0, 0.65);
+  color: rgba(255, 255, 255, 0.92);
+  font-family: "Geist", sans-serif;
+  font-size: 13px;
+  font-weight: 500;
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  z-index: 40;
+  cursor: pointer;
+  animation: cmdk-pill-rise 600ms cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+.cmdk-pill-arrow {
+  font-family: "Geist Mono", monospace;
+  color: rgba(255, 255, 255, 0.55);
+}
+.cmdk-pill-kbd {
+  display: inline-flex;
+  align-items: center;
+  padding: 2px 7px;
+  border-radius: 5px;
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  background: rgba(255, 255, 255, 0.05);
+  font-family: "Geist Mono", monospace;
+  font-size: 11px;
+  font-weight: 600;
+  color: rgba(255, 255, 255, 0.92);
+  letter-spacing: 0.02em;
+}
+
+/* Overlay */
+.cmdk-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 50;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+  background: rgba(0, 0, 0, 0.65);
+  -webkit-backdrop-filter: blur(4px);
+  backdrop-filter: blur(4px);
+  animation: cmdk-overlay-in 200ms ease-out both;
+}
+.cmdk-overlay--mobile {
+  align-items: flex-start;
+  padding: 12px;
+}
+
+/* Modal */
+.cmdk-modal {
+  width: 100%;
+  max-width: 640px;
+  max-height: 76vh;
+  display: flex;
+  flex-direction: column;
+  background: rgba(15, 15, 20, 0.92);
+  -webkit-backdrop-filter: blur(40px) saturate(110%);
+  backdrop-filter: blur(40px) saturate(110%);
+  border: 1px solid rgba(255, 255, 255, 0.10);
+  border-radius: 20px;
+  box-shadow:
+    0 32px 64px -16px rgba(0, 0, 0, 0.85),
+    inset 0 1px 0 rgba(255, 255, 255, 0.06);
+  color: #ffffff;
+  font-family: "Geist", sans-serif;
+  overflow: hidden;
+  animation: cmdk-modal-in 220ms cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+.cmdk-modal--mobile {
+  max-height: 92vh;
+}
+
+/* Input row */
+.cmdk-input-row {
+  padding: 14px 18px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-shrink: 0;
+}
+.cmdk-input-caret {
+  color: #71717a;
+  font-family: "Geist Mono", monospace;
+  font-size: 15px;
+  line-height: 1;
+}
+.cmdk-input {
+  flex: 1;
+  background: transparent;
+  border: none;
+  outline: none;
+  color: #ffffff;
+  font-family: "Geist", sans-serif;
+  font-size: 15.5px;
+  font-weight: 400;
+  padding: 0;
+}
+.cmdk-esc {
+  padding: 3px 8px;
+  border-radius: 5px;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  background: rgba(255, 255, 255, 0.04);
+  color: #71717a;
+  font-family: "Geist Mono", monospace;
+  font-size: 10.5px;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  cursor: pointer;
+}
+
+/* Footer bar */
+.cmdk-footer {
+  padding: 10px 18px;
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-family: "Geist Mono", monospace;
+  font-size: 10.5px;
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  color: #52525b;
+  text-transform: uppercase;
+  flex-shrink: 0;
+}
+
+/* Suggestions */
+.cmdk-suggestions {
+  padding: 16px 18px 18px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  flex-shrink: 0;
+}
+.cmdk-suggestions-eyebrow {
+  font-family: "Geist Mono", monospace;
+  font-size: 10.5px;
+  font-weight: 600;
+  letter-spacing: 0.18em;
+  color: #71717a;
+  text-transform: uppercase;
+}
+.cmdk-suggestions-grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+.cmdk-suggestion {
+  padding: 8px 14px;
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.10);
+  border-radius: 9999px;
+  color: rgba(255, 255, 255, 0.85);
+  font-family: "Geist", sans-serif;
+  font-size: 13px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background 150ms, border-color 150ms;
+}
+.cmdk-suggestion:hover {
+  background: rgba(255, 255, 255, 0.08);
+  border-color: rgba(255, 255, 255, 0.20);
+}
+
+/* Response area */
+.cmdk-response {
+  flex: 1;
+  overflow-y: auto;
+  padding: 18px 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+  min-height: 180px;
+}
+.cmdk-offline-badge {
+  font-family: "Geist Mono", monospace;
+  font-size: 10.5px;
+  font-weight: 600;
+  letter-spacing: 0.14em;
+  color: #52525b;
+  text-transform: uppercase;
+  margin-top: 4px;
+}
+.cmdk-clear {
+  align-self: flex-start;
+  padding: 6px 12px;
+  background: transparent;
+  border: 1px solid rgba(255, 255, 255, 0.10);
+  border-radius: 9999px;
+  color: rgba(255, 255, 255, 0.55);
+  font-family: "Geist Mono", monospace;
+  font-size: 11.5px;
+  font-weight: 500;
+  letter-spacing: 0.08em;
+  cursor: pointer;
+}
+
+/* Message bubble */
+.cmdk-message-role {
+  font-family: "Geist Mono", monospace;
+  font-size: 10.5px;
+  font-weight: 600;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  margin-bottom: 8px;
+}
+.cmdk-message-role--user { color: #a1a1aa; }
+.cmdk-message-role--assistant { color: #71717a; }
+.cmdk-message-body {
+  font-family: "Geist", sans-serif;
+  font-size: 14.5px;
+  line-height: 1.6;
+  white-space: pre-wrap;
+}
+.cmdk-message-body--user { color: #ffffff; }
+.cmdk-message-body--assistant { color: #d4d4d8; }
+
 /* Procedural starfield twinkle (HeroStarfield component) */
 .hero-starfield {
   animation: starsTwinkle 6s ease-in-out infinite;
@@ -1763,101 +1474,6 @@ body { font-variant-numeric: tabular-nums; }
 }
 @media (prefers-reduced-motion: reduce) {
   .hero-starfield { animation: none; opacity: 0.75; }
-}
-
-/* ──────────────────────────────────────────────────────────
-   Hero spotlight — cursor-tracked sharp radial wash.
-   No blur. Subtle alpha only. Disabled on touch + RM.
-   ────────────────────────────────────────────────────────── */
-.hero-spotlight {
-  position: absolute;
-  inset: 0;
-  pointer-events: none;
-  z-index: 1;
-  background: radial-gradient(
-    circle 320px at var(--mx, 50%) var(--my, 50%),
-    rgba(255, 255, 255, 0.08) 0%,
-    rgba(255, 255, 255, 0.02) 40%,
-    transparent 70%
-  );
-  opacity: 0;
-  transition: opacity 600ms var(--ease-out);
-}
-.hero-spotlight[data-active="true"] {
-  opacity: 1;
-}
-@media (max-width: 1024px), (prefers-reduced-motion: reduce), (hover: none) {
-  .hero-spotlight { display: none; }
-}
-
-/* ──────────────────────────────────────────────────────────
-   Background beams — sharp animated diagonal lines.
-   1px wide, gradient mask, no blur. Aceternity pattern without
-   the soft glows.
-   ────────────────────────────────────────────────────────── */
-.beams-layer {
-  position: absolute;
-  inset: 0;
-  pointer-events: none;
-  z-index: 0;
-  overflow: hidden;
-}
-.beam {
-  position: absolute;
-  top: -20%;
-  height: 140%;
-  width: 1px;
-  background: linear-gradient(
-    180deg,
-    transparent 0%,
-    rgba(255, 255, 255, 0.20) 50%,
-    transparent 100%
-  );
-  transform-origin: center top;
-  animation: beam-flow 8s linear infinite;
-  opacity: 0;
-}
-.beam--1 { left: 18%; animation-delay: 0s;   transform: rotate(-12deg); }
-.beam--2 { left: 42%; animation-delay: 2.7s; transform: rotate(-10deg); }
-.beam--3 { left: 68%; animation-delay: 5.3s; transform: rotate(-14deg); }
-.beam--4 { left: 88%; animation-delay: 1.4s; transform: rotate(-11deg); }
-
-@keyframes beam-flow {
-  0%   { opacity: 0; transform-origin: center top; }
-  15%  { opacity: 1; }
-  85%  { opacity: 1; }
-  100% { opacity: 0; }
-}
-.beam--1 { animation-name: beam-flow-1; }
-.beam--2 { animation-name: beam-flow-2; }
-.beam--3 { animation-name: beam-flow-3; }
-.beam--4 { animation-name: beam-flow-4; }
-@keyframes beam-flow-1 {
-  0%   { opacity: 0; transform: rotate(-12deg) translateY(-30%); }
-  15%  { opacity: 1; }
-  85%  { opacity: 1; }
-  100% { opacity: 0; transform: rotate(-12deg) translateY(30%); }
-}
-@keyframes beam-flow-2 {
-  0%   { opacity: 0; transform: rotate(-10deg) translateY(-30%); }
-  15%  { opacity: 1; }
-  85%  { opacity: 1; }
-  100% { opacity: 0; transform: rotate(-10deg) translateY(30%); }
-}
-@keyframes beam-flow-3 {
-  0%   { opacity: 0; transform: rotate(-14deg) translateY(-30%); }
-  15%  { opacity: 1; }
-  85%  { opacity: 1; }
-  100% { opacity: 0; transform: rotate(-14deg) translateY(30%); }
-}
-@keyframes beam-flow-4 {
-  0%   { opacity: 0; transform: rotate(-11deg) translateY(-30%); }
-  15%  { opacity: 1; }
-  85%  { opacity: 1; }
-  100% { opacity: 0; transform: rotate(-11deg) translateY(30%); }
-}
-@media (prefers-reduced-motion: reduce) {
-  .beam { animation: none; opacity: 0; }
 }
 
 /* ──────────────────────────────────────────────────────────
@@ -2463,43 +2079,6 @@ body { font-variant-numeric: tabular-nums; }
 .hamburger[data-open="true"] .hamburger-line-3 { transform: translateY(-6px) rotate(-45deg); }
 
 /* ──────────────────────────────────────────────────────────
-   Step indicator — Revolut-style: active = solid black/white
-   ────────────────────────────────────────────────────────── */
-.step-row {
-  cursor: pointer;
-  transition: opacity 320ms var(--ease-out);
-}
-.step-row[data-active="false"] { opacity: 0.36; }
-.step-row[data-active="true"]  { opacity: 1; }
-.step-badge {
-  transition:
-    background 280ms var(--ease-out),
-    color 280ms var(--ease-out),
-    transform 280ms var(--ease-spring),
-    border-color 280ms var(--ease-out);
-}
-.step-row[data-active="true"] .step-badge {
-  background: var(--color-ink);
-  color: var(--color-canvas);
-  border-color: var(--color-ink);
-  transform: scale(1.06);
-}
-.section-light .step-row[data-active="true"] .step-badge {
-  background: var(--color-black);
-  color: var(--color-white);
-  border-color: var(--color-black);
-}
-
-/* ──────────────────────────────────────────────────────────
-   Live dot — mint, single allowed accent
-   ────────────────────────────────────────────────────────── */
-.live-dot {
-  position: relative;
-  display: inline-block;
-  width: 8px;
-  height: 8px;
-  border-radius: 9999px;
-  background: var(--color-live);
 }
 .live-dot::after {
   content: "";

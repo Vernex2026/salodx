@@ -3,32 +3,105 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta name="theme-color" content="#06070B" />
-    <meta name="description" content="Vernex — Engineering Studio. WebGL, AI agents, premium frontend. Architektury B2B dla wymagających projektów." />
+    <meta name="theme-color" content="#000000" />
+    <meta name="color-scheme" content="dark" />
 
+    <title>Vernex — Premium Frontend Engineering · AI Agents · WebGL</title>
+    <meta
+      name="description"
+      content="Vernex — studio inżynierskie premium. WebGL, AI agents (Claude API + Supabase), architektury B2B. Frontend React, integracje, Wrocław/Warszawa/Remote."
+    />
+    <link rel="canonical" href="https://vernex.pl/" />
+
+    <!-- Open Graph -->
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content="Vernex" />
+    <meta
+      property="og:title"
+      content="Vernex — Premium Frontend Engineering · AI Agents · WebGL"
+    />
+    <meta
+      property="og:description"
+      content="Studio inżynierskie premium. WebGL, AI agents, architektury B2B. Claude API · Supabase · Vercel Edge."
+    />
+    <meta property="og:url" content="https://vernex.pl/" />
+    <meta property="og:image" content="https://vernex.pl/api/og" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:image:type" content="image/png" />
+    <meta property="og:image:alt" content="Vernex — Premium Frontend Engineering · AI Agents · WebGL" />
+    <meta property="og:locale" content="pl_PL" />
+
+    <!-- Twitter -->
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="Vernex — Premium Frontend Engineering" />
+    <meta
+      name="twitter:description"
+      content="WebGL, AI agents, architektury B2B. Claude API · Supabase · Vercel Edge."
+    />
+    <meta name="twitter:image" content="https://vernex.pl/api/og" />
+    <meta name="twitter:image:alt" content="Vernex — Premium Frontend Engineering" />
+
+    <!-- Apple / PWA -->
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+    <meta name="apple-mobile-web-app-title" content="Vernex" />
+    <link rel="manifest" href="/manifest.json" />
+
+    <!-- Icons -->
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <link rel="apple-touch-icon" href="/apple-touch-icon.svg" />
 
-    <meta property="og:type" content="website" />
-    <meta property="og:title" content="Vernex — Engineering Studio · WebGL + AI" />
-    <meta property="og:description" content="Premium frontend engineering. WebGL, AI agents, architektury B2B." />
-    <meta property="og:url" content="https://vernex.pl" />
-    <meta property="og:image" content="/og-image.svg" />
-    <meta property="og:locale" content="pl_PL" />
-
-    <meta name="twitter:card" content="summary_large_image" />
-    <meta name="twitter:title" content="Vernex — Engineering Studio · WebGL + AI" />
-    <meta name="twitter:description" content="Premium frontend engineering. WebGL, AI agents, architektury B2B." />
-    <meta name="twitter:image" content="/og-image.svg" />
-
+    <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      rel="preload"
+      as="style"
+      href="https://fonts.googleapis.com/css2?family=Geist:wght@400;700&display=swap"
+    />
     <link
       href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700;800;900&family=Geist+Mono:wght@400;500;600&family=JetBrains+Mono:wght@400;500;600&family=Instrument+Serif:ital@0;1&display=swap"
       rel="stylesheet"
     />
 
-    <title>Vernex — Engineering Studio · WebGL + AI</title>
+    <!-- Structured data: Organization + ProfessionalService -->
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "ProfessionalService",
+        "name": "Vernex",
+        "alternateName": "Vernex Engineering Studio",
+        "description": "Premium frontend engineering studio. WebGL, AI agents, architektury B2B.",
+        "url": "https://vernex.pl/",
+        "logo": "https://vernex.pl/favicon.svg",
+        "image": "https://vernex.pl/api/og",
+        "email": "biuro@vernex.pl",
+        "areaServed": [
+          { "@type": "Country", "name": "Poland" },
+          { "@type": "Country", "name": "Germany" }
+        ],
+        "serviceType": [
+          "Frontend Engineering",
+          "AI Agent Development",
+          "WebGL Development",
+          "B2B System Architecture",
+          "Claude API Integration",
+          "Supabase Integration"
+        ],
+        "knowsAbout": [
+          "React",
+          "WebGL",
+          "Three.js",
+          "Vercel AI SDK",
+          "Anthropic Claude",
+          "Supabase",
+          "TypeScript",
+          "Edge Functions"
+        ],
+        "slogan": "Twój stos. Jeden warsztat."
+      }
+    </script>
   </head>
   <body>
     <div id="root"></div>

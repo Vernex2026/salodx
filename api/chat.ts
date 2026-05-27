@@ -38,21 +38,49 @@ export async function POST(req: Request) {
     maxOutputTokens: 600,
     temperature: 0.3,
     onError({ error }) {
-      console.error("[chat] stream error:", error);
+      console.error("[chat] stream onError:", error);
+    },
+    onFinish(event) {
+      console.log("[chat] stream onFinish:", {
+        finishReason: event.finishReason,
+        usage: event.usage,
+        textLength: event.text?.length ?? 0,
+      });
     },
   });
 
   const encoder = new TextEncoder();
   const stream = new ReadableStream({
     async start(controller) {
+      let chunkCount = 0;
       try {
         for await (const chunk of result.textStream) {
           controller.enqueue(encoder.encode(chunk));
+          chunkCount++;
+        }
+        if (chunkCount === 0) {
+          let reason = "unknown";
+          try {
+            reason = (await result.finishReason) ?? "unknown";
+          } catch {
+            // ignore
+          }
+          const hint =
+            reason === "content-filter"
+              ? "treść została odrzucona przez moderator Anthropic"
+              : reason === "length"
+                ? "wyczerpano maxOutputTokens"
+                : `model zwrócił pustą odpowiedź (finishReason: ${reason})`;
+          controller.enqueue(
+            encoder.encode(`[empty-stream] ${hint}. Sprawdź Vercel Functions logs.`)
+          );
         }
         controller.close();
       } catch (err) {
         const msg =
-          err instanceof Error ? err.message : String(err);
+          err instanceof Error
+            ? `${err.name}: ${err.message}`
+            : String(err);
         controller.enqueue(
           encoder.encode(`\n\n[upstream-error] ${msg}`)
         );

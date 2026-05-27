@@ -1,0 +1,27 @@
+{
+  "name": "Vernex — Premium Frontend Engineering",
+  "short_name": "Vernex",
+  "description": "Studio inżynierskie premium. WebGL, AI agents, architektury B2B.",
+  "start_url": "/",
+  "scope": "/",
+  "display": "standalone",
+  "orientation": "portrait-primary",
+  "theme_color": "#000000",
+  "background_color": "#000000",
+  "lang": "pl",
+  "categories": ["business", "developer", "productivity"],
+  "icons": [
+    {
+      "src": "/favicon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any"
+    },
+    {
+      "src": "/apple-touch-icon.svg",
+      "sizes": "180x180",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
+  ]
+}
