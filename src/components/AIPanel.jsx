@@ -250,7 +250,7 @@ export default function AIPanel() {
                 "'Geist Mono', ui-monospace, SFMono-Regular, monospace",
               fontSize: "12px",
               letterSpacing: "0.08em",
-              color: "rgba(255,255,255,0.40)",
+              color: "rgba(255,255,255,0.65)",
             }}
           >
             DEMO — symulator pokazuje typowy flow. W produkcji: Claude Sonnet
@@ -292,7 +292,7 @@ function MockBrowser({ state, headingRef, buttonRef, badgeRef }) {
             style={{ color: state.brand === "#FFFFFF" ? "#06070B" : state.brand }}
           >
             {state.heading}
-            <span style={{ color: "#71717A", display: "block" }}>
+            <span style={{ color: "#A1A1AA", display: "block" }}>
               {state.subhead}
             </span>
           </h3>

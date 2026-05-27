@@ -81,13 +81,9 @@ export default defineConfig(({ mode }) => {
         output: {
           manualChunks: {
             "vendor-react": ["react", "react-dom"],
-            "vendor-three": [
-              "three",
-              "@react-three/fiber",
-              "@react-three/drei",
-              "@react-three/postprocessing",
-            ],
-            "vendor-anim": ["gsap", "framer-motion"],
+            "vendor-three": ["three", "@react-three/fiber"],
+            "vendor-gsap": ["gsap"],
+            "vendor-framer": ["framer-motion"],
           },
         },
       },

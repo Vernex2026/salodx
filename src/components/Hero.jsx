@@ -66,8 +66,23 @@ export default function Hero() {
 
   useEffect(() => {
     if (!gsapActive) return;
-    const id = setTimeout(() => ScrollTrigger.refresh(), 320);
-    return () => clearTimeout(id);
+    // Defer ScrollTrigger.refresh() to browser idle slot — avoids
+    // 50-100ms long task right after Hero mount (Lighthouse v40).
+    // Fallback to setTimeout for Safari (no requestIdleCallback).
+    let idleId = 0;
+    let timeoutId = 0;
+    const run = () => ScrollTrigger.refresh();
+    if (typeof window.requestIdleCallback === "function") {
+      idleId = window.requestIdleCallback(run, { timeout: 500 });
+    } else {
+      timeoutId = window.setTimeout(run, 320);
+    }
+    return () => {
+      if (idleId && typeof window.cancelIdleCallback === "function") {
+        window.cancelIdleCallback(idleId);
+      }
+      if (timeoutId) clearTimeout(timeoutId);
+    };
   }, [gsapActive]);
 
   return (

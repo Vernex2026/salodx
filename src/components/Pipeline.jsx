@@ -190,7 +190,7 @@ function PipelineSticky({ activeIdx, total }) {
           }}
         >
           {String(activeIdx + 1).padStart(2, "0")} /{" "}
-          <span style={{ color: "#52525B" }}>
+          <span style={{ color: "#A1A1AA" }}>
             {String(total).padStart(2, "0")}
           </span>
         </div>

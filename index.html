@@ -74,18 +74,8 @@
     <link rel="apple-touch-icon" href="/apple-touch-icon.svg" />
     <link rel="mask-icon" href="/favicon.svg" color="#000000" />
 
-    <!-- Fonts -->
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link
-      rel="preload"
-      as="style"
-      href="https://fonts.googleapis.com/css2?family=Geist:wght@400;700&display=swap"
-    />
-    <link
-      href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700;800;900&family=Geist+Mono:wght@400;500;600&display=swap"
-      rel="stylesheet"
-    />
+    <!-- Fonts self-hosted via @fontsource (Geist + Geist Mono + JetBrains Mono).
+         Imported through src/main.jsx → eliminates render-blocking Google Fonts CDN. -->
 
     <!-- Structured data: ProfessionalService -->
     <script type="application/ld+json">

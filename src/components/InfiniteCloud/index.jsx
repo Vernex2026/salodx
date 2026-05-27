@@ -21,16 +21,25 @@ export default function InfiniteCloud() {
   const [selectedId, setSelectedId] = useState(null);
 
   useEffect(() => {
-    const update = () => {
+    let rafId = 0;
+    const doUpdate = () => {
+      rafId = 0;
       if (stageRef.current) {
         const rect = stageRef.current.getBoundingClientRect();
         setStage({ w: rect.width, h: rect.height });
       }
       setIsMobile(window.innerWidth < MOBILE_BREAKPOINT_PX);
     };
-    update();
-    window.addEventListener("resize", update);
-    return () => window.removeEventListener("resize", update);
+    const update = () => {
+      if (rafId) return;
+      rafId = requestAnimationFrame(doUpdate);
+    };
+    doUpdate();
+    window.addEventListener("resize", update, { passive: true });
+    return () => {
+      if (rafId) cancelAnimationFrame(rafId);
+      window.removeEventListener("resize", update);
+    };
   }, []);
 
   useEffect(() => {
