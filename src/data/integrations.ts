@@ -1,4 +1,31 @@
-export const INTEGRATIONS = [
+export type GlyphType =
+  | "fintech"
+  | "ai"
+  | "crm"
+  | "legal"
+  | "ecom"
+  | "logistics"
+  | "cloud"
+  | "radial"
+  | "edge";
+
+export interface Integration {
+  id: string;
+  glyph: GlyphType;
+  accent: string;
+  title: string;
+  tag: string;
+  metric: string;
+  desc: string;
+}
+
+export interface CellMapEntry {
+  col: number;
+  row: number;
+  tileIndex: number;
+}
+
+export const INTEGRATIONS: Integration[] = [
   {
     id: "claude",
     glyph: "ai",
@@ -111,7 +138,7 @@ export const INTEGRATIONS = [
 
 // 4 cols × 3 rows. Heroes at (col 1, row 1) and (col 2, row 1).
 // Numbering left-to-right top-to-bottom; tileIndex points into INTEGRATIONS.
-export const CELL_MAP = [
+export const CELL_MAP: CellMapEntry[] = [
   { col: 0, row: 0, tileIndex: 1 },   // ElevenLabs
   { col: 1, row: 0, tileIndex: 2 },   // Supabase
   { col: 2, row: 0, tileIndex: 4 },   // Base / Ethereum
@@ -126,4 +153,4 @@ export const CELL_MAP = [
   { col: 3, row: 2, tileIndex: 11 },  // Playwright
 ];
 
-export const HERO_INDICES = new Set([0, 3]);
+export const HERO_INDICES: ReadonlySet<number> = new Set([0, 3]);

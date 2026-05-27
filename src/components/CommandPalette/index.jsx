@@ -1,6 +1,7 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 import { createPortal } from "react-dom";
 import { useAgentChat } from "../../hooks/useAgentChat";
+import { VERNEX_EVENTS, dispatchTyping } from "../../lib/events";
 import PillButton from "./PillButton";
 import ChatModal from "./ChatModal";
 
@@ -19,12 +20,6 @@ export default function CommandPalette() {
 
   const typingTimeoutRef = useRef(0);
   const typingActiveRef = useRef(false);
-
-  const dispatchTyping = (active) => {
-    window.dispatchEvent(
-      new CustomEvent("vernex:typing", { detail: { active } })
-    );
-  };
 
   // Kinetic feedback for ParticleCloud — debounced typing pulse
   const onTypingPulse = useCallback(() => {
@@ -50,15 +45,15 @@ export default function CommandPalette() {
   // Terminal broadcasts chat-mode → hide floating pill while in chat
   useEffect(() => {
     const onChatMode = (e) => setChatModeActive(!!e.detail?.active);
-    window.addEventListener("vernex:chat-mode", onChatMode);
-    return () => window.removeEventListener("vernex:chat-mode", onChatMode);
+    window.addEventListener(VERNEX_EVENTS.CHAT_MODE, onChatMode);
+    return () => window.removeEventListener(VERNEX_EVENTS.CHAT_MODE, onChatMode);
   }, []);
 
   // Nav / other CTAs can open the palette without ⌘K
   useEffect(() => {
     const onOpen = () => setOpen(true);
-    window.addEventListener("vernex:open-palette", onOpen);
-    return () => window.removeEventListener("vernex:open-palette", onOpen);
+    window.addEventListener(VERNEX_EVENTS.OPEN_PALETTE, onOpen);
+    return () => window.removeEventListener(VERNEX_EVENTS.OPEN_PALETTE, onOpen);
   }, []);
 
   // Mount delay — let Hero entrance animations finish first

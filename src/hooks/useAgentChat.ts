@@ -1,5 +1,5 @@
 import { useCallback, useState } from "react";
-import { useMessages } from "./useMessages";
+import { useMessages, type ChatMessage } from "./useMessages";
 import { useStreamingTypewriter } from "./useStreamingTypewriter";
 
 const OFFLINE_MESSAGE =
@@ -12,11 +12,14 @@ export function useAgentChat() {
   const typewriter = useStreamingTypewriter();
 
   const streamReply = useCallback(
-    async (userText) => {
+    async (userText: string): Promise<void> => {
       const text = (userText ?? "").trim();
       if (!text || streaming) return;
 
-      const nextMessages = [...messages, { role: "user", content: text }];
+      const nextMessages: ChatMessage[] = [
+        ...messages,
+        { role: "user", content: text },
+      ];
       appendUserAndPlaceholder(text);
       setStreaming(true);
       setOffline(false);

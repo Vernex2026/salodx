@@ -9,6 +9,7 @@
   "theme_color": "#000000",
   "background_color": "#000000",
   "lang": "pl",
+  "dir": "ltr",
   "categories": ["business", "developer", "productivity"],
   "icons": [
     {
@@ -22,6 +23,20 @@
       "sizes": "180x180",
       "type": "image/svg+xml",
       "purpose": "any maskable"
+    },
+    {
+      "src": "/api/og",
+      "sizes": "1200x630",
+      "type": "image/png",
+      "purpose": "any"
+    }
+  ],
+  "shortcuts": [
+    {
+      "name": "Skontaktuj się",
+      "short_name": "Kontakt",
+      "description": "Wyślij brief do agenta Vernex",
+      "url": "/#kontakt"
     }
   ]
 }

@@ -34,7 +34,7 @@ export async function POST(req: Request) {
   const result = streamText({
     model: anthropic(MODEL_ID),
     system: SYSTEM_PROMPT,
-    messages: messages as Parameters<typeof streamText>[0]["messages"],
+    messages: messages as NonNullable<Parameters<typeof streamText>[0]["messages"]>,
     maxOutputTokens: 600,
     temperature: 0.3,
     onError({ error }) {

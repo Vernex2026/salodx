@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 import { createPortal } from "react-dom";
+import { VERNEX_EVENTS, dispatchOpenPalette } from "../lib/events";
 
 const LINKS = [
   { label: "Proces",        href: "#pipeline" },
@@ -24,7 +25,9 @@ export default function Nav() {
   // .section-light. Teraz nasłuchujemy SCROLL na <main> dodatkowo.
   useEffect(() => {
     const mainEl = document.querySelector("main");
-    const recheck = () => {
+    let rafId = 0;
+    const doCheck = () => {
+      rafId = 0;
       const mainScroll = mainEl ? mainEl.scrollTop : 0;
       setScrolled(window.scrollY > 64 || mainScroll > 64);
       const navCenterY = 42; // top: 12 + height 60 / 2
@@ -36,11 +39,16 @@ export default function Nav() {
       });
       setOverLight(touchingLight);
     };
-    recheck();
+    const recheck = () => {
+      if (rafId) return;
+      rafId = requestAnimationFrame(doCheck);
+    };
+    doCheck();
     window.addEventListener("scroll", recheck, { passive: true });
     window.addEventListener("resize", recheck, { passive: true });
     if (mainEl) mainEl.addEventListener("scroll", recheck, { passive: true });
     return () => {
+      if (rafId) cancelAnimationFrame(rafId);
       window.removeEventListener("scroll", recheck);
       window.removeEventListener("resize", recheck);
       if (mainEl) mainEl.removeEventListener("scroll", recheck);
@@ -53,8 +61,8 @@ export default function Nav() {
     const onChatMode = (e) => {
       setChatActive(!!(e.detail && e.detail.active));
     };
-    window.addEventListener("vernex:chat-mode", onChatMode);
-    return () => window.removeEventListener("vernex:chat-mode", onChatMode);
+    window.addEventListener(VERNEX_EVENTS.CHAT_MODE, onChatMode);
+    return () => window.removeEventListener(VERNEX_EVENTS.CHAT_MODE, onChatMode);
   }, []);
 
   // Scroll lock + Esc when menu open
@@ -112,7 +120,7 @@ export default function Nav() {
           <div className="flex items-center gap-3">
             <button
               type="button"
-              onClick={() => window.dispatchEvent(new CustomEvent("vernex:open-palette"))}
+              onClick={dispatchOpenPalette}
               className="hidden h-10 items-center rounded-full border border-[var(--color-hairline)] bg-white/[0.04] px-4 text-[13px] font-medium text-[var(--color-ink)] transition-colors hover:border-white/20 hover:bg-white/[0.08] sm:inline-flex"
               aria-label="Otwórz agenta Vernex"
             >
