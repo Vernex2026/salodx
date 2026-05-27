@@ -1,4 +1,27 @@
+# Vernex — premium frontend engineering studio
+# https://vernex.pl/
+
 User-agent: *
+Allow: /
+
+# Optional rate limits for aggressive crawlers
+User-agent: AhrefsBot
+Crawl-delay: 10
+
+User-agent: SemrushBot
+Crawl-delay: 10
+
+# AI crawlers — explicit (allow indexing for discoverability)
+User-agent: GPTBot
+Allow: /
+
+User-agent: ClaudeBot
+Allow: /
+
+User-agent: Google-Extended
+Allow: /
+
+User-agent: PerplexityBot
 Allow: /
 
 Sitemap: https://vernex.pl/sitemap.xml

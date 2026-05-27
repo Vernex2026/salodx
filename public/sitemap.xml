@@ -1,9 +1,20 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+<urlset
+  xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
+  xmlns:image="http://www.google.com/schemas/sitemap-image/1.1"
+  xmlns:xhtml="http://www.w3.org/1999/xhtml"
+>
   <url>
     <loc>https://vernex.pl/</loc>
-    <lastmod>2026-05-26</lastmod>
+    <lastmod>2026-05-27</lastmod>
     <changefreq>weekly</changefreq>
     <priority>1.0</priority>
+    <xhtml:link rel="alternate" hreflang="pl" href="https://vernex.pl/" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://vernex.pl/" />
+    <image:image>
+      <image:loc>https://vernex.pl/api/og</image:loc>
+      <image:title>Vernex — Premium Frontend Engineering</image:title>
+      <image:caption>AI Agents · WebGL · Architektury B2B</image:caption>
+    </image:image>
   </url>
 </urlset>
