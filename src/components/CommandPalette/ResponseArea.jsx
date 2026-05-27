@@ -9,7 +9,7 @@ export default function ResponseArea({ messages, streaming, offline, onClear }) 
   }, [messages]);
 
   return (
-    <div className="cmdk-response">
+    <div className="cmdk-response" aria-live="polite" aria-atomic="false">
       {messages.map((m, i) => (
         <Message
           key={i}

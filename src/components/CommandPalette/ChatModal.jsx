@@ -1,4 +1,5 @@
 import { useEffect, useRef } from "react";
+import { useFocusTrap } from "../../hooks/useFocusTrap";
 import Suggestions from "./Suggestions";
 import ResponseArea from "./ResponseArea";
 
@@ -23,6 +24,7 @@ export default function ChatModal({
   onTypingPulse,
 }) {
   const inputRef = useRef(null);
+  const trapRef = useFocusTrap(true);
 
   useEffect(() => {
     const t = setTimeout(() => inputRef.current?.focus(), 80);
@@ -46,7 +48,7 @@ export default function ChatModal({
       className={`cmdk-overlay${isMobile ? " cmdk-overlay--mobile" : ""}`}
       onClick={handleOverlayClick}
     >
-      <div className={`cmdk-modal${isMobile ? " cmdk-modal--mobile" : ""}`}>
+      <div ref={trapRef} className={`cmdk-modal${isMobile ? " cmdk-modal--mobile" : ""}`}>
         <form onSubmit={handleSubmit} className="cmdk-input-row">
           <span aria-hidden="true" className="cmdk-input-caret">›</span>
           <input

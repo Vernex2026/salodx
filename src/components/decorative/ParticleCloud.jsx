@@ -1,6 +1,7 @@
 import { useEffect, useMemo, useRef, useState } from "react";
 import { Canvas, useFrame } from "@react-three/fiber";
 import * as THREE from "three";
+import { VERNEX_EVENTS } from "../../lib/events";
 
 /**
  * ParticleCloud — wave-deformed plasma core (v15 "QuantumCore").
@@ -205,8 +206,8 @@ function QuantumCore({ count, reduceMotion }) {
       const active = !!(e.detail && e.detail.active);
       intensityTargetRef.current = active ? 2.4 : 1.0;
     };
-    window.addEventListener("vernex:typing", onTyping);
-    return () => window.removeEventListener("vernex:typing", onTyping);
+    window.addEventListener(VERNEX_EVENTS.TYPING, onTyping);
+    return () => window.removeEventListener(VERNEX_EVENTS.TYPING, onTyping);
   }, []);
 
   // v28 burst: Terminal "Wyślij brief" submit triggers one-shot implode.
@@ -218,8 +219,8 @@ function QuantumCore({ count, reduceMotion }) {
       burstOriginRef.current = o;
       burstStartRef.current = performance.now() / 1000;
     };
-    window.addEventListener("vernex:burst", onBurst);
-    return () => window.removeEventListener("vernex:burst", onBurst);
+    window.addEventListener(VERNEX_EVENTS.BURST, onBurst);
+    return () => window.removeEventListener(VERNEX_EVENTS.BURST, onBurst);
   }, []);
 
   // Big Bang scroll listener — map scrollY do uScroll phase (0..4)

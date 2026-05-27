@@ -1,7 +1,20 @@
+import { useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
+import { useFocusTrap } from "../../hooks/useFocusTrap";
 import Glyph from "./Glyph";
 
 export default function FocusModal({ selected, onClose }) {
+  const trapRef = useFocusTrap(Boolean(selected));
+
+  useEffect(() => {
+    if (!selected) return;
+    const onKey = (e) => {
+      if (e.key === "Escape") onClose();
+    };
+    document.addEventListener("keydown", onKey);
+    return () => document.removeEventListener("keydown", onKey);
+  }, [selected, onClose]);
+
   return (
     <AnimatePresence>
       {selected && (
@@ -16,6 +29,7 @@ export default function FocusModal({ selected, onClose }) {
           aria-labelledby="cloud-focus-title"
         >
           <motion.div
+            ref={trapRef}
             initial={{ opacity: 0, scale: 0.95, y: 12 }}
             animate={{ opacity: 1, scale: 1, y: 0 }}
             exit={{ opacity: 0, scale: 0.97, y: 6 }}

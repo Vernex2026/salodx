@@ -1,8 +1,21 @@
 import { useCallback, useReducer } from "react";
 
-const initialState = [];
+export type ChatRole = "user" | "assistant";
 
-function reducer(state, action) {
+export interface ChatMessage {
+  role: ChatRole;
+  content: string;
+}
+
+type Action =
+  | { type: "append"; message: ChatMessage }
+  | { type: "appendUserAndPlaceholder"; userText: string }
+  | { type: "updateLast"; content: string }
+  | { type: "clear" };
+
+const initialState: ChatMessage[] = [];
+
+function reducer(state: ChatMessage[], action: Action): ChatMessage[] {
   switch (action.type) {
     case "append":
       return [...state, action.message];
@@ -29,13 +42,16 @@ function reducer(state, action) {
 export function useMessages() {
   const [messages, dispatch] = useReducer(reducer, initialState);
 
-  const append = useCallback((message) => dispatch({ type: "append", message }), []);
+  const append = useCallback(
+    (message: ChatMessage) => dispatch({ type: "append", message }),
+    []
+  );
   const appendUserAndPlaceholder = useCallback(
-    (userText) => dispatch({ type: "appendUserAndPlaceholder", userText }),
+    (userText: string) => dispatch({ type: "appendUserAndPlaceholder", userText }),
     []
   );
   const updateLast = useCallback(
-    (content) => dispatch({ type: "updateLast", content }),
+    (content: string) => dispatch({ type: "updateLast", content }),
     []
   );
   const clear = useCallback(() => dispatch({ type: "clear" }), []);

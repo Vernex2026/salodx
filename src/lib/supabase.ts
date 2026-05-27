@@ -1,4 +1,4 @@
-import { createClient } from "@supabase/supabase-js";
+import { createClient, type SupabaseClient } from "@supabase/supabase-js";
 
 // VERNEX project Supabase. Publishable key — designed for client bundle
 // exposure (anon role, INSERT-only on site_leads via RLS). Hardcoded
@@ -7,12 +7,10 @@ import { createClient } from "@supabase/supabase-js";
 const FALLBACK_URL = "https://yachdnnoudjxdxflcjrg.supabase.co";
 const FALLBACK_KEY = "sb_publishable_TRUV6CW9KsAikkSGkI4USg_W-tpfkvg";
 
-const url = import.meta.env.VITE_SUPABASE_URL || FALLBACK_URL;
-const key = import.meta.env.VITE_SUPABASE_ANON_KEY || FALLBACK_KEY;
+const url: string = import.meta.env.VITE_SUPABASE_URL || FALLBACK_URL;
+const key: string = import.meta.env.VITE_SUPABASE_ANON_KEY || FALLBACK_KEY;
 
-export const supabase =
-  url && key
-    ? createClient(url, key, { auth: { persistSession: false } })
-    : null;
+export const supabase: SupabaseClient | null =
+  url && key ? createClient(url, key, { auth: { persistSession: false } }) : null;
 
-export const supabaseReady = Boolean(supabase);
+export const supabaseReady: boolean = Boolean(supabase);

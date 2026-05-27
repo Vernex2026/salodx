@@ -1,6 +1,27 @@
 // Cupertino Gaze Control — geometric constants for the InfiniteCloud grid.
 // Owner-tuned through v23-v26 iterations; behavior is "1:1" with prior commits.
 
+export interface CursorState {
+  x: number;
+  y: number;
+  active: boolean;
+}
+
+export interface TileTransform {
+  scale: number;
+  opacity: number;
+  blur: number;
+  borderAlpha: number;
+  zIndex: number;
+}
+
+export interface TileTransformInput {
+  isHero: boolean;
+  isPrimary: boolean;
+  anyPrimary: boolean;
+  proximity: number;
+}
+
 export const TILE_GEOMETRY = {
   COLS: 4,
   ROWS: 3,
@@ -42,13 +63,18 @@ export const TILE_GEOMETRY = {
   PROXIMITY_Z_GAIN: 4,
 };
 
-export function computeProximity(cursor, cx, cy) {
+export function computeProximity(cursor: CursorState, cx: number, cy: number): number {
   if (!cursor.active) return 0;
   const dist = Math.hypot(cursor.x - cx, cursor.y - cy);
   return Math.max(0, 1 - dist / TILE_GEOMETRY.FOCUS_RADIUS);
 }
 
-export function computeTileTransform({ isHero, isPrimary, anyPrimary, proximity }) {
+export function computeTileTransform({
+  isHero,
+  isPrimary,
+  anyPrimary,
+  proximity,
+}: TileTransformInput): TileTransform {
   const G = TILE_GEOMETRY;
 
   if (isPrimary) {

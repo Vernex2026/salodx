@@ -2,6 +2,7 @@ import { useEffect, useRef, useState } from "react";
 import { supabase, supabaseReady } from "../lib/supabase";
 import { useReveal } from "../hooks/useReveal";
 import { useAgentChat } from "../hooks/useAgentChat";
+import { dispatchBurst, dispatchChatMode } from "../lib/events";
 
 const MIN_LEN = 12;
 const MAX_LEN = 2000;
@@ -45,16 +46,9 @@ export default function Terminal() {
   // v31: broadcast chat-mode state — CommandPalette listens i ukrywa
   // floating ⌘K pill gdy klient już w live chat (redundancja UX).
   useEffect(() => {
-    window.dispatchEvent(
-      new CustomEvent("vernex:chat-mode", {
-        detail: { active: mode !== "idle" },
-      })
-    );
+    dispatchChatMode(mode !== "idle");
     return () => {
-      // Cleanup on unmount — signal idle so pill returns
-      window.dispatchEvent(
-        new CustomEvent("vernex:chat-mode", { detail: { active: false } })
-      );
+      dispatchChatMode(false);
     };
   }, [mode]);
 
@@ -104,7 +98,9 @@ export default function Terminal() {
           user_agent: navigator.userAgent.slice(0, 256),
         })
         .then(({ error }) => {
-          if (error) console.warn("site_leads insert failed:", error);
+          if (error && import.meta.env.DEV) {
+            console.warn("site_leads insert failed:", error);
+          }
         });
     }
 
@@ -119,9 +115,7 @@ export default function Terminal() {
       const ndcY = -(((rect.top + rect.height / 2) / vh) * 2 - 1);
       originWorld = [ndcX * 6, ndcY * 4, 0];
     }
-    window.dispatchEvent(
-      new CustomEvent("vernex:burst", { detail: { origin: originWorld } })
-    );
+    dispatchBurst(originWorld);
 
     setMode("launching");
     // v31: 850 → 600ms sync z bg transition (520→600ms). Eliminuje
@@ -334,6 +328,7 @@ export default function Terminal() {
               className="terminal-chat-messages"
               role="log"
               aria-live="polite"
+              aria-atomic="false"
             >
               {messages.map((msg, i) => (
                 <div
